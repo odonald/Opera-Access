@@ -1,0 +1,101 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": false
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/favicon.ico"
+  },
+  {
+   "optionDest": "ascii",
+   "value": false
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "embed_manifest",
+   "value": true
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "win_private_assemblies",
+   "value": false
+  },
+  {
+   "optionDest": "win_no_prefer_redirects",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/templates:templates/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/static:static/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/customtkinter:customtkinter/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/iso639:iso639/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/app.py:."
+  },
+  {
+   "optionDest": "datas",
+   "value": "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/requirements.txt:."
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}
