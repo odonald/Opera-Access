@@ -19,6 +19,9 @@ import webbrowser
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+language_switcher_values = []
+
+
 local_ip = socket.gethostbyname(socket.gethostname())
 port_number = 3210
 def change_port():
@@ -165,10 +168,18 @@ class LanguageDialog(tk.simpledialog.Dialog):
         pass
 
 def import_additional_language():
+    global language_switcher_values
     LanguageDialog(root)
+    # Automatically switch to the first imported language
+    if language_switcher_values:
+        language.set(language_switcher_values[0])
+        update_label()
+    
+    
 
 
 def import_additional_translation(language_name, language_code):
+    global language_switcher_values
     additional_translation_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
     if additional_translation_file:
         with open(additional_translation_file, "rb") as file:
@@ -317,7 +328,9 @@ def update_label():
         next_line_label.bind("<Button-1>", lambda event, line=next_line: set_current_line(line))
 
         progress.set(current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1))
-   
+        
+        if language_switcher_values:
+            language.set(language_switcher_values[0])
     else:
         # percentage_label.configure(text="0%")
         prev_line_label.configure(text="")
