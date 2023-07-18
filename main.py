@@ -289,19 +289,23 @@ def update_label():
 
         selected_language = language.get()
 
-        # if selected_language == "German":
-        #     prev_lang_line = combined_lines[prev_line][0]
-        #     current_lang_line = combined_lines[current_line][0]
-        #     next_lang_line = combined_lines[next_line][0]
-        # else:
         lang_code = available_languages[selected_language]
         prev_lang_line = additional_languages[lang_code][prev_line]
         current_lang_line = additional_languages[lang_code][current_line]
         next_lang_line = additional_languages[lang_code][next_line]
 
-        prev_line_label.configure(text=f"Last Line{prev_line + 1}:\n {prev_lang_line}")
-        current_line_label.configure(text=f"Current Line {current_line + 1}:\n {current_lang_line}")
-        next_line_label.configure(text=f"Next Line{next_line + 1}:\n {next_lang_line}")
+        # Update the labels with line numbers and make them clickable
+        prev_line_label.configure(text=f"Last Line ({prev_line + 1}):\n{prev_lang_line}")
+        prev_line_label.unbind("<Button-1>")
+        prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
+
+        current_line_label.configure(text=f"Current Line {current_line + 1}:\n{current_lang_line}")
+        current_line_label.unbind("<Button-1>")
+        current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
+
+        next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
+        next_line_label.unbind("<Button-1>")
+        next_line_label.bind("<Button-1>", lambda event, line=next_line: set_current_line(line))
 
         progress.set(current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1))
    
@@ -311,6 +315,12 @@ def update_label():
         current_line_label.configure(text="No lines loaded.")
         next_line_label.configure(text="")
         progress.configure(value=0)
+
+def set_current_line(line):
+    global current_line
+    current_line = line
+    send_to_server(current_line)  # Send the clicked line to the server
+    update_label()
 
 def next_line():
     global current_line, additional_languages
