@@ -190,6 +190,7 @@ def import_additional_translation(language_name, language_code):
                 line = line.decode(result['encoding']).strip()
                 if line:
                     additional_translation_lines.append(line)
+            additional_translation_lines.insert(0, "")  # Add an empty line at the beginning
         additional_languages[language_code] = additional_translation_lines
         # Update the imported languages label
         imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(additional_languages.keys()))
@@ -357,26 +358,48 @@ def set_current_line(line):
     send_to_server(current_line)  # Send the clicked line to the server
     update_label()
 
+
+empty_line = 0
+next_button_clicks = 0
+prev_button_clicks = 0
+
+# Modify the next_line() and previous_line() functions
 def next_line():
-    global current_line, additional_languages
+    global current_line,empty_line, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
     if current_line is not None and current_line < len(additional_languages[lang_code]) - 1:
-        current_line += 1
-        update_label()
-        send_to_server(current_line)
+        next_button_clicks += 1
+        if next_button_clicks == 1:
+            send_to_server(empty_line)
+
+        if next_button_clicks == 2:
+            current_line += 1
+            next_button_clicks = 0
+            prev_button_clicks = 0  # Reset the count for Previous button
+            update_label()
+            send_to_server(current_line)
+    else:
+        next_button_clicks = 0
 
 def previous_line():
-    global current_line, additional_languages
+    global current_line, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
     if current_line > 0:
-        current_line -= 1
-        update_label()
-        send_to_server(current_line)
-    
+        prev_button_clicks += 1
+        if prev_button_clicks ==1:
+            send_to_server(empty_line)
+        if prev_button_clicks == 2:
+            current_line -= 1
+            prev_button_clicks = 0
+            next_button_clicks = 0  # Reset the count for Next button
+            update_label()
+            send_to_server(current_line)
+    else:
+        prev_button_clicks = 0
 
 current_line = 0
 
