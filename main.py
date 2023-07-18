@@ -333,7 +333,7 @@ def update_label():
         prev_line_label.unbind("<Button-1>")
         prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
 
-        current_line_label.configure(text=f"Current Line {current_line + 1}:\n{current_lang_line}")
+        current_line_label.configure(text=f"Line {current_line + 1}:\n{current_lang_line}")
         current_line_label.unbind("<Button-1>")
         current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
 
@@ -499,7 +499,7 @@ navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="n
 prev_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
 prev_line_label.grid(row=2, column=0, columnspan=3, padx=10, pady=(50,20), sticky="nsew")
 
-current_line_label = ctk.CTkLabel(navigation_frame, wraplength=800, text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+current_line_label = ctk.CTkLabel(navigation_frame, wraplength=800, text_color=("Yellow","#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
 current_line_label.grid(row=3, column=0, columnspan=3, padx=10, pady=20, sticky="nsew")
 
 next_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
