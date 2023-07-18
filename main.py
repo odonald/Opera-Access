@@ -299,10 +299,9 @@ def update_label():
         current_lang_line = additional_languages[lang_code][current_line]
         next_lang_line = additional_languages[lang_code][next_line]
 
-        prev_line_label.configure(text=f"Last Line:\n {prev_lang_line}")
-        # current_line_label.configure(text=f"Current Line {current_line + 1}:\n {current_lang_line}")
-        current_line_label.configure(text=f"{current_lang_line}")
-        next_line_label.configure(text=f"Next Line:\n {next_lang_line}")
+        prev_line_label.configure(text=f"Last Line{prev_line + 1}:\n {prev_lang_line}")
+        current_line_label.configure(text=f"Current Line {current_line + 1}:\n {current_lang_line}")
+        next_line_label.configure(text=f"Next Line{next_line + 1}:\n {next_lang_line}")
 
         progress.set(current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1))
    
