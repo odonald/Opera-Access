@@ -205,6 +205,15 @@ def on_key_press(event):
         next_line()
     elif event.keysym == 'Left':
         previous_line()
+
+def close_program():
+    result = messagebox.askyesnocancel("Save Session", "Do you want to save before closing?")
+    if result:
+        save_session()
+        root.destroy()
+    elif result is False:
+        root.destroy()
+
         
 def save_session():
     session_data = {
@@ -493,11 +502,14 @@ file_menu.add_command(label="Save Session", command=save_session)
 file_menu.add_command(label="Load Session", command=load_session)
 file_menu.add_command(label="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
 file_menu.add_cascade(label="QR-Code", menu=qr_menu)
-
+file_menu.add_command(label="Exit", command=close_program)
 
 
 
 root.configure(menu=menu_bar)
+
+root.protocol("WM_DELETE_WINDOW", close_program)
+
 
 
 # configure rows and columns
