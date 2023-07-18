@@ -403,7 +403,7 @@ def change_appearance_mode_event(new_appearance_mode: str):
 root = ctk.CTk()
 root.title("Opera Access 1.0")
 root.configure(bg=ctk.set_appearance_mode("System"))
-root.geometry(f"{900}x{550}")
+root.geometry(f"{1000}x{550}")
 
 
 
@@ -450,8 +450,8 @@ appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", 
 appearance_mode_optionemenu.grid(row=8, column=0, padx=10, pady=10, sticky="s")
 appearance_mode_optionemenu.set("Dark")
 
-navigation_frame = ctk.CTkFrame(root, width=100, height=200, corner_radius=4, border_width=2)
-navigation_frame.grid(row=1, column=1,columnspan=2, padx=10, pady=0, sticky="nwe")
+navigation_frame = ctk.CTkFrame(root, width=200, height=200, corner_radius=4, border_width=2)
+navigation_frame.grid(row=1, column=1,columnspan=2, padx=10, pady=0, sticky="nswe")
 navigation_frame.grid_rowconfigure(4, weight=1)
 navigation_frame.grid_columnconfigure(1, weight=1)
 
@@ -476,7 +476,7 @@ navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="n
 prev_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
 prev_line_label.grid(row=2, column=0, columnspan=3, padx=10, pady=(50,20), sticky="nsew")
 
-current_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+current_line_label = ctk.CTkLabel(navigation_frame, wraplength=800, text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
 current_line_label.grid(row=3, column=0, columnspan=3, padx=10, pady=20, sticky="nsew")
 
 next_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
