@@ -175,7 +175,6 @@ def import_additional_language():
         language.set(language_switcher_values[0])
         update_label()
     
-    
 
 
 def import_additional_translation(language_name, language_code):
@@ -225,6 +224,20 @@ def close_program():
     elif result is False:
         root.destroy()
 
+def clear_program():
+    global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line, imported_languages_label, language_switcher_values
+
+    original_file = None
+    translation_file = None
+    original_lines = []
+    translation_lines = []
+    additional_languages = {}
+    combined_lines = []
+    current_line = 0
+    imported_languages_label.configure(text="")
+    language_switcher_values = []
+    language_switcher.configure(values=())
+    update_label()
         
 def save_session():
     session_data = {
@@ -515,7 +528,9 @@ file_menu.add_command(label="Save Session", command=save_session)
 file_menu.add_command(label="Load Session", command=load_session)
 file_menu.add_command(label="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
 file_menu.add_cascade(label="QR-Code", menu=qr_menu)
+file_menu.add_command(label="Reset", command=clear_program)
 file_menu.add_command(label="Exit", command=close_program)
+
 
 
 
