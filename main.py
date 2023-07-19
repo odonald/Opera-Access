@@ -19,6 +19,9 @@ import webbrowser
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+language_switcher_values = []
+
+
 local_ip = socket.gethostbyname(socket.gethostname())
 port_number = 3210
 def change_port():
@@ -165,10 +168,17 @@ class LanguageDialog(tk.simpledialog.Dialog):
         pass
 
 def import_additional_language():
+    global language_switcher_values
     LanguageDialog(root)
+    # Automatically switch to the first imported language
+    if language_switcher_values:
+        language.set(language_switcher_values[0])
+        update_label()
+    
 
 
 def import_additional_translation(language_name, language_code):
+    global language_switcher_values
     additional_translation_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
     if additional_translation_file:
         with open(additional_translation_file, "rb") as file:
@@ -180,6 +190,7 @@ def import_additional_translation(language_name, language_code):
                 line = line.decode(result['encoding']).strip()
                 if line:
                     additional_translation_lines.append(line)
+            additional_translation_lines.insert(0, "")  # Add an empty line at the beginning
         additional_languages[language_code] = additional_translation_lines
         # Update the imported languages label
         imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(additional_languages.keys()))
@@ -205,6 +216,29 @@ def on_key_press(event):
         next_line()
     elif event.keysym == 'Left':
         previous_line()
+
+def close_program():
+    result = messagebox.askyesnocancel("Save Session", "Do you want to save before closing?")
+    if result:
+        save_session()
+        root.destroy()
+    elif result is False:
+        root.destroy()
+
+def clear_program():
+    global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line, imported_languages_label, language_switcher_values
+
+    original_file = None
+    translation_file = None
+    original_lines = []
+    translation_lines = []
+    additional_languages = {}
+    combined_lines = []
+    current_line = 0
+    imported_languages_label.configure(text="")
+    language_switcher_values = []
+    language_switcher.configure(values=())
+    update_label()
         
 def save_session():
     session_data = {
@@ -289,23 +323,28 @@ def update_label():
 
         selected_language = language.get()
 
-        # if selected_language == "German":
-        #     prev_lang_line = combined_lines[prev_line][0]
-        #     current_lang_line = combined_lines[current_line][0]
-        #     next_lang_line = combined_lines[next_line][0]
-        # else:
         lang_code = available_languages[selected_language]
         prev_lang_line = additional_languages[lang_code][prev_line]
         current_lang_line = additional_languages[lang_code][current_line]
         next_lang_line = additional_languages[lang_code][next_line]
 
-        prev_line_label.configure(text=f"Last Line:\n {prev_lang_line}")
-        # current_line_label.configure(text=f"Current Line {current_line + 1}:\n {current_lang_line}")
-        current_line_label.configure(text=f"{current_lang_line}")
-        next_line_label.configure(text=f"Next Line:\n {next_lang_line}")
+        # Update the labels with line numbers and make them clickable
+        prev_line_label.configure(text=f"Last Line ({prev_line + 1}):\n{prev_lang_line}")
+        prev_line_label.unbind("<Button-1>")
+        prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
+
+        current_line_label.configure(text=f"Line {current_line + 1}:\n{current_lang_line}")
+        current_line_label.unbind("<Button-1>")
+        current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
+
+        next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
+        next_line_label.unbind("<Button-1>")
+        next_line_label.bind("<Button-1>", lambda event, line=next_line: set_current_line(line))
 
         progress.set(current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1))
-   
+        
+        if language_switcher_values:
+            language.set(language_switcher_values[0])
     else:
         # percentage_label.configure(text="0%")
         prev_line_label.configure(text="")
@@ -313,26 +352,54 @@ def update_label():
         next_line_label.configure(text="")
         progress.configure(value=0)
 
+def set_current_line(line):
+    global current_line
+    current_line = line
+    send_to_server(current_line)  # Send the clicked line to the server
+    update_label()
+
+
+empty_line = 0
+next_button_clicks = 0
+prev_button_clicks = 0
+
+# Modify the next_line() and previous_line() functions
 def next_line():
-    global current_line, additional_languages
+    global current_line,empty_line, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
     if current_line is not None and current_line < len(additional_languages[lang_code]) - 1:
-        current_line += 1
-        update_label()
-        send_to_server(current_line)
+        next_button_clicks += 1
+        if next_button_clicks == 1:
+            send_to_server(empty_line)
+
+        if next_button_clicks == 2:
+            current_line += 1
+            next_button_clicks = 0
+            prev_button_clicks = 0  # Reset the count for Previous button
+            update_label()
+            send_to_server(current_line)
+    else:
+        next_button_clicks = 0
 
 def previous_line():
-    global current_line, additional_languages
+    global current_line, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
     if current_line > 0:
-        current_line -= 1
-        update_label()
-        send_to_server(current_line)
-    
+        prev_button_clicks += 1
+        if prev_button_clicks ==1:
+            send_to_server(empty_line)
+        if prev_button_clicks == 2:
+            current_line -= 1
+            prev_button_clicks = 0
+            next_button_clicks = 0  # Reset the count for Next button
+            update_label()
+            send_to_server(current_line)
+    else:
+        prev_button_clicks = 0
 
 current_line = 0
 
@@ -359,7 +426,7 @@ def change_appearance_mode_event(new_appearance_mode: str):
 root = ctk.CTk()
 root.title("Opera Access 1.0")
 root.configure(bg=ctk.set_appearance_mode("System"))
-root.geometry(f"{900}x{550}")
+root.geometry(f"{1000}x{550}")
 
 
 
@@ -406,8 +473,8 @@ appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", 
 appearance_mode_optionemenu.grid(row=8, column=0, padx=10, pady=10, sticky="s")
 appearance_mode_optionemenu.set("Dark")
 
-navigation_frame = ctk.CTkFrame(root, width=100, height=200, corner_radius=4, border_width=2)
-navigation_frame.grid(row=1, column=1,columnspan=2, padx=10, pady=0, sticky="nwe")
+navigation_frame = ctk.CTkFrame(root, width=200, height=200, corner_radius=4, border_width=2)
+navigation_frame.grid(row=1, column=1,columnspan=2, padx=10, pady=0, sticky="nswe")
 navigation_frame.grid_rowconfigure(4, weight=1)
 navigation_frame.grid_columnconfigure(1, weight=1)
 
@@ -432,7 +499,7 @@ navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="n
 prev_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
 prev_line_label.grid(row=2, column=0, columnspan=3, padx=10, pady=(50,20), sticky="nsew")
 
-current_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+current_line_label = ctk.CTkLabel(navigation_frame, wraplength=800, text_color=("Yellow","#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
 current_line_label.grid(row=3, column=0, columnspan=3, padx=10, pady=20, sticky="nsew")
 
 next_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
@@ -484,11 +551,16 @@ file_menu.add_command(label="Save Session", command=save_session)
 file_menu.add_command(label="Load Session", command=load_session)
 file_menu.add_command(label="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
 file_menu.add_cascade(label="QR-Code", menu=qr_menu)
+file_menu.add_command(label="Reset", command=clear_program)
+file_menu.add_command(label="Exit", command=close_program)
 
 
 
 
 root.configure(menu=menu_bar)
+
+root.protocol("WM_DELETE_WINDOW", close_program)
+
 
 
 # configure rows and columns
