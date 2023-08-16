@@ -422,6 +422,12 @@ def jump_to_line():
 def change_appearance_mode_event(new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
 
+def on_canvas_configure(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+def set_scrollbar_position(position):
+    canvas.yview_moveto(position)
+
 # Create the Tkinter root
 root = ctk.CTk()
 root.title("Opera Access 1.0")
@@ -432,7 +438,7 @@ root.geometry(f"{1000}x{550}")
 
 # configure grid layout (4x4)
 root.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
-root.columnconfigure((1, 2), weight=1)
+root.columnconfigure((0,1,2), weight=1)
 
 
 # create sidebar frame with widgets
@@ -473,10 +479,32 @@ appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", 
 appearance_mode_optionemenu.grid(row=8, column=0, padx=10, pady=10, sticky="s")
 appearance_mode_optionemenu.set("Dark")
 
-navigation_frame = ctk.CTkFrame(root, width=200, height=200, corner_radius=4, border_width=2)
-navigation_frame.grid(row=1, column=1,columnspan=2, padx=10, pady=0, sticky="nswe")
-navigation_frame.grid_rowconfigure(4, weight=1)
-navigation_frame.grid_columnconfigure(1, weight=1)
+navigation_frame = tk.LabelFrame(root)
+navigation_frame.grid(row=1, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
+navigation_frame.grid_rowconfigure(0, weight=0)
+navigation_frame.grid_columnconfigure(0, weight=1)
+
+canvas = tk.Canvas(navigation_frame)
+canvas.grid(row=0, column=0, sticky="nsew")
+
+scrollbar = ttk.Scrollbar(navigation_frame, orient="vertical", command=canvas.yview)
+scrollbar.grid(row=0, column=3, sticky="ns")
+
+canvas.configure(yscrollcommand=scrollbar.set)
+
+inner_frame = tk.Frame(canvas)
+canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
+def resize_inner_frame(event):
+    canvas.itemconfig(canvas_frame, width=event.width)
+
+canvas.bind("<Configure>", resize_inner_frame)
+
+
+# Calculate and set scrollbar position to 50% on load
+
+# Configure row and column weights for resizing
+
 
 # language = tk.StringVar(value="German")
 # language_switcher = ttk.OptionMenu(navigation_frame, language, command=lambda _: update_label())
@@ -496,18 +524,30 @@ progress.set(0)
 navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
 navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
 
-prev_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
-prev_line_label.grid(row=2, column=0, columnspan=3, padx=10, pady=(50,20), sticky="nsew")
+inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
+inner_frame.grid_columnconfigure(0, weight=1)
 
-current_line_label = ctk.CTkLabel(navigation_frame, wraplength=800, text_color=("Yellow","#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-current_line_label.grid(row=3, column=0, columnspan=3, padx=10, pady=20, sticky="nsew")
+prev_line_label = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+prev_line_label.grid(row=0, column=0, padx=10, pady=10)
 
-next_line_label = ctk.CTkLabel(navigation_frame, wraplength=500, text="---")
-next_line_label.grid(row=4, column=0, columnspan=3, padx=10, pady=(20,50), sticky="nsew")
+current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+current_line_label.grid(row=1, column=0, padx=10, pady=10)
 
-navigation_label = ctk.CTkLabel(root, text=f"", font=("", 20))
-navigation_label.grid(row=5, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
+next_line_label = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+next_line_label.grid(row=2, column=0, padx=10, pady=10)
 
+def on_canvas_configure(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+inner_frame.bind("<Configure>", on_canvas_configure)
+
+root.grid_rowconfigure(0, weight=0)
+root.grid_columnconfigure(0, weight=0)
+
+canvas.configure(yscrollcommand=scrollbar.set)
+scrollbar.configure(command=canvas.yview)
+
+inner_frame.bind("<Configure>", on_canvas_configure)
 
 # progress = ctk.CTkProgressBar(navigation_frame, length=500, maximum=len(combined_lines), mode='determinate', value=current_line)
 
