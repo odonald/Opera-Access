@@ -321,27 +321,40 @@ def update_label():
         next_lang_line = additional_languages[lang_code][next_line]
 
         # Update the labels with line numbers and make them clickable
-        prev_line_label.configure(text=f"Last Line ({prev_line + 1}):\n{prev_lang_line}")
-        prev_line_label.unbind("<Button-1>")
-        prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
+        # prev_line_label.configure(text=f"Last Line ({prev_line + 1}):\n{prev_lang_line}")
+        # prev_line_label.unbind("<Button-1>")
+        # prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
 
         current_line_label.configure(text=f"Line {current_line + 1}:\n{current_lang_line}")
         current_line_label.unbind("<Button-1>")
         current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
 
-        next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
-        next_line_label.unbind("<Button-1>")
-        next_line_label.bind("<Button-1>", lambda event, line=next_line: set_current_line(line))
+        # next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
+        # next_line_label.unbind("<Button-1>")
+        # next_line_label.bind("<Button-1>", lambda event, line=next_line: set_current_line(line))
 
         progress.set(current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1))
-        
-        if language_switcher_values:
-            language.set(language_switcher_values[0])
+            # Inside update_label()
+        for i in range(5):
+            prev_index = max(current_line - (5-i), 0)
+            prev_lang_line = additional_languages[lang_code][prev_index]
+            prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
+            prev_line_labels[i].unbind("<Button-1>")
+            prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: set_current_line(line))
+
+        for i in range(20):
+            next_index = min(current_line + (i+1), max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1)
+            next_lang_line = additional_languages[lang_code][next_index]
+            next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
+            next_line_labels[i].unbind("<Button-1>")
+            next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: set_current_line(line))
+            
+
     else:
         # percentage_label.configure(text="0%")
-        prev_line_label.configure(text="")
+        # prev_line_label.configure(text="")
         current_line_label.configure(text="No lines loaded.")
-        next_line_label.configure(text="")
+        # next_line_label.configure(text="")
         progress.configure(value=0)
 
 def set_current_line(line):
@@ -382,6 +395,8 @@ def previous_line():
 
     if current_line > 0:
         prev_button_clicks += 1
+        # canvas.yview_moveto(0.2)
+
         if prev_button_clicks ==1:
             send_to_server(empty_line)
         if prev_button_clicks == 2:
@@ -413,13 +428,6 @@ def jump_to_line():
 
 def change_appearance_mode_event(new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
-
-def on_canvas_configure(event):
-    canvas.configure(scrollregion=canvas.bbox("all"))
-
-def set_scrollbar_position(position):
-    canvas.yview_moveto(position)
-
 
 # Create the Tkinter root
 root = ctk.CTk()
@@ -486,9 +494,9 @@ def on_mousewheel(event):
         canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
 
 
-navigation_frame = tk.LabelFrame(root)
-navigation_frame.grid(row=1, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
-navigation_frame.grid_rowconfigure(0, weight=0)
+navigation_frame = tk.LabelFrame(root, height=900)
+navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
+navigation_frame.grid_rowconfigure(0, weight=1)
 navigation_frame.grid_columnconfigure(0, weight=1)
 
 
@@ -513,6 +521,7 @@ def resize_inner_frame(event):
 
 
 canvas.bind("<Configure>", resize_inner_frame)
+canvas.bind("<MouseWheel>", on_mousewheel)
 inner_frame.bind("<MouseWheel>", on_mousewheel)
 
 
@@ -544,29 +553,24 @@ navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="n
 inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
 inner_frame.grid_columnconfigure(0, weight=1)
 
-prev_line_label = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-prev_line_label.grid(row=0, column=0, padx=10, pady=10)
+prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
 
 current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
 current_line_label.grid(row=1, column=0, padx=10, pady=10)
 
-next_line_label = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-next_line_label.grid(row=2, column=0, padx=10, pady=10)
+next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
 
-next_line_label1 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-next_line_label1.grid(row=3, column=0, padx=10, pady=10)
+for index, label in enumerate(prev_line_labels, start=0):
+    label.grid(row=index, column=0, padx=10, pady=10)
 
-next_line_label2 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-next_line_label2.grid(row=4, column=0, padx=10, pady=10)
+current_line_label.grid(row=5, column=0, padx=10, pady=10)
 
-next_line_label3 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-next_line_label3.grid(row=5, column=0, padx=10, pady=10)
-
-next_line_label4 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
-next_line_label4.grid(row=6, column=0, padx=10, pady=10)
+for index, label in enumerate(next_line_labels, start=6):
+    label.grid(row=index, column=0, padx=10, pady=10)
 
 def on_canvas_configure(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
+
 
 inner_frame.bind("<Configure>", on_canvas_configure)
 
@@ -574,9 +578,16 @@ root.grid_rowconfigure(0, weight=0)
 root.grid_columnconfigure(0, weight=0)
 
 canvas.configure(yscrollcommand=scrollbar.set)
+canvas.configure(scrollregion=canvas.bbox("all"))
 scrollbar.configure(command=canvas.yview)
 
 inner_frame.bind("<Configure>", on_canvas_configure)
+
+def set_scroll_to_center():
+    canvas.configure(scrollregion=canvas.bbox("all"))
+    canvas.yview_moveto(0.1)
+
+root.after(100, set_scroll_to_center)
 
 # progress = ctk.CTkProgressBar(navigation_frame, length=500, maximum=len(combined_lines), mode='determinate', value=current_line)
 
