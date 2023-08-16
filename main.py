@@ -4,7 +4,7 @@ import customtkinter as ctk
 from tkinter import messagebox, filedialog, ttk, StringVar, Entry, simpledialog
 import requests
 import json
-
+import platform
 import pickle
 import threading
 from functools import partial
@@ -113,14 +113,6 @@ def show_qr_code(url):
 def open_url_in_browser(local_ip, port_number):
     url = f"http://{local_ip}:{port_number}"
     webbrowser.open(url)
-
-def import_original():
-    global original_file, original_lines
-    original_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
-    if original_file:
-        with open(original_file, "r", encoding="utf-8") as file_a:
-            original_lines = [line.strip() for line in file_a if line.strip()]
-        combine_files()
 
 
 class LanguageDialog(tk.simpledialog.Dialog):
@@ -428,6 +420,7 @@ def on_canvas_configure(event):
 def set_scrollbar_position(position):
     canvas.yview_moveto(position)
 
+
 # Create the Tkinter root
 root = ctk.CTk()
 root.title("Opera Access 1.0")
@@ -479,10 +472,25 @@ appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", 
 appearance_mode_optionemenu.grid(row=8, column=0, padx=10, pady=10, sticky="s")
 appearance_mode_optionemenu.set("Dark")
 
+def on_mousewheel(event):
+    platform = event.widget.tk.call('tk', 'windowingsystem')
+    
+    # For macOS
+    if platform == "aqua":
+        canvas.yview_scroll(-1*(event.delta), "units")
+    # For Windows
+    elif platform == "win32":
+        canvas.yview_scroll(-1*(event.delta//120), "units")
+    # For Linux
+    else:
+        canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
+
+
 navigation_frame = tk.LabelFrame(root)
 navigation_frame.grid(row=1, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
 navigation_frame.grid_rowconfigure(0, weight=0)
 navigation_frame.grid_columnconfigure(0, weight=1)
+
 
 canvas = tk.Canvas(navigation_frame)
 canvas.grid(row=0, column=0, sticky="nsew")
@@ -495,10 +503,19 @@ canvas.configure(yscrollcommand=scrollbar.set)
 inner_frame = tk.Frame(canvas)
 canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
+# Binding the scrolling action to the navigation_frame and its children
+# inner_frame.bind_class('Tk', '<MouseWheel>', on_mousewheel)  # for Windows
+# inner_frame.bind_class('Tk', '<Button-4>', on_mousewheel)    # for macOS and Linux (scroll up)
+# inner_frame.bind_class('Tk', '<Button-5>', on_mousewheel)    # for macOS and Linux (scroll down)
+
 def resize_inner_frame(event):
     canvas.itemconfig(canvas_frame, width=event.width)
 
+
 canvas.bind("<Configure>", resize_inner_frame)
+inner_frame.bind("<MouseWheel>", on_mousewheel)
+
+
 
 
 # Calculate and set scrollbar position to 50% on load
@@ -535,6 +552,18 @@ current_line_label.grid(row=1, column=0, padx=10, pady=10)
 
 next_line_label = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
 next_line_label.grid(row=2, column=0, padx=10, pady=10)
+
+next_line_label1 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+next_line_label1.grid(row=3, column=0, padx=10, pady=10)
+
+next_line_label2 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+next_line_label2.grid(row=4, column=0, padx=10, pady=10)
+
+next_line_label3 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+next_line_label3.grid(row=5, column=0, padx=10, pady=10)
+
+next_line_label4 = ctk.CTkLabel(inner_frame, wraplength=400, text="---")
+next_line_label4.grid(row=6, column=0, padx=10, pady=10)
 
 def on_canvas_configure(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
