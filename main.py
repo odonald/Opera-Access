@@ -603,6 +603,13 @@ scrollbar.configure(command=canvas.yview)
 
 inner_frame.bind("<Configure>", on_canvas_configure)
 
+def bind_scroll_to_widget(widget):
+    widget.bind("<MouseWheel>", on_mousewheel)
+    for child in widget.winfo_children():
+        bind_scroll_to_widget(child)
+
+bind_scroll_to_widget(inner_frame)
+
 def set_scroll_to_center():
     canvas.configure(scrollregion=canvas.bbox("all"))
     canvas.yview_moveto(0.1)
