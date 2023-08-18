@@ -174,7 +174,7 @@ class LanguageDialog(tk.simpledialog.Dialog):
         box = tk.Frame(self)
         w = ttk.Button(box, text="Import", width=10, command=self.ok, default=tk.ACTIVE)
         w.pack(side=tk.LEFT, padx=5, pady=5)
-        w = ttk.Button(box, text="Cancel", width=10, command=self.cancel)
+        w = tk.Button(box, text="Cancel", width=10, command=self.cancel)
         w.pack(side=tk.LEFT, padx=5, pady=5)
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
