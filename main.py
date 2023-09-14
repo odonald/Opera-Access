@@ -1,4 +1,5 @@
 import os
+import sys
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox, filedialog, ttk, StringVar, Entry, simpledialog
@@ -15,6 +16,9 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
+
+sys.stdout = open('my_stdout.log', 'w')
+sys.stderr = open('my_stderr.log', 'w')
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -312,6 +316,10 @@ def start_stop_server(start):
         # Stopping the Flask server is not straightforward; for now, the server will keep running
         # You might want to look into using other server options (like Gunicorn)
 
+def start_server():
+    server_thread = threading.Thread(target=run_server)
+    server_thread.start()
+    
 def send_to_server(line_number):
     global additional_languages
     message = {

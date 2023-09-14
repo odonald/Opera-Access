@@ -1,4 +1,8 @@
 __pycache__
-output
-build
-dist
+output/
+build/
+dist/
+env/
+main.spec
+text_a.txt 
+text_b.txt
