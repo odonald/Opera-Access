@@ -3,6 +3,6 @@ output/
 build/
 dist/
 env/
-main.spec
-text_a.txt 
-text_b.txt
+/main.spec
+/text_a.txt 
+/text_b.txt
