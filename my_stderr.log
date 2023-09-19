@@ -1,0 +1,194 @@
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 398, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 244, in request
+    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1285, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1331, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1280, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1040, in _send_output
+    self.send(msg)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 980, in send
+    self.connect()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 205, in connect
+    conn = self._new_conn()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x7fe74f6b3190>: Failed to establish a new connection: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=3210): Max retries exceeded with url: /stream/push (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fe74f6b3190>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/anaconda3/lib/python3.9/tkinter/__init__.py", line 1892, in __call__
+    return self.func(*args)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/customtkinter/windows/widgets/ctk_button.py", line 553, in _clicked
+    self._command()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 409, in next_line
+    send_to_server(empty_line)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 334, in send_to_server
+    requests.post(url, json=message)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/adapters.py", line 565, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=3210): Max retries exceeded with url: /stream/push (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fe74f6b3190>: Failed to establish a new connection: [Errno 61] Connection refused'))
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/connection.py", line 95, in create_connection
+    raise err
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 398, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 244, in request
+    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1285, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1331, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1280, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 1040, in _send_output
+    self.send(msg)
+  File "/Users/ugn/anaconda3/lib/python3.9/http/client.py", line 980, in send
+    self.connect()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 205, in connect
+    conn = self._new_conn()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x7fe750ad6ac0>: Failed to establish a new connection: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=3210): Max retries exceeded with url: /stream/push (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fe750ad6ac0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ugn/anaconda3/lib/python3.9/tkinter/__init__.py", line 1892, in __call__
+    return self.func(*args)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/customtkinter/windows/widgets/ctk_button.py", line 553, in _clicked
+    self._command()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 416, in next_line
+    send_to_server(current_line)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 334, in send_to_server
+    requests.post(url, json=message)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.9/site-packages/requests/adapters.py", line 565, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=3210): Max retries exceeded with url: /stream/push (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fe750ad6ac0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:3210
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [19/Sep/2023 15:37:09] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:09] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:39] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:40] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:43] "GET /stream/sse HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:43] "GET /static/favicon.ico HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:43] "[36mGET /static/favicon.ico HTTP/1.1[0m" 304 -
+127.0.0.1 - - [19/Sep/2023 15:37:58] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:37:58] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:03] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:03] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:05] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:05] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:09] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:09] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:10] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:11] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:11] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:12] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:12] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:12] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:13] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:13] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:13] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:14] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:14] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:15] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:15] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:16] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:16] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:17] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:17] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:18] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:18] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:18] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:18] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:19] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:19] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:20] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:20] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:26] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:26] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:26] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:27] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:27] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:27] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:28] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:28] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:28] "POST /stream/push HTTP/1.1" 200 -
+127.0.0.1 - - [19/Sep/2023 15:38:29] "POST /stream/push HTTP/1.1" 200 -

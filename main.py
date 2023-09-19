@@ -17,8 +17,8 @@ from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
 
-sys.stdout = open('my_stdout.log', 'w')
-sys.stderr = open('my_stderr.log', 'w')
+# sys.stdout = open('my_stdout.log', 'w')
+# sys.stderr = open('my_stderr.log', 'w')
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -183,6 +183,7 @@ class LanguageDialog(tk.simpledialog.Dialog):
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
         box.pack()
+
 def import_additional_language():
     global language_switcher_values
     LanguageDialog(root)
@@ -536,7 +537,7 @@ scrollbar.grid(row=0, column=3, sticky="ns")
 
 canvas.configure(yscrollcommand=scrollbar.set)
 
-inner_frame = tk.Frame(canvas)
+inner_frame = ctk.CTkFrame(canvas)
 canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
 # Binding the scrolling action to the navigation_frame and its children
