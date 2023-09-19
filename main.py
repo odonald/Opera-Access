@@ -27,6 +27,7 @@ language_switcher_values = []
 
 
 local_ip = socket.gethostbyname(socket.gethostname())
+
 port_number = 3210
 def change_port():
     global port_number, url
@@ -316,10 +317,6 @@ def start_stop_server(start):
         server_indicator.configure(bg="red")
         # Stopping the Flask server is not straightforward; for now, the server will keep running
         # You might want to look into using other server options (like Gunicorn)
-
-def start_server():
-    server_thread = threading.Thread(target=run_server)
-    server_thread.start()
     
 def send_to_server(line_number):
     global additional_languages
