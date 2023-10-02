@@ -236,12 +236,22 @@ def on_key_press(event):
         previous_line()
 
 def close_program():
-    result = messagebox.askyesnocancel("Save Session", "Do you want to save before closing?")
-    if result:
-        save_session()
-        root.destroy()
-    elif result is False:
-        root.destroy()
+    print("close_program called")  # Debug print
+    result = messagebox.askyesnocancel("Save Session",
+                                       "Do you want to save before closing?")
+    
+    if result is None:  # The user pressed 'Cancel'
+        print("Cancel pressed in the first dialog")  # Debug print
+        return
+    elif result:  # The user wants to save the session.
+        if save_session():  # The session is saved successfully.
+            print("Session saved successfully, closing application")  # Debug print
+            root.destroy()  # Now close the application.
+        else:
+            print("Session not saved, application remains open")  # Debug print
+    else:  # The user doesn't want to save the session.
+        print("No pressed, closing application")  # Debug print
+        root.destroy()  
 
 def clear_program():
     global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line, imported_languages_label, language_switcher_values
@@ -275,6 +285,8 @@ def save_session():
     if save_file:
         with open(save_file, 'wb') as f:
             pickle.dump(session_data, f)
+        return True  # Add this line to return True when the file is saved successfully
+    return False  # Add this line to return False if the user cancels the save dialog
 
 def load_session():
     global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line

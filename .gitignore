@@ -6,3 +6,8 @@ env/
 /main.spec
 /text_a.txt 
 /text_b.txt
+/my_stderr.log
+/my_stdout.log
+.DS_Store
+my_stderr.log
+my_stdout.log
