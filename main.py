@@ -330,10 +330,20 @@ def start_stop_server(start):
         # Stopping the Flask server is not straightforward; for now, the server will keep running
         # You might want to look into using other server options (like Gunicorn)
 
-def start_server_thread():
+def start_server_thread(start):
     server_thread = threading.Thread(target=run_server)
     server_thread.daemon = True  # Allow the thread to exit when the main program exits
     server_thread.start()
+    if start:
+        server_thread = threading.Thread(target=run_server, daemon=True)
+        server_thread.start()
+        server_running = True
+        server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+        server_indicator.configure(bg="green")
+    else:
+        server_running = False
+        server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+        server_indicator.configure(bg="red")
 
 def send_to_server(line_number):
     global additional_languages
@@ -733,7 +743,7 @@ root.protocol("WM_DELETE_WINDOW", close_program)
 #         server_button.configure(text="Start Server", command=partial(start_stop_server, True))
 #         update_server_indicator(False)
 
-start_server_thread()
+start_server_thread(start=True)
 
 root.bind("<KeyPress>", on_key_press)
 # Run the Tkinter root
