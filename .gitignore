@@ -11,3 +11,4 @@ env/
 .DS_Store
 my_stderr.log
 my_stdout.log
+.DS_Store

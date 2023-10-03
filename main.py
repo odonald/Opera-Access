@@ -329,7 +329,12 @@ def start_stop_server(start):
         server_indicator.configure(bg="red")
         # Stopping the Flask server is not straightforward; for now, the server will keep running
         # You might want to look into using other server options (like Gunicorn)
-    
+
+def start_server_thread():
+    server_thread = threading.Thread(target=run_server)
+    server_thread.daemon = True  # Allow the thread to exit when the main program exits
+    server_thread.start()
+
 def send_to_server(line_number):
     global additional_languages
     message = {
@@ -343,8 +348,12 @@ def send_to_server(line_number):
     requests.post(url, json=message)
 
 
+empty_line = 0
+next_button_clicks = 0
+prev_button_clicks = 0
+
 def update_label():
-    global current_line
+    global current_line, next_button_clicks, prev_button_clicks
     if additional_languages:
         percentage = (current_line / (max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1)) * 100
         # percentage_label.configure(text=f"{percentage:.2f}%")
@@ -396,15 +405,13 @@ def update_label():
         progress.configure(value=0)
 
 def set_current_line(line):
-    global current_line
+    global current_line, next_button_clicks, prev_button_clicks
+
     current_line = line
+    next_button_clicks = 0
+    prev_button_clicks = 0
     send_to_server(current_line)  # Send the clicked line to the server
     update_label()
-
-
-empty_line = 0
-next_button_clicks = 0
-prev_button_clicks = 0
 
 # Modify the next_line() and previous_line() functions
 def next_line():
@@ -710,21 +717,23 @@ root.protocol("WM_DELETE_WINDOW", close_program)
 # Place server button and indicator in the right frame (column 2)
 
 
-# If you want to update the server indicator color when the server starts or stops, you can use the following function
-def update_server_indicator(status):
-    if status:
-        server_indicator.configure(bg="green")
-    else:
-        server_indicator.configure(bg="red")
+# # If you want to update the server indicator color when the server starts or stops, you can use the following function
+# def update_server_indicator(status):
+#     if status:
+#         server_indicator.configure(bg="green")
+#     else:
+#         server_indicator.configure(bg="red")
 
-# Update the start_stop_server function to call update_server_indicator
-def start_stop_server(status):
-    if status:
-        server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
-        update_server_indicator(True)
-    else:
-        server_button.configure(text="Start Server", command=partial(start_stop_server, True))
-        update_server_indicator(False)
+# # Update the start_stop_server function to call update_server_indicator
+# def start_stop_server(status):
+#     if status:
+#         server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+#         update_server_indicator(True)
+#     else:
+#         server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+#         update_server_indicator(False)
+
+start_server_thread()
 
 root.bind("<KeyPress>", on_key_press)
 # Run the Tkinter root
