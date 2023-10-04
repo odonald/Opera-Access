@@ -30,8 +30,16 @@ local_ip = socket.gethostbyname(socket.gethostname())
 
 port_number = 3210
 def change_port():
-    global port_number, url
-    reserved_ports = [80, 443, 8080, 8443]  # list of reserved ports
+    global port_number, server_running
+    reserved_ports = [80, 443, 8080, 8443]  # List of reserved ports
+
+    # Stop the existing server if it's running
+    if server_running:
+        start_server_thread(start=False)
+        server_running = False
+        server_status_label.configure(text=f"Idle")
+        server_indicator.configure(bg="red")
+
     while True:
         new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=root)
         if new_port:
@@ -40,6 +48,17 @@ def change_port():
                 if 1024 <= port_int <= 65535 and port_int not in reserved_ports:
                     port_number = port_int
                     url = f"http://{local_ip}:{port_number}/stream/push"  # Update the url variable
+
+                    # Start a new server with the updated port
+                    server_thread = threading.Thread(target=run_server, daemon=True)
+                    server_thread.start()
+                    server_running = True
+                    if local_ip == "127.0.0.1":
+                        server_status_label.configure(text=f"LOCAL - No network detected")
+                        server_indicator.configure(bg="red")
+                    else:
+                        server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
+                        server_indicator.configure(bg="green")
                     break
                 else:
                     tk.messagebox.showerror("Invalid Port", "The selected port is already reserved or invalid.")
@@ -322,20 +341,20 @@ def run_server():
     app.run(debug=True, port=port, host=host, use_reloader=False)
 
 
-def start_stop_server(start):
-    global server_thread, server_running
-    if start:
-        server_thread = threading.Thread(target=run_server, daemon=True)
-        server_thread.start()
-        server_running = True
-        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
-        server_indicator.configure(bg="green")
-    else:
-        server_running = False
-        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
-        server_indicator.configure(bg="red")
-        # Stopping the Flask server is not straightforward; for now, the server will keep running
-        # You might want to look into using other server options (like Gunicorn)
+# def start_stop_server(start):
+#     global server_thread, server_running
+#     if start:
+#         server_thread = threading.Thread(target=run_server, daemon=True)
+#         server_thread.start()
+#         server_running = True
+#         # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+#         server_indicator.configure(bg="green")
+#     else:
+#         server_running = False
+#         # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+#         server_indicator.configure(bg="red")
+#         # Stopping the Flask server is not straightforward; for now, the server will keep running
+#         # You might want to look into using other server options (like Gunicorn)
 
 def start_server_thread(start):
     global server_running  # Declare server_running as a global variable
