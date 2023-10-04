@@ -17,8 +17,8 @@ from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
 
-# sys.stdout = open('my_stdout.log', 'w')
-# sys.stderr = open('my_stderr.log', 'w')
+sys.stdout = open('my_stdout.log', 'w')
+sys.stderr = open('my_stderr.log', 'w')
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
