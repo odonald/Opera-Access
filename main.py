@@ -90,6 +90,10 @@ def save_qr_code(url):
 
 def show_qr_code(url):
     url = f"http://{local_ip}:{port_number}"
+    
+    def on_qr_click(event):
+        save_qr_code(url)
+    
     global qr_img
     qr = qrcode.QRCode(
         version=1,
@@ -112,6 +116,9 @@ def show_qr_code(url):
     qr_label = tk.Label(qr_window, image=img_tk)
     qr_label.image = img_tk
     qr_label.pack()
+
+    # Bind the click event to the label
+    qr_label.bind("<Button-1>", on_qr_click)
 
     qr_window.mainloop()
 
@@ -321,11 +328,11 @@ def start_stop_server(start):
         server_thread = threading.Thread(target=run_server, daemon=True)
         server_thread.start()
         server_running = True
-        server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
         server_indicator.configure(bg="green")
     else:
         server_running = False
-        server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
         server_indicator.configure(bg="red")
         # Stopping the Flask server is not straightforward; for now, the server will keep running
         # You might want to look into using other server options (like Gunicorn)
@@ -338,11 +345,13 @@ def start_server_thread(start):
         server_thread = threading.Thread(target=run_server, daemon=True)
         server_thread.start()
         server_running = True
-        server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+        server_status_label.configure(text=f"Server Status: Live")
+        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
         server_indicator.configure(bg="green")
     else:
         server_running = False
-        server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+        server_status_label.configure(text=f"Idle")
         server_indicator.configure(bg="red")
 
 def send_to_server(line_number):
@@ -493,7 +502,7 @@ root.geometry(f"{1000}x{550}")
 
 
 # configure grid layout (4x4)
-root.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
+root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
 root.columnconfigure((0,1,2), weight=1)
 
 
@@ -506,33 +515,40 @@ Sidebar_label = ctk.CTkLabel(sidebar_frame, text="Menu:",font=("", 20))
 Sidebar_label.grid(row=0, column=0,  padx=20, pady=10, sticky="nwe")
 import_translation_button = ctk.CTkButton(sidebar_frame ,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Import Text", command=import_additional_language)
 import_translation_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsw")
-server_button = ctk.CTkButton(sidebar_frame,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Start Server", command=partial(start_stop_server, True))
-server_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
 
-server_indicator = tk.Canvas(sidebar_frame, width=15, height=15, bg="red", bd=0, highlightthickness=0)
-server_indicator.grid(row=2, column=0, padx=0, pady=0, sticky="nse")
+show_qr_button = ctk.CTkButton(sidebar_frame,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2,text="Show QR", command=lambda: show_qr_code(url))
+show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
+
+# server_button = ctk.CTkButton(sidebar_frame,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Start Server", command=partial(start_stop_server, True))
+# server_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
+
 
 port_button = ctk.CTkButton(sidebar_frame,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2,text="Change Port", command=change_port)
 port_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
 
 
 language_label = ctk.CTkLabel(sidebar_frame, text="Switch Display Language:")
-language_label.grid(row=4, column=0, padx=10, pady=0, sticky="nwe")
+language_label.grid(row=4, column=0, padx=10, pady=0, sticky="nw")
 
 language = tk.StringVar(root)
 language.set("Choose")
 
 language_switcher = ctk.CTkOptionMenu(sidebar_frame, variable=language, state="normal", values=(), width=10)
-language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nwe")
+language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nw")
 language_switcher.configure(values=(), command=lambda choice: update_label())
 
 imported_languages_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text="Imported Languages:")
-imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="nwe")
+imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
 
+server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"Server Status: \n {url}")
+server_status_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
+
+server_indicator = tk.Canvas(sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
+server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
 
 appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", "Dark", "System"],
                                                                        command=change_appearance_mode_event)
-appearance_mode_optionemenu.grid(row=8, column=0, padx=10, pady=10, sticky="s")
+appearance_mode_optionemenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")
 appearance_mode_optionemenu.set("Dark")
 
 def on_mousewheel(event):
