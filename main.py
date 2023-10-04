@@ -28,7 +28,7 @@ language_switcher_values = []
 
 local_ip = socket.gethostbyname(socket.gethostname())
 
-port_number = 3210
+port_number = 7832
 def change_port():
     global port_number, server_running
     reserved_ports = [80, 443, 8080, 8443]  # List of reserved ports
