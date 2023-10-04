@@ -322,22 +322,23 @@ def run_server():
     app.run(debug=True, port=port, host=host, use_reloader=False)
 
 
-def start_stop_server(start):
-    global server_thread, server_running
-    if start:
-        server_thread = threading.Thread(target=run_server, daemon=True)
-        server_thread.start()
-        server_running = True
-        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
-        server_indicator.configure(bg="green")
-    else:
-        server_running = False
-        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
-        server_indicator.configure(bg="red")
-        # Stopping the Flask server is not straightforward; for now, the server will keep running
-        # You might want to look into using other server options (like Gunicorn)
+# def start_stop_server(start):
+#     global server_thread, server_running
+#     if start:
+#         server_thread = threading.Thread(target=run_server, daemon=True)
+#         server_thread.start()
+#         server_running = True
+#         # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+#         server_indicator.configure(bg="green")
+#     else:
+#         server_running = False
+#         # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+#         server_indicator.configure(bg="red")
+#         # Stopping the Flask server is not straightforward; for now, the server will keep running
+#         # You might want to look into using other server options (like Gunicorn)
 
 def start_server_thread(start):
+    global server_running  # Declare server_running as a global variable
     server_thread = threading.Thread(target=run_server)
     server_thread.daemon = True  # Allow the thread to exit when the main program exits
     server_thread.start()
@@ -345,12 +346,14 @@ def start_server_thread(start):
         server_thread = threading.Thread(target=run_server, daemon=True)
         server_thread.start()
         server_running = True
-        server_status_label.configure(text=f"Server Status: Live")
-        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
-        server_indicator.configure(bg="green")
+        if local_ip == "127.0.0.1":
+            server_status_label.configure(text=f"LOCAL - No network detected")
+            server_indicator.configure(bg="red")
+        else:
+            server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
+            server_indicator.configure(bg="green")
     else:
         server_running = False
-        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
         server_status_label.configure(text=f"Idle")
         server_indicator.configure(bg="red")
 
@@ -534,14 +537,17 @@ language = tk.StringVar(root)
 language.set("Choose")
 
 language_switcher = ctk.CTkOptionMenu(sidebar_frame, variable=language, state="normal", values=(), width=10)
-language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nw")
+language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nwe")
 language_switcher.configure(values=(), command=lambda choice: update_label())
 
 imported_languages_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text="Imported Languages:")
 imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
 
-server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"Server Status: \n {url}")
-server_status_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
+server_status_menu_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent",font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
+server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nwe")
+
+server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{url}")
+server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
 
 server_indicator = tk.Canvas(sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
 server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
