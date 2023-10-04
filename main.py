@@ -545,8 +545,8 @@ show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
 # server_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
 
 
-port_button = ctk.CTkButton(sidebar_frame,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2,text="Change Port", command=change_port)
-port_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
+website_button = ctk.CTkButton(sidebar_frame,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2,text="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
+website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
 
 
 language_label = ctk.CTkLabel(sidebar_frame, text="Switch Display Language:")
