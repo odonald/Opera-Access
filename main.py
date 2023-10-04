@@ -322,20 +322,20 @@ def run_server():
     app.run(debug=True, port=port, host=host, use_reloader=False)
 
 
-# def start_stop_server(start):
-#     global server_thread, server_running
-#     if start:
-#         server_thread = threading.Thread(target=run_server, daemon=True)
-#         server_thread.start()
-#         server_running = True
-#         # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
-#         server_indicator.configure(bg="green")
-#     else:
-#         server_running = False
-#         # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
-#         server_indicator.configure(bg="red")
-#         # Stopping the Flask server is not straightforward; for now, the server will keep running
-#         # You might want to look into using other server options (like Gunicorn)
+def start_stop_server(start):
+    global server_thread, server_running
+    if start:
+        server_thread = threading.Thread(target=run_server, daemon=True)
+        server_thread.start()
+        server_running = True
+        # server_button.configure(text="Stop Server", command=partial(start_stop_server, False))
+        server_indicator.configure(bg="green")
+    else:
+        server_running = False
+        # server_button.configure(text="Start Server", command=partial(start_stop_server, True))
+        server_indicator.configure(bg="red")
+        # Stopping the Flask server is not straightforward; for now, the server will keep running
+        # You might want to look into using other server options (like Gunicorn)
 
 def start_server_thread(start):
     global server_running  # Declare server_running as a global variable
@@ -715,8 +715,10 @@ file_menu.add_command(label="Save Session", command=save_session)
 file_menu.add_command(label="Load Session", command=load_session)
 file_menu.add_command(label="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
 file_menu.add_cascade(label="QR-Code", menu=qr_menu)
+file_menu.add_command(label="Change Port", command=change_port)
 file_menu.add_command(label="Reset", command=clear_program)
 file_menu.add_command(label="Exit", command=close_program)
+
 
 
 
