@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 519, in <module>
-    root = ctk.CTk()
-  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.10/site-packages/customtkinter/windows/ctk_tk.py", line 38, in __init__
-    tkinter.Tk.__init__(self, **pop_from_dict_by_set(kwargs, self._valid_tk_constructor_arguments))
-  File "/Users/ugn/.pyenv/versions/3.10.11/lib/python3.10/tkinter/__init__.py", line 2299, in __init__
-    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
-_tkinter.TclError: couldn't connect to display "/private/tmp/com.apple.launchd.F1TNjcpHDH/org.xquartz:0"
