@@ -12,3 +12,9 @@ env/
 my_stderr.log
 my_stdout.log
 .DS_Store
+latest-mac-test.json
+latest-mac.json
+my_stderr.log
+my_stdout.log
+pyten.txt
+.DS_Store

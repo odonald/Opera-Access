@@ -2,10 +2,8 @@ import os
 import sys
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import messagebox, filedialog, ttk, StringVar, Entry, simpledialog
+from tkinter import messagebox, filedialog, ttk, StringVar, simpledialog
 import requests
-import json
-import platform
 import pickle
 import threading
 from functools import partial
@@ -16,9 +14,6 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
-
-sys.stdout = open('my_stdout.log', 'w')
-sys.stderr = open('my_stderr.log', 'w')
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -376,6 +371,7 @@ def start_server_thread(start):
         server_status_label.configure(text=f"Idle")
         server_indicator.configure(bg="red")
 
+
 def send_to_server(line_number):
     global additional_languages
     message = {
@@ -445,18 +441,29 @@ def update_label():
         # next_line_label.configure(text="")
         progress.configure(value=0)
 
-def set_current_line(line):
-    global current_line, next_button_clicks, prev_button_clicks
+current_line_clicks = 0
 
-    current_line = line
-    next_button_clicks = 0
-    prev_button_clicks = 0
-    send_to_server(current_line)  # Send the clicked line to the server
-    update_label()
+def set_current_line(line):
+    global current_line, next_button_clicks, prev_button_clicks, current_line_clicks
+
+    current_line_clicks += 1
+    if current_line_clicks == 1:
+        send_to_server(empty_line)
+
+    if current_line_clicks == 2:
+        current_line = line
+        current_line_clicks = 0  # Reset the current line click count
+        next_button_clicks = 0   # Reset the count for Next button
+        prev_button_clicks = 0   # Reset the count for Previous button
+        send_to_server(current_line)  # Send the clicked line to the server
+        update_label()
+
+# And update the global variables section at the top
+current_line_clicks = 0
 
 # Modify the next_line() and previous_line() functions
 def next_line():
-    global current_line,empty_line, additional_languages, next_button_clicks, prev_button_clicks
+    global current_line,empty_line, current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
@@ -469,13 +476,15 @@ def next_line():
             current_line += 1
             next_button_clicks = 0
             prev_button_clicks = 0  # Reset the count for Previous button
+            current_line_clicks = 0
             update_label()
             send_to_server(current_line)
     else:
         next_button_clicks = 0
 
+
 def previous_line():
-    global current_line, additional_languages, next_button_clicks, prev_button_clicks
+    global current_line,current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
@@ -489,10 +498,12 @@ def previous_line():
             current_line -= 1
             prev_button_clicks = 0
             next_button_clicks = 0  # Reset the count for Next button
+            current_line_clicks = 0
             update_label()
             send_to_server(current_line)
     else:
         prev_button_clicks = 0
+
 
 current_line = 0
 
@@ -563,13 +574,15 @@ imported_languages_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", t
 imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
 
 server_status_menu_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent",font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
-server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nwe")
+server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
 
 server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{url}")
 server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
 
 server_indicator = tk.Canvas(sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
 server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
+
+start_server_thread(start=True)
 
 appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", "Dark", "System"],
                                                                        command=change_appearance_mode_event)
@@ -786,7 +799,30 @@ root.protocol("WM_DELETE_WINDOW", close_program)
 #         server_button.configure(text="Start Server", command=partial(start_stop_server, True))
 #         update_server_indicator(False)
 
-start_server_thread(start=True)
+
+# Get the directory where the application is running
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)
+elif __file__:
+    application_path = os.path.dirname(__file__)
+
+# Check the type of operating system
+if os.name == 'nt':  # For Windows
+    logs_folder = 'logs'
+else:  # For Unix and MacOS
+    logs_folder = '.logs'  # Use a dot to make the folder hidden on Unix systems
+
+log_dir = os.path.join(application_path, logs_folder)
+
+# Ensure the directory exists, if not, create it
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+stdout_log_path = os.path.join(log_dir, 'my_stdout.log')
+stderr_log_path = os.path.join(log_dir, 'my_stderr.log')
+
+sys.stdout = open(stdout_log_path, 'w')
+sys.stderr = open(stderr_log_path, 'w')
 
 root.bind("<KeyPress>", on_key_press)
 # Run the Tkinter root

@@ -1,9 +1,8 @@
-Address already in use
-Port 7832 is in use by another program. Either identify and stop that program, or start the server with a different port.
-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:7832
-[33mPress CTRL+C to quit[0m
-127.0.0.1 - - [04/Oct/2023 09:44:42] "POST /stream/push HTTP/1.1" 200 -
-127.0.0.1 - - [04/Oct/2023 09:44:43] "POST /stream/push HTTP/1.1" 200 -
-127.0.0.1 - - [04/Oct/2023 09:44:44] "POST /stream/push HTTP/1.1" 200 -
-127.0.0.1 - - [04/Oct/2023 09:44:46] "POST /stream/push HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/main.py", line 519, in <module>
+    root = ctk.CTk()
+  File "/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/env/lib/python3.10/site-packages/customtkinter/windows/ctk_tk.py", line 38, in __init__
+    tkinter.Tk.__init__(self, **pop_from_dict_by_set(kwargs, self._valid_tk_constructor_arguments))
+  File "/Users/ugn/.pyenv/versions/3.10.11/lib/python3.10/tkinter/__init__.py", line 2299, in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+_tkinter.TclError: couldn't connect to display "/private/tmp/com.apple.launchd.F1TNjcpHDH/org.xquartz:0"
