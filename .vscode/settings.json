@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./build/x86_64-apple-darwin/debug/install/prefix/iso639"
+    ]
+}

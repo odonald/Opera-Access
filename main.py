@@ -217,8 +217,9 @@ def import_additional_language():
 
 
 def import_additional_translation(language_name, language_code):
-    global language_switcher_values
+    global language_switcher_values, additional_languages
     additional_translation_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+    
     if additional_translation_file:
         with open(additional_translation_file, "rb") as file:
             # Use charset_normalizer to detect the file encoding
@@ -227,18 +228,32 @@ def import_additional_translation(language_name, language_code):
             file.seek(0)
             for line in file:
                 line = line.decode(result['encoding']).strip()
+                line = line.replace('\\n', '\n')
                 if line:
                     additional_translation_lines.append(line)
-            additional_translation_lines.insert(0, "")  # Add an empty line at the beginning
+
+        additional_translation_lines.insert(0, "")  # Consistency with original format
+
+        # Perform line length comparison with existing translations
+        if additional_languages and any(len(lines) != len(additional_translation_lines) for lines in additional_languages.values()):
+            example_language, example_lines = next(iter(additional_languages.items()))
+            tk.messagebox.showerror("Line Length Mismatch",
+                                    f"The imported text does not match the line count of the existing translations.\n"
+                                    f"Example mismatch with '{example_language}': {len(example_lines)} lines.\n"
+                                    f"Imported text lines: {len(additional_translation_lines)}")
+            return  # Do not proceed with the import
+
+        # Update additional_languages with the new translation
         additional_languages[language_code] = additional_translation_lines
-        # Update the imported languages label
         imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(additional_languages.keys()))
-        # Update the language switcher values
         language_switcher_values = list(language_switcher.cget("values"))
+        
         if language_code not in language_switcher_values:
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
             language_switcher.configure(values=tuple(language_switcher_values))
+
+
 
 
 
@@ -460,10 +475,10 @@ def set_current_line(line):
 
 # And update the global variables section at the top
 current_line_clicks = 0
+last_confirmed_line = 0  
 
-# Modify the next_line() and previous_line() functions
 def next_line():
-    global current_line,empty_line, current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks
+    global current_line, empty_line, current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks, last_confirmed_line
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
@@ -471,11 +486,43 @@ def next_line():
         next_button_clicks += 1
         if next_button_clicks == 1:
             send_to_server(empty_line)
+            last_confirmed_line = current_line  # Save the current line state
 
         if next_button_clicks == 2:
             current_line += 1
             next_button_clicks = 0
-            prev_button_clicks = 0  # Reset the count for Previous button
+            prev_button_clicks = 0
+            current_line_clicks = 0
+            update_label()
+            send_to_server(current_line)
+    else:
+        next_button_clicks = 0
+
+
+def next_line():
+    global current_line, empty_line, current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks, last_confirmed_line
+    selected_language = language.get()
+    lang_code = available_languages[selected_language]
+
+    if current_line is not None and current_line < len(additional_languages[lang_code]) - 1:
+        next_button_clicks += 1
+        if next_button_clicks == 1:
+            send_to_server(empty_line)
+            last_confirmed_line = current_line
+
+            if prev_button_clicks == 1:
+                # User clicked previous and then clicked next
+                current_line = last_confirmed_line
+                next_button_clicks = 0
+                prev_button_clicks = 0
+                update_label()
+                send_to_server(current_line)
+                return
+
+        if next_button_clicks == 2:
+            current_line += 1
+            next_button_clicks = 0
+            prev_button_clicks = 0
             current_line_clicks = 0
             update_label()
             send_to_server(current_line)
@@ -484,25 +531,35 @@ def next_line():
 
 
 def previous_line():
-    global current_line,current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks
+    global current_line, current_line_clicks, additional_languages, next_button_clicks, prev_button_clicks, last_confirmed_line
     selected_language = language.get()
     lang_code = available_languages[selected_language]
 
     if current_line > 0:
         prev_button_clicks += 1
-        # canvas.yview_moveto(0.2)
-
-        if prev_button_clicks ==1:
+        if prev_button_clicks == 1:
             send_to_server(empty_line)
+            last_confirmed_line = current_line
+
+            if next_button_clicks == 1:
+                # User clicked next and then clicked previous
+                current_line = last_confirmed_line
+                next_button_clicks = 0
+                prev_button_clicks = 0
+                update_label()
+                send_to_server(current_line)
+                return
+
         if prev_button_clicks == 2:
             current_line -= 1
             prev_button_clicks = 0
-            next_button_clicks = 0  # Reset the count for Next button
+            next_button_clicks = 0
             current_line_clicks = 0
             update_label()
             send_to_server(current_line)
     else:
         prev_button_clicks = 0
+
 
 
 current_line = 0

@@ -116,10 +116,12 @@
       function displayMessage(language) {
         if (currentMessageContent) {
           var message = currentMessageContent[language];
+          // Replace '\n' with '<br>' for HTML rendering
+          message = message.replace(/\n/g, '<br>');
           document.getElementById("message").innerHTML = message;
           document.getElementById("message").style.fontSize = currentTextSize + "px";
-        }
-      }
+  }
+}
 
       languageSelector.addEventListener("change", function() {
         displayMessage(languageSelector.value);

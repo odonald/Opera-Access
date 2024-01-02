@@ -21,7 +21,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='Overtitle',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -38,7 +38,7 @@ exe = EXE(
 )
 app = BUNDLE(
     exe,
-    name='main.app',
+    name='Overtitle.app',
     icon='/Users/ugn/Documents/Code/Commercial/overtitle/overtitle-build/favicon.icns',
     bundle_identifier=None,
 )

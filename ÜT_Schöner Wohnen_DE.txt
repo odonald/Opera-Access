@@ -10,7 +10,8 @@ Marie Kondo, Rosa Luxemburg, Elon Musk, Jean Paul und Kurt Tucholsky
 
 I.
 
-Der eingegebene Code ist leider falsch.
+Der eingegebene 
+Code.\nist leider\nfalsch.
 
 Sie haben noch - drei - Versuche.
 
