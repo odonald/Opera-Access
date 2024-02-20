@@ -41,7 +41,7 @@ Run the Application:
 python main.py
 ```
 ## Usage
-1. The Application will start a local server at http://YOUNETOWRKIP:7832 (shown in the program).
+1. The Application will start a local server at http://{YOURNETWORKIP}:7832 (shown in the program).
 
 2. If required, you can change the port from 7832 to a different setting via "File" --> "Change Port".
 
