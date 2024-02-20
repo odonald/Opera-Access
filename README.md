@@ -51,12 +51,13 @@ python main.py
 
 5. Switch the display language to your preferred language (this will only be visible to the navigator). 
 
-5. Use the "Open Website" Button and navigate through the text using the "previous" and "next" buttons to preview the audience output page.
+5. Use the "Open Website" Button and navigate through the text using the "previous" and "next" buttons to preview the user device output page.
 
-6. Share the link with the audience - Use the QR code or share the Link from your browser window in step 5.
+6. Share the link with the users - Use the QR code or share the Link from your browser window in step 5.
 
 Important:
-The program needs to be restarted if introduced to a new network - It will not automatically switch networks while still opened. 
+1. The user devices have to be logged in to the same network the host device is broadcasting on. 
+2. The program needs to be restarted if introduced to a new network - It will not automatically switch networks while still open. 
 
 
 
