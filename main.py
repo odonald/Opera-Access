@@ -62,10 +62,7 @@ def run_server():
 
 
 
-# Create a text box for entering the line number
-line_number_var = StringVar()
-line_number_entry = ctk.CTkEntry(navigation_frame3, placeholder_text="Jump to line")
-line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
 
 
 
