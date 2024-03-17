@@ -1,18 +1,8 @@
-import os
-import sys
 import tkinter as tk
-import customtkinter as ctk
-from tkinter import messagebox, filedialog, ttk, StringVar, simpledialog
-import requests
-import pickle
+from tkinter import simpledialog
 import threading
-from functools import partial
 import iso639
 import socket
-import charset_normalizer
-import qrcode
-from PIL import ImageTk, Image
-from io import BytesIO
 import webbrowser
 
 def start_server_thread(start):
@@ -98,57 +88,6 @@ current_line = 0 if combined_lines else None
 # Create a dictionary of all available languages using the iso639 package
 available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
 
-def save_qr_code(url):
-    url = f"http://{local_ip}:{port_number}"
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(url)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    
-    file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
-
-    if file_path:
-        img.save(file_path)
-
-def show_qr_code(url):
-    url = f"http://{local_ip}:{port_number}"
-    
-    def on_qr_click(event):
-        save_qr_code(url)
-    
-    global qr_img
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=20,
-        border=4,
-    )
-    qr.add_data(url)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    img_tk = ImageTk.PhotoImage(img)
-
-    qr_img = img
-
-    qr_window = tk.Toplevel()
-    qr_window.title("QR Code")
-    qr_window.geometry("600x600")
-
-    qr_label = tk.Label(qr_window, image=img_tk)
-    qr_label.image = img_tk
-    qr_label.pack()
-
-    # Bind the click event to the label
-    qr_label.bind("<Button-1>", on_qr_click)
-
-    qr_window.mainloop()
 
 def open_url_in_browser(local_ip, port_number):
     url = f"http://{local_ip}:{port_number}"
