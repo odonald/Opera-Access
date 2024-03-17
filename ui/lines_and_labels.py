@@ -6,6 +6,34 @@ empty_line = 0
 next_button_clicks = 0
 prev_button_clicks = 0
 
+# Create previous, current, and next line labels
+
+progress = ctk.CTkProgressBar(root, orientation="horizontal")
+progress.grid(row=0, column=1,columnspan=3, padx=0, pady=0, sticky="new")
+progress.configure(mode="determinate")
+progress.set(0)
+
+navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
+navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
+
+
+
+prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
+
+current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+current_line_label.grid(row=1, column=0, padx=10, pady=10)
+
+next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
+
+for index, label in enumerate(prev_line_labels, start=0):
+    label.grid(row=index, column=0, padx=10, pady=10)
+
+current_line_label.grid(row=5, column=0, padx=10, pady=10)
+
+for index, label in enumerate(next_line_labels, start=6):
+    label.grid(row=index, column=0, padx=10, pady=10)
+
+
 def update_label():
     global current_line, next_button_clicks, prev_button_clicks
     if additional_languages:
