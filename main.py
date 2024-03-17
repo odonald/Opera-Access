@@ -15,25 +15,9 @@ from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
 
-ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 
 
-
-def on_key_press(event):
-    if event.keysym == 'Right':
-        next_line()
-    elif event.keysym == 'Left':
-        previous_line()
-
-
-
-def run_server():
-    from app import app
-    host = local_ip
-    port = port_number  # Replace with your desired port number
-    app.run(debug=True, port=port, host=host, use_reloader=False)
 
 
 # def start_stop_server(start):
@@ -50,13 +34,6 @@ def run_server():
 #         server_indicator.configure(bg="red")
 #         # Stopping the Flask server is not straightforward; for now, the server will keep running
 #         # You might want to look into using other server options (like Gunicorn)
-
-
-
-
-
-
-
 
 
 root.protocol("WM_DELETE_WINDOW", close_program)
