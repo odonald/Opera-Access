@@ -23,6 +23,7 @@ setup(
 )
 
 
+
 # Get the directory where the application is running
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)

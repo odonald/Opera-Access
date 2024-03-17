@@ -55,6 +55,7 @@ def save_session():
         return True  # Add this line to return True when the file is saved successfully
     return False  # Add this line to return False if the user cancels the save dialog
 
+
 def load_session():
     global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line
     load_file = filedialog.askopenfilename(filetypes=[("Pickle files", "*.pkl")])
@@ -74,3 +75,5 @@ def load_session():
 
 
         update_label()
+        
+

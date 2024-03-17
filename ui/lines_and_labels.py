@@ -90,6 +90,15 @@ def update_label():
         # next_line_label.configure(text="")
         progress.configure(value=0)
 
+
+def combine_files():
+    global combined_lines
+    if original_lines and translation_lines:
+        combined_lines = list(zip(original_lines, translation_lines))
+    else:
+        combined_lines = [(line, "") for line in original_lines]
+    update_label()
+
 current_line_clicks = 0
 
 def set_current_line(line):

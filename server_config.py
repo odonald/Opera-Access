@@ -72,3 +72,9 @@ url = f"http://{local_ip}:{port_number}/stream/push"
 def open_url_in_browser(local_ip, port_number):
     url = f"http://{local_ip}:{port_number}"
     webbrowser.open(url)
+    
+def run_server():
+    from app import app
+    host = local_ip
+    port = port_number  # Replace with your desired port number
+    app.run(debug=True, port=port, host=host, use_reloader=False)
