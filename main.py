@@ -101,6 +101,8 @@ scrollbar.grid(row=0, column=3, sticky="ns")
 
 canvas.configure(yscrollcommand=scrollbar.set)
 
+
+
 inner_frame = ctk.CTkFrame(canvas)
 canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
@@ -133,33 +135,6 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 # percentage_label = ctk.CTkLabel(navigation_frame, text="%")
 # percentage_label.grid(row=1, column=1, sticky="ns")
 
-# Create previous, current, and next line labels
-
-progress = ctk.CTkProgressBar(root, orientation="horizontal")
-progress.grid(row=0, column=1,columnspan=3, padx=0, pady=0, sticky="new")
-progress.configure(mode="determinate")
-progress.set(0)
-
-navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
-navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
-
-inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
-inner_frame.grid_columnconfigure(0, weight=1)
-
-prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
-
-current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-current_line_label.grid(row=1, column=0, padx=10, pady=10)
-
-next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
-
-for index, label in enumerate(prev_line_labels, start=0):
-    label.grid(row=index, column=0, padx=10, pady=10)
-
-current_line_label.grid(row=5, column=0, padx=10, pady=10)
-
-for index, label in enumerate(next_line_labels, start=6):
-    label.grid(row=index, column=0, padx=10, pady=10)
 
 def on_canvas_configure(event):
     canvas.configure(scrollregion=canvas.bbox("all"))
