@@ -60,48 +60,14 @@ def run_server():
 
 
 
-previous_button = ctk.CTkButton(navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
-previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
 
-next_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
-next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
 # Create a text box for entering the line number
 line_number_var = StringVar()
 line_number_entry = ctk.CTkEntry(navigation_frame3, placeholder_text="Jump to line")
 line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
 
-# Create a 'Go' button to jump to the specified line number
-go_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
-go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
-# Create the menu bar
-menu_bar = tk.Menu(root)
-root.configure(menu=menu_bar)
-
-# Create the "File" menu
-file_menu = tk.Menu(menu_bar, tearoff=0)
-menu_bar.add_cascade(label="File", menu=file_menu)
-
-# Create a submenu for "Import" option
-qr_menu = tk.Menu(file_menu, tearoff=0)
-qr_menu.add_command(label="Save QR Code", command=lambda: save_qr_code(url))
-qr_menu.add_command(label="Show QR Code", command=lambda: show_qr_code(url))
-
-file_menu.add_command(label="Import additional language", command=import_additional_language)
-file_menu.add_command(label="Save Session", command=save_session)
-file_menu.add_command(label="Load Session", command=load_session)
-file_menu.add_command(label="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
-file_menu.add_cascade(label="QR-Code", menu=qr_menu)
-file_menu.add_command(label="Change Port", command=change_port)
-file_menu.add_command(label="Reset", command=clear_program)
-file_menu.add_command(label="Exit", command=close_program)
-
-
-
-
-
-root.configure(menu=menu_bar)
 
 root.protocol("WM_DELETE_WINDOW", close_program)
 
