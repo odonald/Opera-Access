@@ -20,13 +20,6 @@ ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark
 
 
 
-def combine_files():
-    global combined_lines
-    if original_lines and translation_lines:
-        combined_lines = list(zip(original_lines, translation_lines))
-    else:
-        combined_lines = [(line, "") for line in original_lines]
-    update_label()
 
 def on_key_press(event):
     if event.keysym == 'Right':

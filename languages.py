@@ -7,7 +7,8 @@ import iso639
 
 language_switcher_values = []
 
-
+# Create a dictionary of all available languages using the iso639 package
+available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
 
 COMMON_LANGUAGES = ['Arabic', 'Bengali', 'Chinese', 'English', 'French', 'German', 'Hindi', 'Indonesian', 'Italian', 'Japanese', 'Javanese', 'Korean', 'Malay', 'Marathi', 'Portuguese', 'Punjabi', 'Russian', 'Spanish', 'Tamil', 'Telugu', 'Turkish', 'Ukrainian', 'Urdu', 'Vietnamese', 'Wu', 'Xhosa', 'Yoruba', 'Zulu', 'Cantonese', 'Farsi', 'Filipino', 'Gujarati', 'Hausa', 'Haitian Creole', 'Igbo', 'Kannada', 'Maithili', 'Odia', 'Romanian', 'Thai']
 
@@ -102,6 +103,8 @@ def import_additional_translation(language_name, language_code):
                     additional_translation_lines.append(line)
 
         additional_translation_lines.insert(0, "")  # Consistency with original format
+    
+
 
         # Perform line length comparison with existing translations
         if additional_languages and any(len(lines) != len(additional_translation_lines) for lines in additional_languages.values()):
@@ -121,6 +124,24 @@ def import_additional_translation(language_name, language_code):
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
             language_switcher.configure(values=tuple(language_switcher_values))
+
+
+original_file = None
+translation_file = None
+original_lines = []
+translation_lines = []
+additional_languages = {}
+combined_lines = []
+current_line = 0
+imported_languages_label = []
+
+if original_lines:
+    combined_lines.extend(original_lines)
+
+if translation_lines:
+    combined_lines.extend(translation_lines)
+
+current_line = 0 if combined_lines else None
 
 
 

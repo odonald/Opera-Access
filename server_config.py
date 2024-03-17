@@ -68,26 +68,6 @@ def change_port():
 
 url = f"http://{local_ip}:{port_number}/stream/push"
 
-original_file = None
-translation_file = None
-original_lines = []
-translation_lines = []
-additional_languages = {}
-combined_lines = []
-current_line = 0
-imported_languages_label = []
-
-if original_lines:
-    combined_lines.extend(original_lines)
-
-if translation_lines:
-    combined_lines.extend(translation_lines)
-
-current_line = 0 if combined_lines else None
-
-# Create a dictionary of all available languages using the iso639 package
-available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
-
 
 def open_url_in_browser(local_ip, port_number):
     url = f"http://{local_ip}:{port_number}"
