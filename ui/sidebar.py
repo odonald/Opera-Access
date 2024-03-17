@@ -16,7 +16,8 @@ show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
 
 # server_button = ctk.CTkButton(sidebar_frame,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Start Server", command=partial(start_stop_server, True))
 # server_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
-
+inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
+inner_frame.grid_columnconfigure(0, weight=1)
 
 website_button = ctk.CTkButton(sidebar_frame,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2,text="Open Website", command=lambda: open_url_in_browser(local_ip, port_number))
 website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
