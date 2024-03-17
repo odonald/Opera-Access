@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import  filedialog, ttk
 import charset_normalizer
+import requests
+import iso639
 
 
 language_switcher_values = []
@@ -122,3 +124,14 @@ def import_additional_translation(language_name, language_code):
 
 
 
+def send_to_server(line_number):
+    global additional_languages
+    message = {
+        "type": "message",
+        "content": {
+        }
+    }
+    for lang_code, lang_lines in additional_languages.items():
+        lang_name = iso639.languages.get(alpha2=lang_code).name
+        message["content"][lang_name] = lang_lines[line_number]
+    requests.post(url, json=message)
