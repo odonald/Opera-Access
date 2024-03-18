@@ -36,7 +36,7 @@ import webbrowser
 #         # You might want to look into using other server options (like Gunicorn)
 
 
-root.protocol("WM_DELETE_WINDOW", close_program)
+# root.protocol("WM_DELETE_WINDOW", close_program)
 
 
 
