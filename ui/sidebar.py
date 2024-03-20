@@ -44,7 +44,7 @@ imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
 server_status_menu_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent",font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
 server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
 
-server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{url}")
+server_status_label = ctk.CTkLabel(sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{qr_code_setup.url}")
 server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
 
 server_indicator = tk.Canvas(sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)

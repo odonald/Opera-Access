@@ -5,6 +5,7 @@ import iso639
 import socket
 import webbrowser
 import lines_and_labels
+import frame_window_setup
 
 def start_server_thread(start):
     global server_running  # Declare server_running as a global variable
@@ -41,7 +42,7 @@ def change_port():
         lines_and_labels.server_indicator.configure(bg="red")
 
     while True:
-        new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=root)
+        new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=frame_window_setup.root)
         if new_port:
             try:
                 port_int = int(new_port)

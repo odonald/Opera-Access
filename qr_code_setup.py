@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 import qrcode
 from PIL import ImageTk
-
+import qr_code_setup
+import server_config
 def save_qr_code(url):
-    url = f"http://{local_ip}:{port_number}"
+    url = f"http://{server_config.local_ip}:{server_config.port_number}"
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -22,7 +23,7 @@ def save_qr_code(url):
         img.save(file_path)
 
 def show_qr_code(url):
-    url = f"http://{local_ip}:{port_number}"
+    url = f"http://{server_config.local_ip}:{server_config.port_number}"
     
     def on_qr_click(event):
         save_qr_code(url)
