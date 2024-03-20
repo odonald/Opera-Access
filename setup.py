@@ -1,6 +1,7 @@
-from setuptools import setup, find_packages
 import os
 import sys
+from setuptools import setup, find_packages
+import frame_window_setup
 
 APP = ['main.py']
 APP_NAME = "Opera Access"
@@ -48,6 +49,6 @@ stderr_log_path = os.path.join(log_dir, 'my_stderr.log')
 sys.stdout = open(stdout_log_path, 'w')
 sys.stderr = open(stderr_log_path, 'w')
 
-root.bind("<KeyPress>", on_key_press)
+frame_window_setup.root.bind("<KeyPress>", frame_window_setup.on_key_press)
 # Run the Tkinter root
-root.mainloop()
+frame_window_setup.root.mainloop()
