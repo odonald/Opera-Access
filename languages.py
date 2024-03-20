@@ -3,7 +3,11 @@ from tkinter import  filedialog, ttk
 import charset_normalizer
 import requests
 import iso639
-
+import frame_window_setup
+import languages
+import lines_and_labels
+import qr_code_setup
+import sidebar
 
 language_switcher_values = []
 
@@ -78,11 +82,11 @@ class LanguageDialog(tk.simpledialog.Dialog):
 
 def import_additional_language():
     global language_switcher_values
-    LanguageDialog(root)
+    LanguageDialog(frame_window_setup.root)
     # Automatically switch to the first imported language
     if language_switcher_values:
-        language.set(language_switcher_values[0])
-        update_label()
+        languages.language.set(language_switcher_values[0])
+        lines_and_labels.update_label()
     
 
 
@@ -118,12 +122,12 @@ def import_additional_translation(language_name, language_code):
         # Update additional_languages with the new translation
         additional_languages[language_code] = additional_translation_lines
         imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(additional_languages.keys()))
-        language_switcher_values = list(language_switcher.cget("values"))
+        language_switcher_values = list(sidebar.language_switcher.cget("values"))
         
         if language_code not in language_switcher_values:
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
-            language_switcher.configure(values=tuple(language_switcher_values))
+            languages.language_switcher.configure(values=tuple(language_switcher_values))
 
 
 original_file = None
@@ -155,4 +159,4 @@ def send_to_server(line_number):
     for lang_code, lang_lines in additional_languages.items():
         lang_name = iso639.languages.get(alpha2=lang_code).name
         message["content"][lang_name] = lang_lines[line_number]
-    requests.post(url, json=message)
+    requests.post(qr_code_setup.url, json=message)
