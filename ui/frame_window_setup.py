@@ -1,15 +1,20 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import ttk
+import lines_and_labels
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 # Create the Tkinter root
+#def create_root():
+    #global root
+global root    
 root = ctk.CTk()
 root.title("Opera Access 1.0")
 root.configure(bg=ctk.set_appearance_mode("System"))
 root.geometry(f"{1000}x{550}")
+ #   return root
 
 # configure grid layout (4x4)
 root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
@@ -124,6 +129,6 @@ next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
 def on_key_press(event):
     if event.keysym == 'Right':
-        next_line()
+        lines_and_labels.next_line()
     elif event.keysym == 'Left':
-        previous_line()
+        lines_and_labels.previous_line()
