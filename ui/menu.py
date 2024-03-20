@@ -15,8 +15,8 @@ menu_bar.add_cascade(label="File", menu=file_menu)
 
 # Create a submenu for "Import" option
 qr_menu = tk.Menu(file_menu, tearoff=0)
-qr_menu.add_command(label="Save QR Code", command=lambda: qr_code_setup.save_qr_code(url))
-qr_menu.add_command(label="Show QR Code", command=lambda: qr_code_setup.show_qr_code(url))
+qr_menu.add_command(label="Save QR Code", command=lambda: qr_code_setup.save_qr_code(qr_code_setup.url))
+qr_menu.add_command(label="Show QR Code", command=lambda: qr_code_setup.show_qr_code(qr_code_setup.url))
 
 file_menu.add_command(label="Import additional language", command=languages.import_additional_language)
 file_menu.add_command(label="Save Session", command=session_mgmt.save_session)
@@ -27,4 +27,4 @@ file_menu.add_command(label="Change Port", command=server_config.change_port)
 file_menu.add_command(label="Reset", command=session_mgmt.clear_program)
 file_menu.add_command(label="Exit", command=session_mgmt.close_program)
 
-root.configure(menu=menu_bar)
+frame_window_setup.root.configure(menu=menu_bar)
