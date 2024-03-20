@@ -4,6 +4,7 @@ import threading
 import iso639
 import socket
 import webbrowser
+import lines_and_labels
 
 def start_server_thread(start):
     global server_running  # Declare server_running as a global variable
@@ -15,15 +16,15 @@ def start_server_thread(start):
         server_thread.start()
         server_running = True
         if local_ip == "127.0.0.1":
-            server_status_label.configure(text=f"LOCAL - No network detected")
-            server_indicator.configure(bg="red")
+            lines_and_labels.server_status_label.configure(text=f"LOCAL - No network detected")
+            lines_and_labels.server_indicator.configure(bg="red")
         else:
-            server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
-            server_indicator.configure(bg="green")
+            lines_and_labels.server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
+            lines_and_labels.server_indicator.configure(bg="green")
     else:
         server_running = False
-        server_status_label.configure(text=f"Idle")
-        server_indicator.configure(bg="red")
+        lines_and_labels.server_status_label.configure(text=f"Idle")
+        lines_and_labels.server_indicator.configure(bg="red")
 
 local_ip = socket.gethostbyname(socket.gethostname())
 
@@ -36,8 +37,8 @@ def change_port():
     if server_running:
         start_server_thread(start=False)
         server_running = False
-        server_status_label.configure(text=f"Idle")
-        server_indicator.configure(bg="red")
+        lines_and_labels.server_status_label.configure(text=f"Idle")
+        lines_and_labels.server_indicator.configure(bg="red")
 
     while True:
         new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=root)
@@ -53,11 +54,11 @@ def change_port():
                     server_thread.start()
                     server_running = True
                     if local_ip == "127.0.0.1":
-                        server_status_label.configure(text=f"LOCAL - No network detected")
-                        server_indicator.configure(bg="red")
+                        lines_and_labels.server_status_label.configure(text=f"LOCAL - No network detected")
+                        lines_and_labels.server_indicator.configure(bg="red")
                     else:
-                        server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
-                        server_indicator.configure(bg="green")
+                        lines_and_labels.server_status_label.configure(text=f"Live\n http://{local_ip}:{port_number}")
+                        lines_and_labels.server_indicator.configure(bg="green")
                     break
                 else:
                     tk.messagebox.showerror("Invalid Port", "The selected port is already reserved or invalid.")
