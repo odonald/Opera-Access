@@ -1,7 +1,7 @@
 from tkinter import messagebox, filedialog
 import pickle
-import frame_window_setup
-import lines_and_labels
+import ui.frame_window_setup
+import ui.lines_and_labels
 import languages
 
 
@@ -16,12 +16,12 @@ def close_program():
     elif result:  # The user wants to save the session.
         if save_session():  # The session is saved successfully.
             print("Session saved successfully, closing application")  # Debug print
-            frame_window_setup.root.destroy()  # Now close the application.
+            ui.frame_window_setup.root.destroy()  # Now close the application.
         else:
             print("Session not saved, application remains open")  # Debug print
     else:  # The user doesn't want to save the session.
         print("No pressed, closing application")  # Debug print
-        frame_window_setup.root.destroy()  
+        ui.frame_window_setup.root.destroy()  
 
 def clear_program():
     global original_file, translation_file, original_lines, translation_lines, additional_languages, combined_lines, current_line, imported_languages_label, language_switcher_values
@@ -36,7 +36,7 @@ def clear_program():
     imported_languages_label.configure(text="")
     language_switcher_values = []
     languages.language_switcher.configure(values=())
-    lines_and_labels.update_label()
+    ui.lines_and_labels.update_label()
         
 def save_session():
     session_data = {
@@ -77,6 +77,6 @@ def load_session():
         languages.language_switcher.configure(values=tuple(language_switcher_values))
 
 
-        lines_and_labels.update_label()
+        ui.lines_and_labels.update_label()
         
 

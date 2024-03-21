@@ -3,11 +3,11 @@ from tkinter import  filedialog, ttk
 import charset_normalizer
 import requests
 import iso639
-import frame_window_setup
-import languages
-import lines_and_labels
+import ui.frame_window_setup
+#import languages
+import ui.lines_and_labels
 import qr_code_setup
-import sidebar
+import ui.sidebar
 
 language_switcher_values = []
 
@@ -54,6 +54,7 @@ class LanguageDialog(tk.simpledialog.Dialog):
         if len(search_term) < 3:
             items = COMMON_LANGUAGES
         else:
+            global language
             for language in {**available_languages, **additional_languages}.keys():
                 if search_term in language.lower():
                     items.append(language)
@@ -82,11 +83,11 @@ class LanguageDialog(tk.simpledialog.Dialog):
 
 def import_additional_language():
     global language_switcher_values
-    LanguageDialog(frame_window_setup.root)
+    LanguageDialog(ui.frame_window_setup.root)
     # Automatically switch to the first imported language
     if language_switcher_values:
-        languages.language.set(language_switcher_values[0])
-        lines_and_labels.update_label()
+        language.set(language_switcher_values[0])
+        ui.lines_and_labels.update_label()
     
 
 
@@ -122,12 +123,12 @@ def import_additional_translation(language_name, language_code):
         # Update additional_languages with the new translation
         additional_languages[language_code] = additional_translation_lines
         imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(additional_languages.keys()))
-        language_switcher_values = list(sidebar.language_switcher.cget("values"))
+        language_switcher_values = list(ui.sidebar.language_switcher.cget("values"))
         
         if language_code not in language_switcher_values:
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
-            languages.language_switcher.configure(values=tuple(language_switcher_values))
+            ui.sidebar.language_switcher.configure(values=tuple(language_switcher_values))
 
 
 original_file = None
