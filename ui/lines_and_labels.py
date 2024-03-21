@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
 import frame_window_setup
-import languages
+import ui.languages as languages
 
 empty_line = 0
 next_button_clicks = 0
@@ -227,3 +227,36 @@ def jump_to_line():
 
 def change_appearance_mode_event(new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
+
+
+# Create a 'Go' button to jump to the specified line number
+go_button = ctk.CTkButton(frame_window_setup.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
+go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+
+previous_button = ctk.CTkButton(frame_window_setup.navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
+previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+
+next_button = ctk.CTkButton(frame_window_setup.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
+next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
+
+def on_key_press(event):
+    if event.keysym == 'Right':
+        next_line()
+    elif event.keysym == 'Left':
+        previous_line()
+
+# Create a 'Go' button to jump to the specified line number
+go_button = ctk.CTkButton(frame_window_setup.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=lines_and_labels.jump_to_line)
+go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+
+previous_button = ctk.CTkButton(frame_window_setup.navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=lines_and_labels.previous_line)
+previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+
+next_button = ctk.CTkButton(frame_window_setup.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=lines_and_labels.next_line)
+next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
+
+def on_key_press(event):
+    if event.keysym == 'Right':
+        next_line()
+    elif event.keysym == 'Left':
+        previous_line()
