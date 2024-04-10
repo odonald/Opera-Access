@@ -16,7 +16,6 @@ from io import BytesIO
 import webbrowser
 from ui import create_main_window
 
-
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -406,6 +405,9 @@ empty_line = 0
 next_button_clicks = 0
 prev_button_clicks = 0
 
+root, progress = create_main_window()
+
+
 def update_label():
     global current_line, next_button_clicks, prev_button_clicks
     if additional_languages:
@@ -585,17 +587,6 @@ def jump_to_line():
 def change_appearance_mode_event(new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
 
-# Create the Tkinter root
-root = create_main_window()
-
-
-
-
-# configure grid layout (4x4)
-root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
-root.columnconfigure((0,1,2), weight=1)
-
-
 # create sidebar frame with widgets
 sidebar_frame = ctk.CTkFrame(root, width=100, corner_radius=0, border_width=2)
 sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
@@ -708,11 +699,6 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 
 # Create previous, current, and next line labels
 
-progress = ctk.CTkProgressBar(root, orientation="horizontal")
-progress.grid(row=0, column=1,columnspan=3, padx=0, pady=0, sticky="new")
-progress.configure(mode="determinate")
-progress.set(0)
-
 navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
 navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
 
@@ -740,8 +726,6 @@ def on_canvas_configure(event):
 
 inner_frame.bind("<Configure>", on_canvas_configure)
 
-root.grid_rowconfigure(0, weight=0)
-root.grid_columnconfigure(0, weight=0)
 
 canvas.configure(yscrollcommand=scrollbar.set)
 canvas.configure(scrollregion=canvas.bbox("all"))
@@ -815,7 +799,6 @@ file_menu.add_command(label="Exit", command=close_program)
 root.configure(menu=menu_bar)
 
 root.protocol("WM_DELETE_WINDOW", close_program)
-
 
 
 # configure rows and columns
