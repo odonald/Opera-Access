@@ -14,10 +14,18 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
-from ui import create_main_window
+from ui.ui import UserInterface, create_main_window
 
-ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+root = create_main_window()
+ui = UserInterface(root)
+
+# Access UI elements
+progress = ui.progress
+navigation_frame = ui.navigation_frame
+sidebar_frame = ui.sidebar_frame
+appearance_mode_optionmenu = ui
+
+  # Themes: "blue" (standard), "green", "dark-blue"
 
 language_switcher_values = []
 
@@ -173,7 +181,7 @@ class LanguageDialog(tk.simpledialog.Dialog):
         
         return self.entry
 
-    
+ 
     def update_list(self, *args):
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
@@ -253,8 +261,6 @@ def import_additional_translation(language_name, language_code):
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
             language_switcher.configure(values=tuple(language_switcher_values))
-
-
 
 
 
@@ -404,9 +410,6 @@ def send_to_server(line_number):
 empty_line = 0
 next_button_clicks = 0
 prev_button_clicks = 0
-
-root, progress = create_main_window()
-
 
 def update_label():
     global current_line, next_button_clicks, prev_button_clicks
@@ -584,14 +587,10 @@ def jump_to_line():
     except ValueError:
         messagebox.showerror("Error", "Please enter a valid line number.")
 
-def change_appearance_mode_event(new_appearance_mode: str):
-        ctk.set_appearance_mode(new_appearance_mode)
+
 
 # create sidebar frame with widgets
-sidebar_frame = ctk.CTkFrame(root, width=100, corner_radius=0, border_width=2)
-sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
-sidebar_frame.grid_rowconfigure(8, weight=1)
-sidebar_frame.grid_columnconfigure(1, weight=1)
+
 Sidebar_label = ctk.CTkLabel(sidebar_frame, text="Menu:",font=("", 20))
 Sidebar_label.grid(row=0, column=0,  padx=20, pady=10, sticky="nwe")
 import_translation_button = ctk.CTkButton(sidebar_frame ,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Import Text", command=import_additional_language)
@@ -632,10 +631,6 @@ server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
 
 start_server_thread(start=True)
 
-appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", "Dark", "System"],
-                                                                       command=change_appearance_mode_event)
-appearance_mode_optionemenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")
-appearance_mode_optionemenu.set("Dark")
 
 def on_mousewheel(event):
     platform = event.widget.tk.call('tk', 'windowingsystem')
@@ -651,10 +646,7 @@ def on_mousewheel(event):
         canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
 
 
-navigation_frame = tk.LabelFrame(root, height=900)
-navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
-navigation_frame.grid_rowconfigure(0, weight=1)
-navigation_frame.grid_columnconfigure(0, weight=1)
+
 
 
 canvas = tk.Canvas(navigation_frame)
