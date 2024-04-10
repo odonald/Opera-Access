@@ -14,6 +14,8 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
+from ui import create_main_window
+
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -584,10 +586,8 @@ def change_appearance_mode_event(new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
 
 # Create the Tkinter root
-root = ctk.CTk()
-root.title("Opera Access 1.0")
-root.configure(bg=ctk.set_appearance_mode("System"))
-root.geometry(f"{1000}x{550}")
+root = create_main_window()
+
 
 
 
