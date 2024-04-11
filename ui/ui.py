@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from definitions.definition import change_appearance_mode_event
+from  definitions.definition import change_appearance_mode_event
 
 class UserInterface:
     def __init__(self, root):
@@ -32,8 +32,7 @@ class UserInterface:
         return sidebar_frame
 
     def create_appearance_mode_optionmenu(self):
-        appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"],
-                                                       command=change_appearance_mode_event)
+        appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"], command=change_appearance_mode_event)
         appearance_mode_optionmenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")
         appearance_mode_optionmenu.set("Dark")
         return appearance_mode_optionmenu
