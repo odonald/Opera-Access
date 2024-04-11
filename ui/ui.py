@@ -19,7 +19,7 @@ class UserInterface:
 
     def main_frame(self):
         navigation_frame = tk.LabelFrame(self.root, height=900)
-        navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=3, padx=20, pady=10, sticky="nwse")
+        navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
         return navigation_frame
@@ -43,6 +43,6 @@ def create_main_window():
     root.title("Opera Access 1.0")
     root.configure(bg=ctk.set_appearance_mode("System"))
     root.geometry(f"{1000}x{550}")
-    root.grid_rowconfigure(0, weight=0)
-    root.grid_columnconfigure(3, weight=3)
+    root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
+    root.columnconfigure((0,1,2), weight=1)
     return root
