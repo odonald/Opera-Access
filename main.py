@@ -591,8 +591,6 @@ def jump_to_line():
 
 # create sidebar frame with widgets
 
-Sidebar_label = ctk.CTkLabel(sidebar_frame, text="Menu:",font=("", 20))
-Sidebar_label.grid(row=0, column=0,  padx=20, pady=10, sticky="nwe")
 import_translation_button = ctk.CTkButton(sidebar_frame ,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Import Text", command=import_additional_language)
 import_translation_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsw")
 
