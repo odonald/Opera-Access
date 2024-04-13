@@ -25,7 +25,7 @@ class EndToEndTest(unittest.TestCase):
         self.driver = webdriver.Chrome(options=chrome_options)
 
         #leftovers from exploring headless mode:
-        # os.environ["HEADLESS_MODE"] = "1"
+        os.environ["HEADLESS_MODE"] = "1"
         self.tkinter_app_process = os.system("python ../main.py &")
         time.sleep(.5)
 
@@ -33,7 +33,7 @@ class EndToEndTest(unittest.TestCase):
         self.driver.quit()
         os.system("pkill -f main.py")
         #leftovers from exploring headless mode:
-        #del os.environ["HEADLESS_MODE"]
+        os.environ["HEADLESS_MODE"]
 
     def test_website_is_served(self):
         website_url = f"http://{local_ip}:{port_number}"

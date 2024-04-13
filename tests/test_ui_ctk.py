@@ -18,6 +18,20 @@ class TestUserInterface:
         print("successful")
 
        # Returns a tkinter LabelFrame object.
+    
+        # The method creates an instance of CTkOptionMenu with the given values.
+    def test_create_optionmenu_with_values(self):
+        root = tk.Tk()
+        ui = UserInterface(root)
+        optionmenu = ui.create_appearance_mode_optionmenu()
+        assert isinstance(optionmenu, ctk.CTkOptionMenu)
+        # assert optionmenu.values == ["Light", "Dark", "System"]
+    def test_change_appearance_mode_to_light(self, user_interface):
+        print(" -> test_change_appearance_mode_to_light: ", end="")
+        user_interface.appearance_mode_optionmenu.invoke(0)
+        assert user_interface.appearance_mode_optionmenu.get() == "Light"
+        print("successful")
+        
 class TestMainFrame:
 
     # Returns a tkinter LabelFrame object.
