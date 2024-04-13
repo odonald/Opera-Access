@@ -352,7 +352,7 @@ def load_session():
         update_label()
 
 def run_server():
-    from app import app
+    from logic.flask_app import app
     host = local_ip
     port = port_number  # Replace with your desired port number
     app.run(debug=True, port=port, host=host, use_reloader=False)
