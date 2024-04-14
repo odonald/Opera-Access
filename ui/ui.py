@@ -8,7 +8,7 @@ class UserInterface:
         self.sidebar_frame = self.create_sidebar_frame()
         self.canvas = self.create_canvas()
         self.inner_frame, self.canvas_frame = self.create_inner_frame()
-        self.current_line_label = self.create_current_line_label()
+        self.current_line_label, self.prev_line_labels, self.next_line_labels = self.labels_inner_frame()
         self.appearance_mode_optionmenu = self.create_appearance_mode_optionmenu()
         self.sidebar_label = self.create_sidebar_label()
         self.navigation_label = self.create_navigation_label()
@@ -56,10 +56,12 @@ class UserInterface:
         navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
         return navigation_label
     
-    def create_current_line_label(self):
+    def labels_inner_frame(self):
         current_line_label = ctk.CTkLabel(self.inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
         current_line_label.grid(row=1, column=0, padx=10, pady=10)
-        return current_line_label
+        prev_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(5)]
+        next_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(20)]
+        return current_line_label, prev_line_labels, next_line_labels
 
     def create_appearance_mode_optionmenu(self):
         appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)

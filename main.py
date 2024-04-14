@@ -446,16 +446,16 @@ def update_label():
         for i in range(5):
             prev_index = max(current_line - (5-i), 0)
             prev_lang_line = additional_languages[lang_code][prev_index]
-            prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
-            prev_line_labels[i].unbind("<Button-1>")
-            prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: set_current_line(line))
+            ui.prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
+            ui.prev_line_labels[i].unbind("<Button-1>")
+            ui.prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: set_current_line(line))
 
         for i in range(20):
             next_index = min(current_line + (i+1), max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1)
             next_lang_line = additional_languages[lang_code][next_index]
-            next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
-            next_line_labels[i].unbind("<Button-1>")
-            next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: set_current_line(line))
+            ui.next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
+            ui.next_line_labels[i].unbind("<Button-1>")
+            ui.next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: set_current_line(line))
             
 
     else:
@@ -692,17 +692,12 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
 inner_frame.grid_columnconfigure(0, weight=1)
 
-prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
-
-
-next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
-
-for index, label in enumerate(prev_line_labels, start=0):
+for index, label in enumerate(ui.prev_line_labels, start=0):
     label.grid(row=index, column=0, padx=10, pady=10)
 
 ui.current_line_label.grid(row=5, column=0, padx=10, pady=10)
 
-for index, label in enumerate(next_line_labels, start=6):
+for index, label in enumerate(ui.next_line_labels, start=6):
     label.grid(row=index, column=0, padx=10, pady=10)
 
 def on_canvas_configure(event):
