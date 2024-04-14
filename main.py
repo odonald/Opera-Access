@@ -15,6 +15,7 @@ from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
 from ui.ui import UserInterface, create_main_window
+from config.config import AppConfig
 
 root = create_main_window()
 ui = UserInterface(root)
@@ -74,7 +75,7 @@ def change_port():
         else:
             break
 
-url = f"http://{local_ip}:{port_number}/stream/push"
+url = AppConfig.URL
 
 original_file = None
 translation_file = None

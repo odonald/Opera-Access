@@ -7,3 +7,4 @@ class AppConfig:
     DEBUG = True
     HOST = socket.gethostbyname(socket.gethostname())
     PORT = 7832
+    URL = f"http://{HOST}:{PORT}/stream/push"
