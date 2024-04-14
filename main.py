@@ -728,24 +728,21 @@ root.after(100, set_scroll_to_center)
 
 # label = tk.Label(root, wraplength=500)
 # label.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
-navigation_frame2 = ctk.CTkFrame(root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-navigation_frame2.grid(row=8, column=2,rowspan=1, padx=0, pady=0, sticky="w")
-navigation_frame3 = ctk.CTkFrame(root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-navigation_frame3.grid(row=8, column=1,rowspan=1, padx=0, pady=0, sticky="e")
 
-previous_button = ctk.CTkButton(navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
+
+previous_button = ctk.CTkButton(ui.navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
 previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
 
-next_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
+next_button = ctk.CTkButton(ui.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
 next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
 # Create a text box for entering the line number
 line_number_var = StringVar()
-line_number_entry = ctk.CTkEntry(navigation_frame3, placeholder_text="Jump to line")
+line_number_entry = ctk.CTkEntry(ui.navigation_frame3, placeholder_text="Jump to line")
 line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
 
 # Create a 'Go' button to jump to the specified line number
-go_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
+go_button = ctk.CTkButton(ui.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
 go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
 # Create the menu bar

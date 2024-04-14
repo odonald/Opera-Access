@@ -4,7 +4,7 @@ import customtkinter as ctk
 class UserInterface:
     def __init__(self, root):
         self.root = root
-        self.navigation_frame = self.main_frame()
+        self.navigation_frame, self.navigation_frame2, self.navigation_frame3 = self.main_frame()
         self.sidebar_frame = self.create_sidebar_frame()
         self.canvas = self.create_canvas()
         self.inner_frame = self.create_inner_frame()
@@ -28,7 +28,11 @@ class UserInterface:
         navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
-        return navigation_frame
+        navigation_frame2 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
+        navigation_frame2.grid(row=8, column=2,rowspan=1, padx=0, pady=0, sticky="w")
+        navigation_frame3 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
+        navigation_frame3.grid(row=8, column=1,rowspan=1, padx=0, pady=0, sticky="e")
+        return navigation_frame, navigation_frame2, navigation_frame3
     
     def create_canvas(self):
         canvas = tk.Canvas(self.navigation_frame)
