@@ -10,6 +10,8 @@ class UserInterface:
         self.sidebar_frame = self.create_sidebar_frame()
         self.appearance_mode_optionmenu = self.create_appearance_mode_optionmenu()
         self.sidebar_label = self.create_sidebar_label()
+        self.navigation_label = self.create_navigation_label()
+
 
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
@@ -36,6 +38,11 @@ class UserInterface:
         sidebar_label = ctk.CTkLabel(self.sidebar_frame, text="Menu:", font=("", 20))
         sidebar_label.grid(row=0, column=0, padx=20, pady=10, sticky="nwe")
         return sidebar_label
+
+    def create_navigation_label(self):
+        navigation_label = ctk.CTkLabel(self.root, text="Display:", font=("", 20))
+        navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
+        return navigation_label
     
     def create_appearance_mode_optionmenu(self):
         appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)

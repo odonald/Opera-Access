@@ -689,8 +689,6 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 
 # Create previous, current, and next line labels
 
-navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
-navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
 
 inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
 inner_frame.grid_columnconfigure(0, weight=1)
