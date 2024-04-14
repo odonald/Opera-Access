@@ -1,16 +1,18 @@
 import tkinter as tk
 import customtkinter as ctk
 
-
 class UserInterface:
     def __init__(self, root):
         self.root = root
-        self.progress = self.create_progress_bar()
         self.navigation_frame = self.main_frame()
         self.sidebar_frame = self.create_sidebar_frame()
+        self.canvas = self.create_canvas()
+        self.inner_frame, self.canvas_frame = self.create_inner_frame()
+        self.current_line_label = self.create_current_line_label()
         self.appearance_mode_optionmenu = self.create_appearance_mode_optionmenu()
         self.sidebar_label = self.create_sidebar_label()
         self.navigation_label = self.create_navigation_label()
+        self.progress = self.create_progress_bar()
 
 
     def create_progress_bar(self):
@@ -26,6 +28,16 @@ class UserInterface:
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
         return navigation_frame
+    
+    def create_canvas(self):
+            canvas = tk.Canvas(self.navigation_frame)
+            canvas.grid(row=0, column=0, sticky="nsew")
+            return canvas
+    
+    def create_inner_frame(self):
+        inner_frame = ctk.CTkFrame(self.canvas)
+        canvas_frame = self.canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+        return inner_frame, canvas_frame
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)
@@ -44,6 +56,11 @@ class UserInterface:
         navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
         return navigation_label
     
+    def create_current_line_label(self):
+        current_line_label = ctk.CTkLabel(self.inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
+        current_line_label.grid(row=1, column=0, padx=10, pady=10)
+        return current_line_label
+
     def create_appearance_mode_optionmenu(self):
         appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)
         appearance_mode_optionmenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")

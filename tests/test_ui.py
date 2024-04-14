@@ -13,6 +13,14 @@ class TestUserInterface:
         optionmenu = user_interface.create_appearance_mode_optionmenu()
         assert isinstance(optionmenu, ctk.CTkOptionMenu)
         # assert optionmenu.values == ["Light", "Dark", "System"]
+        
+    def test_create_current_line_label(self):
+        root = tk.Tk()
+        ui = UserInterface(root)
+        ui.create_current_line_label()
+        label = ui.current_line_label
+        assert label.cget("text") == "Please import a language or load a session.\n +\n <--- Choose display language"
+        assert label.cget("font") == ("", 25)
 
 class TestMainFrame:
     def test_returns_label_frame_object(self, user_interface):

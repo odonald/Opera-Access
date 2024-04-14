@@ -20,9 +20,11 @@ root = create_main_window()
 ui = UserInterface(root)
 
 # Access UI elements
+canvas = ui.canvas
 progress = ui.progress
 navigation_frame = ui.navigation_frame
 sidebar_frame = ui.sidebar_frame
+inner_frame = ui.inner_frame
 appearance_mode_optionmenu = ui
 
   # Themes: "blue" (standard), "green", "dark-blue"
@@ -431,9 +433,9 @@ def update_label():
         # prev_line_label.unbind("<Button-1>")
         # prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
 
-        current_line_label.configure(text=f"Current Line:\n{current_lang_line}")
-        current_line_label.unbind("<Button-1>")
-        current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
+        ui.current_line_label.configure(text=f"Current Line:\n{current_lang_line}")
+        ui.current_line_label.unbind("<Button-1>")
+        ui.current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
 
         # next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
         # next_line_label.unbind("<Button-1>")
@@ -459,7 +461,7 @@ def update_label():
     else:
         # percentage_label.configure(text="0%")
         # prev_line_label.configure(text="")
-        current_line_label.configure(text="No lines loaded.")
+        ui.current_line_label.configure(text="No lines loaded.")
         # next_line_label.configure(text="")
         progress.configure(value=0)
 
@@ -647,16 +649,13 @@ def on_mousewheel(event):
 
 
 
-canvas = tk.Canvas(navigation_frame)
-canvas.grid(row=0, column=0, sticky="nsew")
 
 scrollbar = ttk.Scrollbar(navigation_frame, orient="vertical", command=canvas.yview)
 scrollbar.grid(row=0, column=3, sticky="ns")
 
 canvas.configure(yscrollcommand=scrollbar.set)
 
-inner_frame = ctk.CTkFrame(canvas)
-canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
 
 # Binding the scrolling action to the navigation_frame and its children
 # inner_frame.bind_class('Tk', '<MouseWheel>', on_mousewheel)  # for Windows
@@ -664,7 +663,7 @@ canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 # inner_frame.bind_class('Tk', '<Button-5>', on_mousewheel)    # for macOS and Linux (scroll down)
 
 def resize_inner_frame(event):
-    canvas.itemconfig(canvas_frame, width=event.width)
+    canvas.itemconfig(ui.canvas_frame, width=event.width)
 
 
 canvas.bind("<Configure>", resize_inner_frame)
@@ -695,15 +694,13 @@ inner_frame.grid_columnconfigure(0, weight=1)
 
 prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
 
-current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-current_line_label.grid(row=1, column=0, padx=10, pady=10)
 
 next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
 
 for index, label in enumerate(prev_line_labels, start=0):
     label.grid(row=index, column=0, padx=10, pady=10)
 
-current_line_label.grid(row=5, column=0, padx=10, pady=10)
+ui.current_line_label.grid(row=5, column=0, padx=10, pady=10)
 
 for index, label in enumerate(next_line_labels, start=6):
     label.grid(row=index, column=0, padx=10, pady=10)
