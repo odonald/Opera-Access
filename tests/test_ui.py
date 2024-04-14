@@ -17,7 +17,7 @@ class TestUserInterface:
     def test_create_current_line_label(self):
         root = tk.Tk()
         ui = UserInterface(root)
-        ui.create_current_line_label()
+        ui.labels_inner_frame()
         label = ui.current_line_label
         assert label.cget("text") == "Please import a language or load a session.\n +\n <--- Choose display language"
         assert label.cget("font") == ("", 25)

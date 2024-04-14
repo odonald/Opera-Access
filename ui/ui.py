@@ -7,7 +7,8 @@ class UserInterface:
         self.navigation_frame = self.main_frame()
         self.sidebar_frame = self.create_sidebar_frame()
         self.canvas = self.create_canvas()
-        self.inner_frame, self.canvas_frame = self.create_inner_frame()
+        self.inner_frame = self.create_inner_frame()
+        self.canvas_frame = self.create_canvas_frame()
         self.current_line_label, self.prev_line_labels, self.next_line_labels = self.labels_inner_frame()
         self.appearance_mode_optionmenu = self.create_appearance_mode_optionmenu()
         self.sidebar_label = self.create_sidebar_label()
@@ -30,14 +31,19 @@ class UserInterface:
         return navigation_frame
     
     def create_canvas(self):
-            canvas = tk.Canvas(self.navigation_frame)
-            canvas.grid(row=0, column=0, sticky="nsew")
-            return canvas
+        canvas = tk.Canvas(self.navigation_frame)
+        canvas.grid(row=0, column=0, sticky="nsew")
+        return canvas
     
     def create_inner_frame(self):
         inner_frame = ctk.CTkFrame(self.canvas)
-        canvas_frame = self.canvas.create_window((0, 0), window=inner_frame, anchor="nw")
-        return inner_frame, canvas_frame
+        inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
+        inner_frame.grid_columnconfigure(0, weight=1)
+        return inner_frame
+    
+    def create_canvas_frame(self):
+        canvas_frame = self.canvas.create_window((0, 0), window=self.inner_frame, anchor="nw")
+        return canvas_frame
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)

@@ -25,6 +25,7 @@ progress = ui.progress
 navigation_frame = ui.navigation_frame
 sidebar_frame = ui.sidebar_frame
 inner_frame = ui.inner_frame
+canvas_frame = ui.canvas_frame
 appearance_mode_optionmenu = ui
 
   # Themes: "blue" (standard), "green", "dark-blue"
@@ -688,9 +689,6 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 
 # Create previous, current, and next line labels
 
-
-inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
-inner_frame.grid_columnconfigure(0, weight=1)
 
 for index, label in enumerate(ui.prev_line_labels, start=0):
     label.grid(row=index, column=0, padx=10, pady=10)
