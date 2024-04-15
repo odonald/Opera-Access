@@ -14,11 +14,22 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
-from ui import create_main_window
+from ui.ui import UserInterface, create_main_window
+from config.config import AppConfig
 
+root = create_main_window()
+ui = UserInterface(root)
 
-ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+# Access UI elements
+canvas = ui.canvas
+progress = ui.progress
+navigation_frame = ui.navigation_frame
+sidebar_frame = ui.sidebar_frame
+inner_frame = ui.inner_frame
+canvas_frame = ui.canvas_frame
+appearance_mode_optionmenu = ui
+
+  # Themes: "blue" (standard), "green", "dark-blue"
 
 language_switcher_values = []
 
@@ -64,7 +75,7 @@ def change_port():
         else:
             break
 
-url = f"http://{local_ip}:{port_number}/stream/push"
+url = AppConfig.URL
 
 original_file = None
 translation_file = None
@@ -174,7 +185,7 @@ class LanguageDialog(tk.simpledialog.Dialog):
         
         return self.entry
 
-    
+ 
     def update_list(self, *args):
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
@@ -254,8 +265,6 @@ def import_additional_translation(language_name, language_code):
             language_switcher_values.append(language_name)
             language_switcher_values.sort()
             language_switcher.configure(values=tuple(language_switcher_values))
-
-
 
 
 
@@ -347,7 +356,7 @@ def load_session():
         update_label()
 
 def run_server():
-    from app import app
+    from logic.flask_app import app
     host = local_ip
     port = port_number  # Replace with your desired port number
     app.run(debug=True, port=port, host=host, use_reloader=False)
@@ -426,9 +435,9 @@ def update_label():
         # prev_line_label.unbind("<Button-1>")
         # prev_line_label.bind("<Button-1>", lambda event, line=prev_line: set_current_line(line))
 
-        current_line_label.configure(text=f"Current Line:\n{current_lang_line}")
-        current_line_label.unbind("<Button-1>")
-        current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
+        ui.current_line_label.configure(text=f"Current Line:\n{current_lang_line}")
+        ui.current_line_label.unbind("<Button-1>")
+        ui.current_line_label.bind("<Button-1>", lambda event, line=current_line: set_current_line(line))
 
         # next_line_label.configure(text=f"Next Line ({next_line + 1}):\n{next_lang_line}")
         # next_line_label.unbind("<Button-1>")
@@ -439,22 +448,22 @@ def update_label():
         for i in range(5):
             prev_index = max(current_line - (5-i), 0)
             prev_lang_line = additional_languages[lang_code][prev_index]
-            prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
-            prev_line_labels[i].unbind("<Button-1>")
-            prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: set_current_line(line))
+            ui.prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
+            ui.prev_line_labels[i].unbind("<Button-1>")
+            ui.prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: set_current_line(line))
 
         for i in range(20):
             next_index = min(current_line + (i+1), max(len(combined_lines), max(len(lang_lines) for lang_lines in additional_languages.values())) - 1)
             next_lang_line = additional_languages[lang_code][next_index]
-            next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
-            next_line_labels[i].unbind("<Button-1>")
-            next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: set_current_line(line))
+            ui.next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
+            ui.next_line_labels[i].unbind("<Button-1>")
+            ui.next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: set_current_line(line))
             
 
     else:
         # percentage_label.configure(text="0%")
         # prev_line_label.configure(text="")
-        current_line_label.configure(text="No lines loaded.")
+        ui.current_line_label.configure(text="No lines loaded.")
         # next_line_label.configure(text="")
         progress.configure(value=0)
 
@@ -582,27 +591,10 @@ def jump_to_line():
     except ValueError:
         messagebox.showerror("Error", "Please enter a valid line number.")
 
-def change_appearance_mode_event(new_appearance_mode: str):
-        ctk.set_appearance_mode(new_appearance_mode)
-
-# Create the Tkinter root
-root = create_main_window()
-
-
-
-
-# configure grid layout (4x4)
-root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
-root.columnconfigure((0,1,2), weight=1)
 
 
 # create sidebar frame with widgets
-sidebar_frame = ctk.CTkFrame(root, width=100, corner_radius=0, border_width=2)
-sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
-sidebar_frame.grid_rowconfigure(8, weight=1)
-sidebar_frame.grid_columnconfigure(1, weight=1)
-Sidebar_label = ctk.CTkLabel(sidebar_frame, text="Menu:",font=("", 20))
-Sidebar_label.grid(row=0, column=0,  padx=20, pady=10, sticky="nwe")
+
 import_translation_button = ctk.CTkButton(sidebar_frame ,fg_color="transparent",text_color=("gray10", "#DCE4EE"),border_width=2, text="Import Text", command=import_additional_language)
 import_translation_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsw")
 
@@ -641,10 +633,6 @@ server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
 
 start_server_thread(start=True)
 
-appearance_mode_optionemenu = ctk.CTkOptionMenu(sidebar_frame, values=["Light", "Dark", "System"],
-                                                                       command=change_appearance_mode_event)
-appearance_mode_optionemenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")
-appearance_mode_optionemenu.set("Dark")
 
 def on_mousewheel(event):
     platform = event.widget.tk.call('tk', 'windowingsystem')
@@ -660,22 +648,16 @@ def on_mousewheel(event):
         canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
 
 
-navigation_frame = tk.LabelFrame(root, height=900)
-navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
-navigation_frame.grid_rowconfigure(0, weight=1)
-navigation_frame.grid_columnconfigure(0, weight=1)
 
 
-canvas = tk.Canvas(navigation_frame)
-canvas.grid(row=0, column=0, sticky="nsew")
+
 
 scrollbar = ttk.Scrollbar(navigation_frame, orient="vertical", command=canvas.yview)
 scrollbar.grid(row=0, column=3, sticky="ns")
 
 canvas.configure(yscrollcommand=scrollbar.set)
 
-inner_frame = ctk.CTkFrame(canvas)
-canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
+
 
 # Binding the scrolling action to the navigation_frame and its children
 # inner_frame.bind_class('Tk', '<MouseWheel>', on_mousewheel)  # for Windows
@@ -683,7 +665,7 @@ canvas_frame = canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 # inner_frame.bind_class('Tk', '<Button-5>', on_mousewheel)    # for macOS and Linux (scroll down)
 
 def resize_inner_frame(event):
-    canvas.itemconfig(canvas_frame, width=event.width)
+    canvas.itemconfig(ui.canvas_frame, width=event.width)
 
 
 canvas.bind("<Configure>", resize_inner_frame)
@@ -708,30 +690,13 @@ inner_frame.bind("<MouseWheel>", on_mousewheel)
 
 # Create previous, current, and next line labels
 
-progress = ctk.CTkProgressBar(root, orientation="horizontal")
-progress.grid(row=0, column=1,columnspan=3, padx=0, pady=0, sticky="new")
-progress.configure(mode="determinate")
-progress.set(0)
 
-navigation_label = ctk.CTkLabel(root, text="Display:", font=("", 20))
-navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
-
-inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
-inner_frame.grid_columnconfigure(0, weight=1)
-
-prev_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(5)]
-
-current_line_label = ctk.CTkLabel(inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-current_line_label.grid(row=1, column=0, padx=10, pady=10)
-
-next_line_labels = [ctk.CTkLabel(inner_frame, wraplength=400, text="---") for _ in range(20)]
-
-for index, label in enumerate(prev_line_labels, start=0):
+for index, label in enumerate(ui.prev_line_labels, start=0):
     label.grid(row=index, column=0, padx=10, pady=10)
 
-current_line_label.grid(row=5, column=0, padx=10, pady=10)
+ui.current_line_label.grid(row=5, column=0, padx=10, pady=10)
 
-for index, label in enumerate(next_line_labels, start=6):
+for index, label in enumerate(ui.next_line_labels, start=6):
     label.grid(row=index, column=0, padx=10, pady=10)
 
 def on_canvas_configure(event):
@@ -740,8 +705,6 @@ def on_canvas_configure(event):
 
 inner_frame.bind("<Configure>", on_canvas_configure)
 
-root.grid_rowconfigure(0, weight=0)
-root.grid_columnconfigure(0, weight=0)
 
 canvas.configure(yscrollcommand=scrollbar.set)
 canvas.configure(scrollregion=canvas.bbox("all"))
@@ -766,24 +729,21 @@ root.after(100, set_scroll_to_center)
 
 # label = tk.Label(root, wraplength=500)
 # label.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
-navigation_frame2 = ctk.CTkFrame(root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-navigation_frame2.grid(row=8, column=2,rowspan=1, padx=0, pady=0, sticky="w")
-navigation_frame3 = ctk.CTkFrame(root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-navigation_frame3.grid(row=8, column=1,rowspan=1, padx=0, pady=0, sticky="e")
 
-previous_button = ctk.CTkButton(navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
+
+previous_button = ctk.CTkButton(ui.navigation_frame3,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Previous", command=previous_line)
 previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
 
-next_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
+next_button = ctk.CTkButton(ui.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Next", command=next_line)
 next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
 # Create a text box for entering the line number
 line_number_var = StringVar()
-line_number_entry = ctk.CTkEntry(navigation_frame3, placeholder_text="Jump to line")
+line_number_entry = ctk.CTkEntry(ui.navigation_frame3, placeholder_text="Jump to line")
 line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
 
 # Create a 'Go' button to jump to the specified line number
-go_button = ctk.CTkButton(navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
+go_button = ctk.CTkButton(ui.navigation_frame2,fg_color="transparent", text_color=("gray10", "#DCE4EE"),border_width=2, text="Go", command=jump_to_line)
 go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
 # Create the menu bar
@@ -815,7 +775,6 @@ file_menu.add_command(label="Exit", command=close_program)
 root.configure(menu=menu_bar)
 
 root.protocol("WM_DELETE_WINDOW", close_program)
-
 
 
 # configure rows and columns

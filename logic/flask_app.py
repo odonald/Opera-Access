@@ -2,9 +2,10 @@ from flask import Flask, render_template, Response, request
 from flask_sse import sse
 import time
 import json
-import socket
+from config.config import AppConfig
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend/templates')
 app.register_blueprint(sse, url_prefix="/stream")  # Initialize SSE extension
 latest_message = None  # Variable to store the latest message
 
@@ -30,6 +31,4 @@ def push():
     return "OK", 200
 
 if __name__ == "__main__":
-    host = socket.gethostbyname(socket.gethostname())  # Get the IP address of the machine
-    port = 3210  # Replace with your desired port number
-    app.run(debug=True, host=host, port=port)
+    app.run(debug=AppConfig.DEBUG, host=AppConfig.HOST, port=AppConfig.PORT)
