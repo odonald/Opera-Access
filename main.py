@@ -37,6 +37,7 @@ language_switcher_values = []
 local_ip = socket.gethostbyname(socket.gethostname())
 
 port_number = 7832
+
 def change_port():
     global port_number, server_running
     reserved_ports = [80, 443, 8080, 8443]  # List of reserved ports
@@ -359,7 +360,7 @@ def run_server():
     from logic.flask_app import app
     host = local_ip
     port = port_number  # Replace with your desired port number
-    app.run(debug=True, port=port, host=host, use_reloader=False)
+    app.run(debug=AppConfig.DEBUG, port=port, host=host, use_reloader=False)
 
 
 # def start_stop_server(start):
