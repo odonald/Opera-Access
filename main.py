@@ -8,7 +8,6 @@ import pickle
 import threading
 from functools import partial
 import iso639
-import socket
 import charset_normalizer
 import qrcode
 from PIL import ImageTk, Image
@@ -34,9 +33,10 @@ appearance_mode_optionmenu = ui
 language_switcher_values = []
 
 
-local_ip = socket.gethostbyname(socket.gethostname())
+local_ip = AppConfig.HOST
 
-port_number = 7832
+port_number = AppConfig.PORT
+
 
 def change_port():
     global port_number, server_running
