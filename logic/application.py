@@ -16,6 +16,7 @@ from ui.ui import UserInterface, create_main_window
 from config.config import AppConfig
 from utils.language_util import LanguageDialog
 from ui.ui import UserInterface
+from ui.file_menu import FileMenu
 
 class Application:
     def __init__(self, root):
@@ -57,7 +58,17 @@ class Application:
         self.bind_scroll_to_widget(self.ui.inner_frame)
 
         self.root.after(100, self.set_scroll_to_center)
-
+        self.file_menu = FileMenu(root, {
+            "save_qr_code": self.save_qr_code,
+            "show_qr_code": self.show_qr_code,
+            "import_additional_language": self.import_additional_language,
+            "save_session": self.save_session,
+            "load_session": self.load_session,
+            "open_url_in_browser": self.open_url_in_browser,
+            "change_port": self.change_port,
+            "clear_program": self.clear_program,
+            "close_program": self.close_program
+        })
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
 

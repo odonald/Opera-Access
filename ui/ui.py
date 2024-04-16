@@ -1,7 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
 
-
 class UserInterface:
     def __init__(self, root):
         self.root = root
@@ -92,4 +91,5 @@ def create_main_window():
     root.geometry(f"{1000}x{550}")
     root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
     root.columnconfigure((0,1,2), weight=1)
+
     return root
