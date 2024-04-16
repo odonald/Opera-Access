@@ -25,3 +25,7 @@ vscode/*
 .coverage
 app_debug.log
 application_log.txt
+.coverage/
+.coverage/*
+coverage
+
