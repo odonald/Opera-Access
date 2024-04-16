@@ -21,7 +21,7 @@ from ui.file_menu import FileMenu
 class Application:
     def __init__(self, root):
         self.root = root
-        self.ui = UserInterface(root, self.show_qr_code)  # Pass the show_qr_code method as the command
+        self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
         self.url = AppConfig.URL
         self.local_ip = AppConfig.HOST
         self.port_number = AppConfig.PORT

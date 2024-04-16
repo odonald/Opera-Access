@@ -15,15 +15,15 @@ class UserInterface:
         self.navigation_label = self.create_navigation_label()
         self.progress = self.create_progress_bar()
         self.website_button = self.create_website_button()  # This line remains unchanged
-        self.show_qr_button = self.create_show_qr_button(None)  # Placeholder None for command, will be set in Application
+        self.show_qr_button = self.create_show_qr_button()  # Pass the actual command
 
     def create_website_button(self):
         website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
         website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
         return website_button
 
-    def create_show_qr_button(self, show_qr_code_command):
-        show_qr_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR", command=show_qr_code_command)
+    def create_show_qr_button(self):
+        show_qr_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR")
         show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
         return show_qr_button
 
