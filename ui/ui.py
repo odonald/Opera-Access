@@ -21,6 +21,11 @@ class UserInterface:
         website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
         return website_button
 
+    def create_show_qr_button(self, show_qr_code_command):
+        show_qr_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR", command=show_qr_code_command)
+        show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
+        return show_qr_button
+
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
         progress.grid(row=0, column=1, columnspan=3, padx=0, pady=0, sticky="new")
