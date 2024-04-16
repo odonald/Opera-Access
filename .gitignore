@@ -28,4 +28,5 @@ application_log.txt
 .coverage/
 .coverage/*
 coverage
-
+.vscode
+.vscode/

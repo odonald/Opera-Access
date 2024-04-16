@@ -6,10 +6,18 @@ from tkinter import StringVar
 from logic.application import Application
 from ui.ui import create_main_window
 import logging
+import argparse
 
-logging.basicConfig(filename='app_debug.log', level=logging.DEBUG)
+parser = argparse.ArgumentParser(description='My Application')
+parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+args = parser.parse_args()
 
-logging.debug('This message will go to the debug log file')
+if args.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(filename='app_debug.log', level=logging.DEBUG)
+
+logging.debug('This message will go to the debug log file or terminal')
 
 def main():
     root = create_main_window()
@@ -50,23 +58,24 @@ def main():
     elif __file__:
         application_path = os.path.dirname(__file__)
 
-    if os.name == 'nt':
-        logs_folder = 'logs'
-    else:
-        logs_folder = '.logs'
+    if not args.debug:
+            if os.name == 'nt':
+                logs_folder = 'logs'
+            else:
+                logs_folder = '.logs'
 
-    log_dir = os.path.join(application_path, logs_folder)
+            log_dir = os.path.join(application_path, logs_folder)
 
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+            if not os.path.exists(log_dir):
+                os.makedirs(log_dir)
 
-    stdout_log_path = os.path.join(log_dir, 'my_stdout.log')
-    stderr_log_path = os.path.join(log_dir, 'my_stderr.log')
+            stdout_log_path = os.path.join(log_dir, 'my_stdout.log')
+            stderr_log_path = os.path.join(log_dir, 'my_stderr.log')
 
-    sys.stdout = open(stdout_log_path, 'w')
-    sys.stderr = open(stderr_log_path, 'w')
+            sys.stdout = open(stdout_log_path, 'w')
+            sys.stderr = open(stderr_log_path, 'w')
 
     root.mainloop()
-    
+
 if __name__ == "__main__":
     main()
