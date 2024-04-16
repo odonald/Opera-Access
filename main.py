@@ -29,8 +29,6 @@ def main():
     show_qr_button = ctk.CTkButton(app.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR", command=lambda: app.show_qr_code())
     show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
 
-    website_button = ctk.CTkButton(app.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website", command=app.open_url_in_browser)
-    website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
 
     for index, label in enumerate(app.ui.prev_line_labels, start=0):
         label.grid(row=index, column=0, padx=10, pady=10)

@@ -30,3 +30,4 @@ application_log.txt
 coverage
 .vscode
 .vscode/
+.aider*
