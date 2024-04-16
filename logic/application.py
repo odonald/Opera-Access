@@ -57,6 +57,7 @@ class Application:
         self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
         self.bind_scroll_to_widget(self.ui.inner_frame)
         self.bind_website_button()
+        self.bind_show_qr_button()
 
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
@@ -223,6 +224,10 @@ class Application:
     def bind_website_button(self):
         self.ui.website_button.configure(command=self.open_url_in_browser)
         
+
+    def bind_show_qr_button(self):
+        self.ui.show_qr_button.configure(command=self.show_qr_code)
+
     def open_url_in_browser(self):
         url = f"http://{self.local_ip}:{self.port_number}"
         webbrowser.open(url)
