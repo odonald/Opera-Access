@@ -14,7 +14,12 @@ class UserInterface:
         self.sidebar_label = self.create_sidebar_label()
         self.navigation_label = self.create_navigation_label()
         self.progress = self.create_progress_bar()
+        self.website_button = self.create_website_button()
 
+    def create_website_button(self):
+        website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
+        website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
+        return website_button
 
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
@@ -55,7 +60,11 @@ class UserInterface:
         sidebar_frame.grid_rowconfigure(8, weight=1)
         sidebar_frame.grid_columnconfigure(1, weight=1)
         return sidebar_frame
-    
+        
+    def button_go_to_website(self):
+        website_button = ctk.CTkButton(app.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website", command=app.open_url_in_browser)
+        website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
+        return website_button
     def create_sidebar_label(self):
         sidebar_label = ctk.CTkLabel(self.sidebar_frame, text="Menu:", font=("", 20))
         sidebar_label.grid(row=0, column=0, padx=20, pady=10, sticky="nwe")

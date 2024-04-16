@@ -56,6 +56,7 @@ class Application:
         self.ui.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
         self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
         self.bind_scroll_to_widget(self.ui.inner_frame)
+        self.bind_website_button()
 
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
@@ -109,6 +110,7 @@ class Application:
 
         self.server_indicator = tk.Canvas(self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
         self.server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
+
 
     def bind_events(self):
         self.root.bind("<KeyPress>", self.on_key_press)
@@ -218,6 +220,9 @@ class Application:
 
         qr_window.mainloop()
 
+    def bind_website_button(self):
+        self.ui.website_button.configure(command=self.open_url_in_browser)
+        
     def open_url_in_browser(self):
         url = f"http://{self.local_ip}:{self.port_number}"
         webbrowser.open(url)
