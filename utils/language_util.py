@@ -1,23 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import os
-import sys
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox, filedialog, ttk, StringVar, simpledialog
-import requests
-import pickle
-import threading
-import iso639
-import charset_normalizer
-import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
-import webbrowser
 from ui.ui import UserInterface, create_main_window
 from config.config import AppConfig
-import logging
-class LanguageDialog(tk.simpledialog.Dialog):
+class ImportLanguageDialog(tk.simpledialog.Dialog):
     def __init__(self, parent, available_languages, additional_languages, import_additional_translation, **kwargs):
         self.available_languages = available_languages
         self.additional_languages = additional_languages
@@ -50,7 +40,6 @@ class LanguageDialog(tk.simpledialog.Dialog):
         return self.entry
     
 
-    # Then, in your LanguageDialog class, make sure to use this variable correctly
     def update_list(self, *args):
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)

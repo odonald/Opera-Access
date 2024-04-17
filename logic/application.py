@@ -14,7 +14,7 @@ from io import BytesIO
 import webbrowser
 from ui.ui import UserInterface, create_main_window
 from config.config import AppConfig
-from utils.language_util import LanguageDialog
+from utils.language_util import ImportLanguageDialog
 from ui.ui import UserInterface, create_main_window
 from ui.file_menu import FileMenu
 
@@ -232,15 +232,15 @@ class Application:
         url = f"http://{self.local_ip}:{self.port_number}"
         webbrowser.open(url)
 
-    def import_additional_language(self):
-        print("Opening Language Import Dialog...")
-        dialog = LanguageDialog(self.root, self.language, self.language_switcher_values, self.additional_languages, self.imported_languages_label, self.language_switcher, self.update_label)
-        self.root.wait_window(dialog.top)
-        self.update_ui_after_language_import()
+    # def import_additional_language(self):
+    #     print("Opening Language Import Dialog...")
+    #     dialog = ImportLanguageDialog(self.root, self.language, self.language_switcher_values, self.additional_languages, self.imported_languages_label, self.language_switcher, self.update_label)
+    #     self.root.wait_window(dialog.top)
+    #     self.update_ui_after_language_import()
 
     def import_additional_language(self):
         print("Opening Language Import Dialog...")
-        dialog = LanguageDialog(self.root, self.available_languages, self.additional_languages, self.import_additional_translation, title="Select Language")
+        dialog = ImportLanguageDialog(self.root, self.available_languages, self.additional_languages, self.import_additional_translation, title="Select Language")
         self.root.wait_window(dialog.top)
         self.update_ui_after_language_import()
 
