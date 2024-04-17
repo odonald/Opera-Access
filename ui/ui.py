@@ -41,6 +41,12 @@ class UserInterface:
         show_qr_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR")
         show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
         return show_qr_button
+
+    def create_appearance_mode_optionmenu(self):
+        appearance_mode_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)
+        appearance_mode_optionmenu.grid(row=10, column=0, padx=10, pady=10, sticky="s")
+        appearance_mode_optionmenu.set("Dark")
+        return appearance_mode_optionmenu
     
     def create_previous_line_button(self):
         previous_line_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous")
@@ -62,7 +68,6 @@ class UserInterface:
         go_button.grid(row=2, column=2, padx=10, pady=10, sticky="w")
         return go_button
 
-    
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
         progress.grid(row=0, column=1, columnspan=3, padx=0, pady=0, sticky="new")
@@ -72,7 +77,7 @@ class UserInterface:
     
     def main_frame(self):
         navigation_frame = tk.LabelFrame(self.root, height=900)
-        navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
+        navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=3, padx=20, pady=10, sticky="nesw")
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
         navigation_frame2 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
@@ -86,8 +91,8 @@ class UserInterface:
     
     def create_inner_frame(self):
         inner_frame = ctk.CTkFrame(self.canvas)
-        inner_frame.grid_rowconfigure((0, 1, 2), weight=1)
-        inner_frame.grid_columnconfigure(0, weight=1)
+        inner_frame.grid_rowconfigure((0, 1, 2, 3), weight=1)
+        inner_frame.grid_columnconfigure(1, weight=1)
         return inner_frame
     
     def create_canvas_frame(self):
@@ -96,9 +101,9 @@ class UserInterface:
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)
-        sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
-        sidebar_frame.grid_rowconfigure(8, weight=1)
-        sidebar_frame.grid_columnconfigure(1, weight=1)
+        sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsw")
+        sidebar_frame.grid_rowconfigure(10, weight=1)
+        sidebar_frame.grid_columnconfigure(0, weight=0)
         return sidebar_frame
         
     def button_go_to_website(self):
@@ -126,12 +131,6 @@ class UserInterface:
         for index, label in enumerate(next_line_labels, start=6):
                 label.grid(row=index, column=0, padx=10, pady=10)
         return current_line_label, prev_line_labels, next_line_labels
-
-    def create_appearance_mode_optionmenu(self):
-        appearance_mode_optionmenu = ctk.CTkOptionMenu(self.root, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)
-        appearance_mode_optionmenu.grid(row=9, column=0, padx=10, pady=10, sticky="s")
-        appearance_mode_optionmenu.set("Dark")
-        return appearance_mode_optionmenu
 
 class Events:
     def change_appearance_mode_event(new_appearance_mode: str):
