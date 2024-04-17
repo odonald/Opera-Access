@@ -24,15 +24,6 @@ def main():
     app = Application(root)
 
 
-    for index, label in enumerate(app.ui.prev_line_labels, start=0):
-        label.grid(row=index, column=0, padx=10, pady=10)
-
-    app.ui.current_line_label.grid(row=5, column=0, padx=10, pady=10)
-
-    for index, label in enumerate(app.ui.next_line_labels, start=6):
-        label.grid(row=index, column=0, padx=10, pady=10)
-
-
 
     if getattr(sys, 'frozen', False):
         application_path = os.path.dirname(sys.executable)

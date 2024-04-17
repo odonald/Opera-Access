@@ -122,9 +122,13 @@ class UserInterface:
     
     def labels_inner_frame(self):
         current_line_label = ctk.CTkLabel(self.inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-        current_line_label.grid(row=1, column=0, padx=10, pady=10)
+        current_line_label.grid(row=5, column=0, padx=10, pady=10)
         prev_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(5)]
+        for index, label in enumerate(prev_line_labels, start=0):
+            label.grid(row=index, column=0, padx=10, pady=10)
         next_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(20)]
+        for index, label in enumerate(next_line_labels, start=6):
+                label.grid(row=index, column=0, padx=10, pady=10)
         return current_line_label, prev_line_labels, next_line_labels
 
     def create_appearance_mode_optionmenu(self):
