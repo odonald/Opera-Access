@@ -4,7 +4,7 @@ import customtkinter as ctk
 class UserInterface:
     def __init__(self, root):
         self.root = root
-        self.navigation_frame, self.navigation_frame2, self.navigation_frame3 = self.main_frame()
+        self.navigation_frame, self.navigation_frame2 = self.main_frame()
         self.sidebar_frame = self.create_sidebar_frame()
         self.canvas = self.create_canvas()
         self.inner_frame = self.create_inner_frame()
@@ -43,22 +43,22 @@ class UserInterface:
         return show_qr_button
     
     def create_previous_line_button(self):
-        previous_line_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous")
-        previous_line_button.grid(row=1 , column=1, padx=10, pady=10, sticky="e")
+        previous_line_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous")
+        previous_line_button.grid(row=0 , column=1, padx=10, pady=10, sticky="e")
         return previous_line_button
 
     def create_next_line_button(self):
-        next_line_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Next")
-        next_line_button.grid(row=1, column=2, padx=10, pady=10, sticky="w")
+        next_line_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Next")
+        next_line_button.grid(row=0, column=2, padx=10, pady=10, sticky="w")
         return next_line_button
 
     def create_line_number_entry(self):
-        line_number_entry = ctk.CTkEntry(self.navigation_frame3, placeholder_text="Jump to line")
+        line_number_entry = ctk.CTkEntry(self.navigation_frame2, placeholder_text="Jump to line")
         line_number_entry.grid(row=2, column=1, padx=10, pady=10, sticky="e")
         return line_number_entry
 
     def create_go_button(self, jump_to_line_command):
-        go_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Go", command=jump_to_line_command)
+        go_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Go", command=jump_to_line_command)
         go_button.grid(row=2, column=2, padx=10, pady=10, sticky="w")
         return go_button
 
@@ -70,19 +70,14 @@ class UserInterface:
         progress.set(0)
         return progress
     
-
-    
-
     def main_frame(self):
         navigation_frame = tk.LabelFrame(self.root, height=900)
         navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=2, padx=20, pady=10, sticky="nwse")
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
         navigation_frame2 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-        navigation_frame2.grid(row=8, column=2,rowspan=1, padx=0, pady=0, sticky="w")
-        navigation_frame3 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-        navigation_frame3.grid(row=8, column=1,rowspan=1, padx=0, pady=0, sticky="e")
-        return navigation_frame, navigation_frame2, navigation_frame3
+        navigation_frame2.grid(row=8, column=1,rowspan=3, padx=0, pady=0, sticky="e")
+        return navigation_frame, navigation_frame2
     
     def create_canvas(self):
         canvas = tk.Canvas(self.navigation_frame)
@@ -107,9 +102,10 @@ class UserInterface:
         return sidebar_frame
         
     def button_go_to_website(self):
-        website_button = ctk.CTkButton(app.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website", command=app.open_url_in_browser)
+        website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
         website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
         return website_button
+    
     def create_sidebar_label(self):
         sidebar_label = ctk.CTkLabel(self.sidebar_frame, text="Menu:", font=("", 20))
         sidebar_label.grid(row=0, column=0, padx=20, pady=10, sticky="nwe")
