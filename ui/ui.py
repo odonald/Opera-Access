@@ -16,17 +16,23 @@ class UserInterface:
         self.progress = self.create_progress_bar()
         self.website_button = self.create_website_button()  # This line remains unchanged
         self.show_qr_button = self.create_show_qr_button()  # Pass the actual command
+        self.import_translation_button = self.create_import_translation_button()  # This line remains unchanged
 
     def create_website_button(self):
         website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
         website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
         return website_button
 
+    def create_import_translation_button(self):
+        import_translation_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Import Text")
+        import_translation_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsw")
+        return import_translation_button
+    
     def create_show_qr_button(self):
         show_qr_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Show QR")
         show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
         return show_qr_button
-
+    
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
         progress.grid(row=0, column=1, columnspan=3, padx=0, pady=0, sticky="new")

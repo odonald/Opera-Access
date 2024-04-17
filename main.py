@@ -23,9 +23,6 @@ def main():
     root = create_main_window()
     app = Application(root)
 
-    import_translation_button = ctk.CTkButton(app.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Import Text", command=app.import_additional_language)
-    import_translation_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsw")
-
 
     for index, label in enumerate(app.ui.prev_line_labels, start=0):
         label.grid(row=index, column=0, padx=10, pady=10)

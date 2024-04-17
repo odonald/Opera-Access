@@ -7,6 +7,7 @@ from PIL import ImageTk, Image
 from io import BytesIO
 from ui.ui import UserInterface, create_main_window
 from config.config import AppConfig
+
 class ImportLanguageDialog(tk.simpledialog.Dialog):
     def __init__(self, parent, available_languages, additional_languages, import_additional_translation, **kwargs):
         self.available_languages = available_languages
@@ -58,12 +59,10 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
 
     def apply(self):
-        print("Applying selected language settings...")
         language_code = {**self.available_languages, **self.additional_languages}.get(self.selected_language, None)
         if language_code:
             self.import_additional_translation(self.selected_language, language_code)
         else:
-            print("No valid language selected or code found.")
             messagebox.showerror("Error", "Selected language is not valid or does not have a code.")
 
     def on_select(self, event):
@@ -72,15 +71,21 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         if selection:
             index = selection[0]
             self.selected_language = widget.get(index)
-            print(f"Selected language: {self.selected_language}")  # Debugging print to check which language is selected
-
+            print(f"Selected language: {self.selected_language}")
 
     def buttonbox(self):
+        """
+        Creates a frame with two buttons, "Import" and "Cancel", and binds the Enter and Escape keys to the corresponding actions.
+        """
         box = tk.Frame(self)
-        w = ttk.Button(box, text="Import", width=10, command=self.ok, default=tk.ACTIVE)
-        w.pack(side=tk.LEFT, padx=5, pady=5)
-        w = tk.Button(box, text="Cancel", width=10, command=self.cancel)
-        w.pack(side=tk.LEFT, padx=5, pady=5)
+    
+        import_button = tk.Button(box, text="Import", width=10, command=self.ok, default=tk.ACTIVE)
+        import_button.pack(side=tk.LEFT, padx=5, pady=5)
+    
+        cancel_button = tk.Button(box, text="Cancel", width=10, command=self.cancel)
+        cancel_button.pack(side=tk.LEFT, padx=5, pady=5)
+    
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
+            
         box.pack()

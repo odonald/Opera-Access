@@ -58,6 +58,7 @@ class Application:
         self.bind_scroll_to_widget(self.ui.inner_frame)
         self.bind_website_button()
         self.bind_show_qr_button()
+        self.bind_import_translation_button()
 
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
@@ -223,7 +224,9 @@ class Application:
 
     def bind_website_button(self):
         self.ui.website_button.configure(command=self.open_url_in_browser)
-        
+
+    def bind_import_translation_button(self):
+        self.ui.import_translation_button.configure(command=self.import_additional_language)
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(command=self.show_qr_code)
@@ -231,12 +234,6 @@ class Application:
     def open_url_in_browser(self):
         url = f"http://{self.local_ip}:{self.port_number}"
         webbrowser.open(url)
-
-    # def import_additional_language(self):
-    #     print("Opening Language Import Dialog...")
-    #     dialog = ImportLanguageDialog(self.root, self.language, self.language_switcher_values, self.additional_languages, self.imported_languages_label, self.language_switcher, self.update_label)
-    #     self.root.wait_window(dialog.top)
-    #     self.update_ui_after_language_import()
 
     def import_additional_language(self):
         print("Opening Language Import Dialog...")
