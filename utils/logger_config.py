@@ -1,6 +1,13 @@
 import logging
 import os
 import sys
+import argparse
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='My Application')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    args = parser.parse_args()
+    return args.debug
 
 def setup_logging(debug_mode):
     if debug_mode:
