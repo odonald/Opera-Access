@@ -59,6 +59,9 @@ class Application:
         self.bind_website_button()
         self.bind_show_qr_button()
         self.bind_import_translation_button()
+        self.bind_previous_line_button()
+        self.bind_next_line_button()
+        self.bind_go_button()
 
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
@@ -230,6 +233,16 @@ class Application:
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(command=self.show_qr_code)
+
+    def bind_previous_line_button(self):
+        self.ui.previous_line_button.configure(command=self.previous_line)
+
+    def bind_next_line_button(self):
+        self.ui.next_line_button.configure(command=self.next_line)
+
+    def bind_go_button(self):
+        self.ui.go_button.configure(command=self.jump_to_line)
+
 
     def open_url_in_browser(self):
         url = f"http://{self.local_ip}:{self.port_number}"

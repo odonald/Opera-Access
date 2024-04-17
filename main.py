@@ -32,18 +32,7 @@ def main():
     for index, label in enumerate(app.ui.next_line_labels, start=6):
         label.grid(row=index, column=0, padx=10, pady=10)
 
-    previous_button = ctk.CTkButton(app.ui.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous", command=app.previous_line)
-    previous_button.grid(row=1, column=0, padx=10, pady=10, sticky="e")
 
-    next_button = ctk.CTkButton(app.ui.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Next", command=app.next_line)
-    next_button.grid(row=1, column=0, padx=10, pady=10, sticky="w")
-
-    line_number_var = StringVar()
-    app.ui.line_number_entry = ctk.CTkEntry(app.ui.navigation_frame3, placeholder_text="Jump to line")
-    app.ui.line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-
-    go_button = ctk.CTkButton(app.ui.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Go", command=app.jump_to_line)
-    go_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
     if getattr(sys, 'frozen', False):
         application_path = os.path.dirname(sys.executable)

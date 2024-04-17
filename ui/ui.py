@@ -14,9 +14,18 @@ class UserInterface:
         self.sidebar_label = self.create_sidebar_label()
         self.navigation_label = self.create_navigation_label()
         self.progress = self.create_progress_bar()
+        self.website_button = self.create_website_button()
+        self.show_qr_button = self.create_show_qr_button()
+        self.import_translation_button = self.create_import_translation_button()
+        self.previous_line_button = self.create_previous_line_button()
+        self.next_line_button = self.create_next_line_button()
+        self.line_number_entry = self.create_line_number_entry()
+        self.go_button = self.create_go_button(None)  # The actual command will be set in Application class
         self.website_button = self.create_website_button()  # This line remains unchanged
         self.show_qr_button = self.create_show_qr_button()  # Pass the actual command
         self.import_translation_button = self.create_import_translation_button()  # This line remains unchanged
+        self.previous_line_button = self.create_previous_line_button()  # This line remains unchanged
+        self.next_line_button = self.create_next_line_button()  # This line remains unchanged
 
     def create_website_button(self):
         website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
@@ -33,12 +42,36 @@ class UserInterface:
         show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
         return show_qr_button
     
+    def create_previous_line_button(self):
+        previous_line_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous")
+        previous_line_button.grid(row=1 , column=1, padx=10, pady=10, sticky="e")
+        return previous_line_button
+
+    def create_next_line_button(self):
+        next_line_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Next")
+        next_line_button.grid(row=1, column=2, padx=10, pady=10, sticky="w")
+        return next_line_button
+
+    def create_line_number_entry(self):
+        line_number_entry = ctk.CTkEntry(self.navigation_frame3, placeholder_text="Jump to line")
+        line_number_entry.grid(row=2, column=1, padx=10, pady=10, sticky="e")
+        return line_number_entry
+
+    def create_go_button(self, jump_to_line_command):
+        go_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Go", command=jump_to_line_command)
+        go_button.grid(row=2, column=2, padx=10, pady=10, sticky="w")
+        return go_button
+
+    
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
         progress.grid(row=0, column=1, columnspan=3, padx=0, pady=0, sticky="new")
         progress.configure(mode="determinate")
         progress.set(0)
         return progress
+    
+
+    
 
     def main_frame(self):
         navigation_frame = tk.LabelFrame(self.root, height=900)
