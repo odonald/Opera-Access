@@ -349,22 +349,9 @@ class Application:
 
             self.update_label()
 
-    def run_server(self):
-        from logic.flask_app import app
-        host = self.local_ip
-        port = self.port_number
-        app.run(debug=AppConfig.DEBUG, port=port, host=host, use_reloader=False)
+    
 
-    def send_to_server(self, line_number):
-        message = {
-            "type": "message",
-            "content": {
-            }
-        }
-        for lang_code, lang_lines in self.additional_languages.items():
-            lang_name = iso639.languages.get(alpha2=lang_code).name
-            message["content"][lang_name] = lang_lines[line_number]
-        requests.post(self.url, json=message)
+    
 
     def update_label(self):
             if self.additional_languages:
