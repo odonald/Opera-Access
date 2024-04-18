@@ -1,3 +1,13 @@
+"""
+This code defines a class called QrCode with two methods: show_qr_code and save_qr_code. 
+
+The show_qr_code method generates a QR code image using the qrcode library and displays it in a tkinter window. The URL to be encoded in the QR code is passed as an argument to the method.
+
+The save_qr_code method also generates a QR code image using the qrcode library, but instead of displaying it, it prompts the user to choose a file path to save the image as a PNG file. The URL to be encoded in the QR code is passed as an argument to the method.
+
+Both methods use the AppConfig class from the config.config module to retrieve the URL to be encoded in the QR code.
+"""
+
 import qrcode
 import tkinter as tk
 from PIL import ImageTk

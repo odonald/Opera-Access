@@ -17,7 +17,7 @@ from config.config import AppConfig
 from utils.language_util import ImportLanguageDialog
 from ui.ui import UserInterface, create_main_window
 from ui.file_menu import FileMenu
-from utils.file_handling import QrCode
+from utils.qr_code_utils import QrCode
 
 class Application:
     def __init__(self, root):
