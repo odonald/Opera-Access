@@ -83,6 +83,7 @@ class Application:
             "clear_program": self.clear_program,
             "close_program": self.close_program
         })
+        
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
 
