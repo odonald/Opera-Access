@@ -1,35 +1,14 @@
-
-import tkinter as tk
-from tkinter import filedialog
 import qrcode
+import tkinter as tk
 from PIL import ImageTk
-import webbrowser
+from tkinter import filedialog
 from config.config import AppConfig
-from ui.ui import UserInterface
-from ui.file_menu import FileMenu
 
-
+url = AppConfig.HOST
 
 class QrCode:
-    def __init__(self, root):
-        self.root = root
-        self.ui = UserInterface(root)
-        self.ui = UserInterface(root)
-        self.bind_show_qr_button(root)
+    def show_qr_code(url):
 
-    local_ip = AppConfig.HOST
-    port_number = AppConfig.PORT
-
-    def bind_show_qr_button(self, root):
-        self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(root))
-
-    def show_qr_code(self, root):
-        url = f"http://{self.local_ip}:{self.port_number}"
-
-        def on_qr_click(event):
-                self.save_qr_code()
-
-                global qr_img
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -42,9 +21,6 @@ class QrCode:
         img = qr.make_image(fill_color="black", back_color="white")
         img_tk = ImageTk.PhotoImage(img)
 
-        qr_img = img
-
-        qr_window = tk.Toplevel(root)
         qr_window = tk.Toplevel()
         qr_window.title("QR Code")
         qr_window.geometry("600x600")
@@ -53,7 +29,21 @@ class QrCode:
         qr_label.image = img_tk
         qr_label.pack()
 
-        qr_label.bind("<Button-1>", on_qr_click)
-
         qr_window.mainloop()
-        
+
+    def save_qr_code(url):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+
+        if file_path:
+            img.save(file_path)

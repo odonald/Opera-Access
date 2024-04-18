@@ -34,6 +34,8 @@ class Application:
         self.url = AppConfig.URL
         self.local_ip = AppConfig.HOST
         self.port_number = AppConfig.PORT
+        self.save_qr_code = QrCode.save_qr_code
+        self.show_qr_code = QrCode.show_qr_code
         self.language_switcher_values = []
         self.original_file = None
         self.translation_file = None
@@ -70,12 +72,12 @@ class Application:
         self.bind_previous_line_button()
         self.bind_next_line_button()
         self.bind_go_button()
+        self.bind_show_qr_button()
 
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
-            "save_qr_code": self.save_qr_code,
-            "show_qr_code": QrCode.show_qr_code,
-            "show_qr_code": self.show_qr_code,
+            "save_qr_code": lambda: self.save_qr_code(self.url),
+            "show_qr_code": lambda: self.show_qr_code(self.url),
             "import_additional_language": self.import_additional_language,
             "save_session": self.save_session,
             "load_session": self.load_session,
@@ -84,12 +86,10 @@ class Application:
             "clear_program": self.clear_program,
             "close_program": self.close_program
         })
-
-    def show_qr_code(self):
-        qr_code = QrCode(self.root)
-        qr_code.show_qr_code(self.root)
-
-        
+    
+    def bind_show_qr_button(self):
+        self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(self.url))   
+    
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
 
@@ -131,30 +131,11 @@ class Application:
         self.server_indicator = tk.Canvas(self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
         self.server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
 
-    def save_qr_code(self):
-            url = f"http://{self.local_ip}:{self.port_number}"
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4,
-            )
-            qr.add_data(url)
-            qr.make(fit=True)
-
-            img = qr.make_image(fill_color="black", back_color="white")
-
-            file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
-
-            if file_path:
-                img.save(file_path)
 
     def bind_events(self):
         self.root.bind("<KeyPress>", self.on_key_press)
         self.root.protocol("WM_DELETE_WINDOW", self.close_program)
-    def open_url_in_browser(self):
-            url = f"http://{self.local_ip}:{self.port_number}"
-            webbrowser.open(url)
+
     def start_server_thread(self, start):
         server_thread = threading.Thread(target=self.run_server)
         server_thread.daemon = True
@@ -208,10 +189,6 @@ class Application:
             else:
                 break
 
-    
-
-    
-
     def bind_website_button(self):
         self.ui.website_button.configure(command=self.open_url_in_browser)
 
@@ -228,76 +205,9 @@ class Application:
         self.ui.go_button.configure(command=self.jump_to_line)
 
 
-    def run_server(self):
-            from logic.flask_app import app
-            host = self.local_ip
-            port = self.port_number
-            app.run(debug=AppConfig.DEBUG, port=port, host=host, use_reloader=False)
-            
-
-    def send_to_server(self, line_number):
-            message = {
-                "type": "message",
-                "content": {
-                }
-            }
-            for lang_code, lang_lines in self.additional_languages.items():
-                lang_name = iso639.languages.get(alpha2=lang_code).name
-                message["content"][lang_name] = lang_lines[line_number]
-            requests.post(self.url, json=message)
-            
-    def start_server_thread(self, start):
-            server_thread = threading.Thread(target=self.run_server)
-            server_thread.daemon = True
-            server_thread.start()
-            if start:
-                server_thread = threading.Thread(target=self.run_server, daemon=True)
-                server_thread.start()
-                self.server_running = True
-                if self.local_ip == "127.0.0.1":
-                    self.server_status_label.configure(text=f"LOCAL - No network detected")
-                    self.server_indicator.configure(bg="red")
-                else:
-                    self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
-                    self.server_indicator.configure(bg="green")
-            else:
-                self.server_running = False
-                self.server_status_label.configure(text=f"Idle")
-                self.server_indicator.configure(bg="red")
-                
-    def change_port(self):
-            reserved_ports = [80, 443, 8080, 8443]
-
-            if self.server_running:
-                self.start_server_thread(start=False)
-                self.server_running = False
-                self.server_status_label.configure(text=f"Idle")
-                self.server_indicator.configure(bg="red")
-
-            while True:
-                new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=self.root)
-                if new_port:
-                    try:
-                        port_int = int(new_port)
-                        if 1024 <= port_int <= 65535 and port_int not in reserved_ports:
-                            self.port_number = port_int
-                            self.url = f"http://{self.local_ip}:{self.port_number}/stream/push"
-                            server_thread = threading.Thread(target=self.run_server, daemon=True)
-                            server_thread.start()
-                            self.server_running = True
-                            if self.local_ip == "127.0.0.1":
-                                self.server_status_label.configure(text=f"LOCAL - No network detected")
-                                self.server_indicator.configure(bg="red")
-                            else:
-                                self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
-                                self.server_indicator.configure(bg="green")
-                            break
-                        else:
-                            tk.messagebox.showerror("Invalid Port", "The selected port is already reserved or invalid.")
-                    except ValueError:
-                        tk.messagebox.showerror("Invalid Port", "Please enter a valid port number.")
-                else:
-                    break 
+    def open_url_in_browser(self):
+        url = f"http://{self.local_ip}:{self.port_number}"
+        webbrowser.open(url)
 
     def import_additional_language(self):
         print("Opening Language Import Dialog...")
@@ -424,9 +334,22 @@ class Application:
 
             self.update_label()
 
-    
+    def run_server(self):
+        from logic.flask_app import app
+        host = self.local_ip
+        port = self.port_number
+        app.run(debug=AppConfig.DEBUG, port=port, host=host, use_reloader=False)
 
-    
+    def send_to_server(self, line_number):
+        message = {
+            "type": "message",
+            "content": {
+            }
+        }
+        for lang_code, lang_lines in self.additional_languages.items():
+            lang_name = iso639.languages.get(alpha2=lang_code).name
+            message["content"][lang_name] = lang_lines[line_number]
+        requests.post(self.url, json=message)
 
     def update_label(self):
             if self.additional_languages:
