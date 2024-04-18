@@ -129,6 +129,10 @@ class Application:
         self.root.bind("<KeyPress>", self.on_key_press)
         self.root.protocol("WM_DELETE_WINDOW", self.close_program)
 
+    def open_url_in_browser(self):
+        url = f"http://{self.local_ip}:{self.port_number}"
+        webbrowser.open(url)
+        
     def start_server_thread(self, start):
         server_thread = threading.Thread(target=self.run_server)
         server_thread.daemon = True
@@ -181,67 +185,10 @@ class Application:
                     tk.messagebox.showerror("Invalid Port", "Please enter a valid port number.")
             else:
                 break
-    """
-    Display a QR code with the application's URL.
 
-    This method generates a QR code using the application's URL and displays it in a separate window. The QR code can be clicked to save it as an image file.
+    
 
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
-    def save_qr_code(self):
-        url = f"http://{self.local_ip}:{self.port_number}"
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(url)
-        qr.make(fit=True)
-
-        img = qr.make_image(fill_color="black", back_color="white")
-
-        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
-
-        if file_path:
-            img.save(file_path)
-
-    def show_qr_code(self):
-        url = f"http://{self.local_ip}:{self.port_number}"
-
-        def on_qr_click(event):
-            self.save_qr_code()
-
-        global qr_img
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=20,
-            border=4,
-        )
-        qr.add_data(url)
-        qr.make(fit=True)
-
-        img = qr.make_image(fill_color="black", back_color="white")
-        img_tk = ImageTk.PhotoImage(img)
-
-        qr_img = img
-
-        qr_window = tk.Toplevel()
-        qr_window.title("QR Code")
-        qr_window.geometry("600x600")
-
-        qr_label = tk.Label(qr_window, image=img_tk)
-        qr_label.image = img_tk
-        qr_label.pack()
-
-        qr_label.bind("<Button-1>", on_qr_click)
-
-        qr_window.mainloop()
+    
 
     def bind_website_button(self):
         self.ui.website_button.configure(command=self.open_url_in_browser)
@@ -262,9 +209,7 @@ class Application:
         self.ui.go_button.configure(command=self.jump_to_line)
 
 
-    def open_url_in_browser(self):
-        url = f"http://{self.local_ip}:{self.port_number}"
-        webbrowser.open(url)
+    
 
     def import_additional_language(self):
         print("Opening Language Import Dialog...")
