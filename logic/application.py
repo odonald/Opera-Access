@@ -181,7 +181,17 @@ class Application:
                     tk.messagebox.showerror("Invalid Port", "Please enter a valid port number.")
             else:
                 break
+    """
+    Display a QR code with the application's URL.
 
+    This method generates a QR code using the application's URL and displays it in a separate window. The QR code can be clicked to save it as an image file.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
     def save_qr_code(self):
         url = f"http://{self.local_ip}:{self.port_number}"
         qr = qrcode.QRCode(
