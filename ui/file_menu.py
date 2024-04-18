@@ -12,8 +12,8 @@ class FileMenu:
         menu_bar.add_cascade(label="File", menu=file_menu)
 
         qr_menu = tk.Menu(file_menu, tearoff=0)
-        qr_menu.add_command(label="Save QR Code", command=callbacks["save_qr_code"])
-        qr_menu.add_command(label="Show QR Code", command=callbacks["show_qr_code"])
+        # qr_menu.add_command(label="Save QR Code", command=callbacks["save_qr_code"])
+        # qr_menu.add_command(label="Show QR Code", command=callbacks["show_qr_code"])
 
         file_menu.add_command(label="Import additional language", command=callbacks["import_additional_language"])
         file_menu.add_command(label="Save Session", command=callbacks["save_session"])

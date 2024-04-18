@@ -17,6 +17,7 @@ from config.config import AppConfig
 from utils.language_util import ImportLanguageDialog
 from ui.ui import UserInterface, create_main_window
 from ui.file_menu import FileMenu
+from utils.file_handling import QrCode
 
 class Application:
     def __init__(self, root):
@@ -65,7 +66,6 @@ class Application:
         self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
         self.bind_scroll_to_widget(self.ui.inner_frame)
         self.bind_website_button()
-        self.bind_show_qr_button()
         self.bind_import_translation_button()
         self.bind_previous_line_button()
         self.bind_next_line_button()
@@ -74,7 +74,7 @@ class Application:
         self.root.after(100, self.set_scroll_to_center)
         self.file_menu = FileMenu(root, {
             "save_qr_code": self.save_qr_code,
-            "show_qr_code": self.show_qr_code,
+            "show_qr_code": QrCode.show_qr_code,
             "import_additional_language": self.import_additional_language,
             "save_session": self.save_session,
             "load_session": self.load_session,
@@ -124,11 +124,30 @@ class Application:
         self.server_indicator = tk.Canvas(self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
         self.server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
 
+    def save_qr_code(self):
+            url = f"http://{self.local_ip}:{self.port_number}"
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(url)
+            qr.make(fit=True)
+
+            img = qr.make_image(fill_color="black", back_color="white")
+
+            file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+
+            if file_path:
+                img.save(file_path)
 
     def bind_events(self):
         self.root.bind("<KeyPress>", self.on_key_press)
         self.root.protocol("WM_DELETE_WINDOW", self.close_program)
-
+    def open_url_in_browser(self):
+            url = f"http://{self.local_ip}:{self.port_number}"
+            webbrowser.open(url)
     def start_server_thread(self, start):
         server_thread = threading.Thread(target=self.run_server)
         server_thread.daemon = True
@@ -191,9 +210,6 @@ class Application:
 
     def bind_import_translation_button(self):
         self.ui.import_translation_button.configure(command=self.import_additional_language)
-
-    def bind_show_qr_button(self):
-        self.ui.show_qr_button.configure(command=self.show_qr_code)
 
     def bind_previous_line_button(self):
         self.ui.previous_line_button.configure(command=self.previous_line)
