@@ -15,7 +15,6 @@ import webbrowser
 from ui.ui import UserInterface, create_main_window
 from config.config import AppConfig
 from utils.language_util import ImportLanguageDialog
-from ui.ui import UserInterface, create_main_window
 from ui.file_menu import FileMenu
 from utils.qr_code_utils import QrCode
 
