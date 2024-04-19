@@ -32,6 +32,7 @@ class Application:
         self.root = root
         self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
         self.url = AppConfig.URL
+        self.sse_url = AppConfig.SSE_URL
         self.local_ip = AppConfig.HOST
         self.port_number = AppConfig.PORT
         self.save_qr_code = QrCode.save_qr_code
@@ -349,7 +350,7 @@ class Application:
         for lang_code, lang_lines in self.additional_languages.items():
             lang_name = iso639.languages.get(alpha2=lang_code).name
             message["content"][lang_name] = lang_lines[line_number]
-        requests.post(self.url, json=message)
+        requests.post(self.sse_url, json=message)
 
     def update_label(self):
             if self.additional_languages:
