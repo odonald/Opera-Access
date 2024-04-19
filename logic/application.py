@@ -253,12 +253,12 @@ class Application:
             self.update_label()
 
 
-    def combine_files(self):
-        if self.original_lines and self.translation_lines:
-            self.combined_lines = list(zip(self.original_lines, self.translation_lines))
+    @staticmethod
+    def combine_files(original_lines, translation_lines):
+        if original_lines and translation_lines:
+            return list(zip(original_lines, translation_lines))
         else:
-            self.combined_lines = [(line, "") for line in self.original_lines]
-        self.update_label()
+            return [(line, "") for line in original_lines]
 
     def on_key_press(self, event):
         if event.keysym == 'Right':
