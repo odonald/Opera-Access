@@ -25,68 +25,64 @@ class Application:
             self.application_path = os.path.dirname(sys.executable)
         elif __file__:
             self.application_path = os.path.dirname(__file__)
-        if getattr(sys, 'frozen', False):
-            self.application_path = os.path.dirname(sys.executable)
-        elif __file__:
-            self.application_path = os.path.dirname(__file__)
         self.root = root
-        self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
-        self.url = AppConfig.URL
-        self.sse_url = AppConfig.SSE_URL
-        self.local_ip = AppConfig.HOST
-        self.port_number = AppConfig.PORT
-        self.save_qr_code = QrCode.save_qr_code
-        self.show_qr_code = QrCode.show_qr_code
-        self.language_switcher_values = []
-        self.original_file = None
-        self.translation_file = None
-        self.original_lines = []
-        self.translation_lines = []
-        self.additional_languages = {}
-        self.combined_lines = []
-        self.current_line = 0
-        self.imported_languages_label = []
+        if root is not None:
+            self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
+            self.url = AppConfig.URL
+            self.sse_url = AppConfig.SSE_URL
+            self.local_ip = AppConfig.HOST
+            self.port_number = AppConfig.PORT
+            self.save_qr_code = QrCode.save_qr_code
+            self.show_qr_code = QrCode.show_qr_code
+            self.language_switcher_values = []
+            self.original_file = None
+            self.translation_file = None
+            self.original_lines = []
+            self.translation_lines = []
+            self.additional_languages = {}
+            self.combined_lines = []
+            self.current_line = 0
+            self.imported_languages_label = []
 
-        self.current_line_clicks = 0
-        self.last_confirmed_line = 0
-        self.empty_line = 0
-        self.next_button_clicks = 0
-        self.prev_button_clicks = 0
+            self.current_line_clicks = 0
+            self.last_confirmed_line = 0
+            self.empty_line = 0
+            self.next_button_clicks = 0
+            self.prev_button_clicks = 0
 
-        self.available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
-        self.server_running = False
+            self.available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
+            self.server_running = False
+            self.setup_ui()
+            self.bind_events()
+            self.start_server_thread(start=True)
 
-        self.setup_ui()
-        self.bind_events()
-        self.start_server_thread(start=True)
+            self.scrollbar = ttk.Scrollbar(self.ui.navigation_frame, orient="vertical", command=self.ui.canvas.yview)
+            self.scrollbar.grid(row=0, column=3, sticky="ns")
 
-        self.scrollbar = ttk.Scrollbar(self.ui.navigation_frame, orient="vertical", command=self.ui.canvas.yview)
-        self.scrollbar.grid(row=0, column=3, sticky="ns")
+            self.ui.canvas.configure(yscrollcommand=self.scrollbar.set)
+            self.ui.canvas.bind("<Configure>", self.resize_inner_frame)
+            self.ui.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+            self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
+            self.bind_scroll_to_widget(self.ui.inner_frame)
+            self.bind_website_button()
+            self.bind_import_translation_button()
+            self.bind_previous_line_button()
+            self.bind_next_line_button()
+            self.bind_go_button()
+            self.bind_show_qr_button()
 
-        self.ui.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.ui.canvas.bind("<Configure>", self.resize_inner_frame)
-        self.ui.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-        self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
-        self.bind_scroll_to_widget(self.ui.inner_frame)
-        self.bind_website_button()
-        self.bind_import_translation_button()
-        self.bind_previous_line_button()
-        self.bind_next_line_button()
-        self.bind_go_button()
-        self.bind_show_qr_button()
-
-        self.root.after(100, self.set_scroll_to_center)
-        self.file_menu = FileMenu(root, {
-            "save_qr_code": lambda: self.save_qr_code(self.url),
-            "show_qr_code": lambda: self.show_qr_code(self.url),
-            "import_additional_language": self.import_additional_language,
-            "save_session": self.save_session,
-            "load_session": self.load_session,
-            "open_url_in_browser": self.open_url_in_browser,
-            "change_port": self.change_port,
-            "clear_program": self.clear_program,
-            "close_program": self.close_program
-        })
+            self.root.after(100, self.set_scroll_to_center)
+            self.file_menu = FileMenu(root, {
+                "save_qr_code": lambda: self.save_qr_code(self.url),
+                "show_qr_code": lambda: self.show_qr_code(self.url),
+                "import_additional_language": self.import_additional_language,
+                "save_session": self.save_session,
+                "load_session": self.load_session,
+                "open_url_in_browser": self.open_url_in_browser,
+                "change_port": self.change_port,
+                "clear_program": self.clear_program,
+                "close_program": self.close_program
+            })
     
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(self.url))   
