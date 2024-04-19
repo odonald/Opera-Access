@@ -98,3 +98,30 @@ class TestApplication(unittest.TestCase):
             self.app.send_to_server(line_number)
 
         mock_post.assert_not_called()
+
+    @patch.object(Application, "send_to_server")
+    def test_set_current_line_single_click(self, mock_send_to_server):
+        line = 5
+        self.app.empty_line = 0
+        self.app.current_line_clicks = 0
+
+        self.app.set_current_line(line)
+
+        self.assertEqual(self.app.current_line_clicks, 1)
+        mock_send_to_server.assert_called_once_with(self.app.empty_line)
+        self.assertNotEqual(self.app.current_line, line)
+
+    @patch.object(Application, "send_to_server")
+    @patch.object(Application, "update_label")
+    def test_set_current_line_two_clicks(self, mock_update_label, mock_send_to_server):
+        line = 5
+        self.app.current_line_clicks = 1
+
+        self.app.set_current_line(line)
+
+        self.assertEqual(self.app.current_line, line)
+        self.assertEqual(self.app.current_line_clicks, 0)
+        self.assertEqual(self.app.next_button_clicks, 0)
+        self.assertEqual(self.app.prev_button_clicks, 0)
+        mock_send_to_server.assert_called_once_with(line)
+        mock_update_label.assert_called_once()

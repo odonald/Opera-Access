@@ -20,10 +20,12 @@ from utils.qr_code_utils import QrCode
 
 class Application:
     def __init__(self, root):
+
         if getattr(sys, 'frozen', False):
             self.application_path = os.path.dirname(sys.executable)
         elif __file__:
             self.application_path = os.path.dirname(__file__)
+        self.current_line = None
         self.root = root
         if root is not None:
             self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
