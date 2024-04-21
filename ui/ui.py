@@ -70,7 +70,7 @@ class UserInterface:
 
     def create_progress_bar(self):
         progress = ctk.CTkProgressBar(self.root, orientation="horizontal")
-        progress.grid(row=0, column=1, columnspan=3, padx=0, pady=0, sticky="new")
+        progress.grid(row=0, column=0, columnspan=4, padx=0, pady=0, sticky="new")
         progress.configure(mode="determinate")
         progress.set(0)
         return progress
@@ -101,9 +101,9 @@ class UserInterface:
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)
-        sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsw")
-        sidebar_frame.grid_rowconfigure(10, weight=1)
-        sidebar_frame.grid_columnconfigure(0, weight=0)
+        sidebar_frame.grid(row=0, column=0,rowspan=10, sticky="nsw")
+        sidebar_frame.grid_rowconfigure(10, weight=0)
+        sidebar_frame.grid_columnconfigure(0, weight=1)
         return sidebar_frame
         
     def button_go_to_website(self):
@@ -143,6 +143,6 @@ def create_main_window():
     root.configure(bg=ctk.set_appearance_mode("System"))
     root.geometry(f"{1000}x{550}")
     root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
-    root.columnconfigure((0,1,2,3), weight=1)
+    root.columnconfigure((0,1,2,3,4), weight=1)
 
     return root
