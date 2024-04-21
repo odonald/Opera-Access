@@ -55,7 +55,6 @@ MouseInfo==0.1.3
 networkx==3.2.1
 numpy==1.26.3
 openai==1.6.1
--e git+ssh://git@github.com/odonald/Opera-Access.git@d4f7fc933ce37067654cff218c7c1fb299fc45d8#egg=Opera_Access
 outcome==1.3.0.post0
 packaging==23.2
 pathspec==0.12.1
