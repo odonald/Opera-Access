@@ -101,7 +101,7 @@ class UserInterface:
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)
-        sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsw")
+        sidebar_frame.grid(row=0, column=0, rowspan=9, sticky="nsw")
         sidebar_frame.grid_rowconfigure(10, weight=1)
         sidebar_frame.grid_columnconfigure(0, weight=0)
         return sidebar_frame
