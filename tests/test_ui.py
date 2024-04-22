@@ -31,12 +31,6 @@ class TestUIComponents(unittest.TestCase):
         self.assertIsInstance(import_translation_button, ctk.CTkButton)
         self.assertEqual(import_translation_button.cget("text"), "Import Text")
 
-    # def test_create_import_translation_button_command(self):
-    #     def mock_command():
-    #         pass
-    #     import_translation_button = self.ui.create_import_translation_button(command=mock_command)
-    #     self.assertEqual(import_translation_button.cget("command"), mock_command)
-
     def test_create_show_qr_button(self):
         show_qr_button = self.ui.create_show_qr_button()
         self.assertIsInstance(show_qr_button, ctk.CTkButton)
@@ -106,23 +100,14 @@ class TestUIComponents(unittest.TestCase):
         self.assertEqual(progress_bar.get(), 0.0)
 
     def test_main_frame(self):
-        navigation_frame, navigation_frame2 = self.ui.main_frame()
+        navigation_frame, navigation_frame2, navigation_frame3 = self.ui.main_frame()
         self.assertIsInstance(navigation_frame, tk.LabelFrame)
         self.assertIsInstance(navigation_frame2, ctk.CTkFrame)
-
-    # def test_main_frame_size(self):
-    #     navigation_frame, navigation_frame2 = self.ui.main_frame()
-    #     self.assertEqual(navigation_frame.winfo_width(), 900)
-    #     self.assertEqual(navigation_frame2.winfo_width(), 500)
+        self.assertIsInstance(navigation_frame3, ctk.CTkFrame)
 
     def test_create_canvas(self):
         canvas = self.ui.create_canvas()
         self.assertIsInstance(canvas, tk.Canvas)
-
-    # def test_create_canvas_size(self):
-    #     canvas = self.ui.create_canvas()
-    #     self.assertEqual(canvas.winfo_width(), 900)
-    #     self.assertEqual(canvas.winfo_height(), 900)
 
     def test_create_inner_frame(self):
         inner_frame = self.ui.create_inner_frame()
@@ -136,17 +121,10 @@ class TestUIComponents(unittest.TestCase):
         canvas_frame = self.ui.create_canvas_frame()
         self.assertIsInstance(canvas_frame, int)
 
-    # def test_create_canvas_frame_position(self):
-    #     canvas_frame = self.ui.create_canvas_frame()
-    #     self.assertEqual(self.ui.canvas.coords(canvas_frame), (0, 0))
-
     def test_create_sidebar_frame(self):
         sidebar_frame = self.ui.create_sidebar_frame()
         self.assertIsInstance(sidebar_frame, ctk.CTkFrame)
 
-    # def test_create_sidebar_frame_size(self):
-    #     sidebar_frame = self.ui.create_sidebar_frame()
-    #     self.assertEqual(sidebar_frame.winfo_width(), 100)
 
     def test_create_sidebar_label(self):
         sidebar_label = self.ui.create_sidebar_label()

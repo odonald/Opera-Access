@@ -21,11 +21,6 @@ class UserInterface:
         self.next_line_button = self.create_next_line_button()
         self.line_number_entry = self.create_line_number_entry()
         self.go_button = self.create_go_button(None)  # The actual command will be set in Application class
-        self.website_button = self.create_website_button()  # This line remains unchanged
-        self.show_qr_button = self.create_show_qr_button()  # Pass the actual command
-        self.import_translation_button = self.create_import_translation_button()  # This line remains unchanged
-        self.previous_line_button = self.create_previous_line_button()  # This line remains unchanged
-        self.next_line_button = self.create_next_line_button()  # This line remains unchanged
 
     def create_website_button(self):
         website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
@@ -44,28 +39,28 @@ class UserInterface:
 
     def create_appearance_mode_optionmenu(self):
         appearance_mode_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"], command=Events.change_appearance_mode_event)
-        appearance_mode_optionmenu.grid(row=10, column=0, padx=10, pady=10, sticky="s")
+        appearance_mode_optionmenu.grid(row=10, column=0, padx=0, pady=10, sticky="s")
         appearance_mode_optionmenu.set("Dark")
         return appearance_mode_optionmenu
     
     def create_previous_line_button(self):
         previous_line_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Previous")
-        previous_line_button.grid(row=0 , column=1, padx=10, pady=10, sticky="e")
+        previous_line_button.grid(row=0 , column=0, padx=10, pady=10, sticky="e")
         return previous_line_button
 
     def create_next_line_button(self):
         next_line_button = ctk.CTkButton(self.navigation_frame2, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Next")
-        next_line_button.grid(row=0, column=2, padx=10, pady=10, sticky="w")
+        next_line_button.grid(row=0, column=1, padx=10, pady=10, sticky="w")
         return next_line_button
 
     def create_line_number_entry(self):
         line_number_entry = ctk.CTkEntry(self.navigation_frame3, placeholder_text="Jump to line")
-        line_number_entry.grid(row=2, column=1, padx=10, pady=10, sticky="e")
+        line_number_entry.grid(row=0, column=0, padx=10, pady=10, sticky="e")
         return line_number_entry
 
     def create_go_button(self, jump_to_line_command):
         go_button = ctk.CTkButton(self.navigation_frame3, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Go", command=jump_to_line_command)
-        go_button.grid(row=2, column=2, padx=10, pady=10, sticky="w")
+        go_button.grid(row=0, column=1, padx=10, pady=10, sticky="w")
         return go_button
 
     def create_progress_bar(self):
@@ -80,10 +75,10 @@ class UserInterface:
         navigation_frame.grid(row=1, rowspan=6, column=1, columnspan=4, padx=20, pady=10, sticky="nesw")
         navigation_frame.grid_rowconfigure(0, weight=1)
         navigation_frame.grid_columnconfigure(0, weight=1)
-        navigation_frame2 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-        navigation_frame2.grid(row=8, column=2,rowspan=1, padx=0, pady=0, sticky="w")
-        navigation_frame3 = ctk.CTkFrame(self.root,fg_color="transparent", width=500, height=200, corner_radius=4, border_width=0)
-        navigation_frame3.grid(row=8, column=1,rowspan=1, padx=0, pady=0, sticky="e")
+        navigation_frame2 = ctk.CTkFrame(self.root,fg_color="transparent", corner_radius=4, border_width=0)
+        navigation_frame2.grid(row=7, column=1,rowspan=1, columnspan=4, padx=0, pady=0, sticky="n")
+        navigation_frame3 = ctk.CTkFrame(self.root,fg_color="transparent", corner_radius=4, border_width=0)
+        navigation_frame3.grid(row=7, column=1,rowspan=1, columnspan=4, padx=0, pady=0, sticky="s")
         return navigation_frame, navigation_frame2, navigation_frame3
     
     def create_canvas(self):
@@ -103,9 +98,9 @@ class UserInterface:
 
     def create_sidebar_frame(self):
         sidebar_frame = ctk.CTkFrame(self.root, width=100, corner_radius=0, border_width=2)
-        sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsew")
+        sidebar_frame.grid(row=0, column=0, rowspan=10, sticky="nsw")
         sidebar_frame.grid_rowconfigure(8, weight=1)
-        sidebar_frame.grid_columnconfigure(1, weight=1)
+        sidebar_frame.grid_columnconfigure(0, weight=0)
         return sidebar_frame
         
     def button_go_to_website(self):
@@ -120,18 +115,18 @@ class UserInterface:
 
     def create_navigation_label(self):
         navigation_label = ctk.CTkLabel(self.root, text="Display:", font=("", 20))
-        navigation_label.grid(row=0, column=1, columnspan=3, padx=20, pady=10, sticky="nwe")
+        navigation_label.grid(row=0, column=1, columnspan=4, padx=20, pady=10, sticky="we")
         return navigation_label
     
     def labels_inner_frame(self):
         current_line_label = ctk.CTkLabel(self.inner_frame, text_color=("Yellow", "#FFD90F"), text="Please import a language or load a session.\n +\n <--- Choose display language", font=("", 25))
-        current_line_label.grid(row=5, column=1, padx=10, pady=10)
+        current_line_label.grid(row=5, column=0, padx=10, pady=10)
         prev_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(5)]
         for index, label in enumerate(prev_line_labels, start=0):
-            label.grid(row=index, column=1, padx=10, pady=10)
+            label.grid(row=index, column=0, padx=10, pady=10)
         next_line_labels = [ctk.CTkLabel(self.inner_frame, wraplength=400, text="---") for _ in range(20)]
         for index, label in enumerate(next_line_labels, start=6):
-                label.grid(row=index, column=1, padx=10, pady=10)
+                label.grid(row=index, column=0, padx=10, pady=10)
         return current_line_label, prev_line_labels, next_line_labels
 
 class Events:
@@ -145,6 +140,7 @@ def create_main_window():
     root.configure(bg=ctk.set_appearance_mode("System"))
     root.geometry(f"{1000}x{550}")
     root.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
-    root.columnconfigure((0,1,2), weight=1)
+    root.columnconfigure(0, weight=0, minsize=100)
+    root.columnconfigure((1,2,3,4), weight=1)
 
     return root
