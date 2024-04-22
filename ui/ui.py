@@ -20,12 +20,20 @@ class UserInterface:
         self.previous_line_button = self.create_previous_line_button()
         self.next_line_button = self.create_next_line_button()
         self.line_number_entry = self.create_line_number_entry()
-        self.go_button = self.create_go_button(None)  # The actual command will be set in Application class
-        self.website_button = self.create_website_button()  # This line remains unchanged
-        self.show_qr_button = self.create_show_qr_button()  # Pass the actual command
-        self.import_translation_button = self.create_import_translation_button()  # This line remains unchanged
-        self.previous_line_button = self.create_previous_line_button()  # This line remains unchanged
-        self.next_line_button = self.create_next_line_button()  # This line remains unchanged
+        self.go_button = self.create_go_button(None)
+        self.website_button = self.create_website_button()
+        self.show_qr_button = self.create_show_qr_button()
+        self.import_translation_button = self.create_import_translation_button()
+        self.previous_line_button = self.create_previous_line_button()
+        self.next_line_button = self.create_next_line_button()
+
+        # New methods added from setup_ui
+        self.language_label = self.create_language_label()
+        self.language_switcher = self.create_language_switcher()
+        self.imported_languages_label = self.create_imported_languages_label()
+        self.server_status_menu_label = self.create_server_status_menu_label()
+        self.server_status_label = self.create_server_status_label()
+        self.server_indicator = self.create_server_indicator()
 
     def create_website_button(self):
         website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), border_width=2, text="Open Website")
@@ -131,6 +139,39 @@ class UserInterface:
         for index, label in enumerate(next_line_labels, start=6):
                 label.grid(row=index, column=0, padx=10, pady=10)
         return current_line_label, prev_line_labels, next_line_labels
+    
+    def create_language_label(self):
+        language_label = ctk.CTkLabel(self.sidebar_frame, text="Switch Display Language:")
+        language_label.grid(row=4, column=0, padx=10, pady=0, sticky="nw")
+        return language_label
+
+    def create_language_switcher(self):
+        language = tk.StringVar(self.root)
+        language.set("Choose")
+        language_switcher = ctk.CTkOptionMenu(self.sidebar_frame, variable=language, state="normal", values=(), width=10)
+        language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nwe")
+        language_switcher.configure(values=(), command=lambda choice: None)  # Update command later
+        return language_switcher
+
+    def create_imported_languages_label(self):
+        imported_languages_label = ctk.CTkLabel(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text="Imported Languages:")
+        imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
+        return imported_languages_label
+
+    def create_server_status_menu_label(self):
+        server_status_menu_label = ctk.CTkLabel(self.sidebar_frame, fg_color="transparent", font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
+        server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
+        return server_status_menu_label
+
+    def create_server_status_label(self):
+        server_status_label = ctk.CTkLabel(self.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"")
+        server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
+        return server_status_label
+
+    def create_server_indicator(self):
+        server_indicator = tk.Canvas(self.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
+        server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
+        return server_indicator
 
 class Events:
     def change_appearance_mode_event(new_appearance_mode: str):

@@ -12,7 +12,7 @@ import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
 import webbrowser
-from ui.ui import UserInterface, create_main_window
+from ui.ui import UserInterface
 from config.config import AppConfig
 from utils.language_util import ImportLanguageDialog
 from ui.file_menu import FileMenu
@@ -53,7 +53,8 @@ class Application:
 
             self.available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
             self.server_running = False
-            self.setup_ui()
+            #self.setup_ui()
+            
             self.bind_events()
             self.start_server_thread(start=True)
 
@@ -106,29 +107,7 @@ class Application:
         self.ui.canvas.configure(scrollregion=self.ui.canvas.bbox("all"))
         self.ui.canvas.yview_moveto(0.1)
 
-    def setup_ui(self):
-        self.language_label = ctk.CTkLabel(self.ui.sidebar_frame, text="Switch Display Language:")
-        self.language_label.grid(row=4, column=0, padx=10, pady=0, sticky="nw")
-
-        self.language = tk.StringVar(self.root)
-        self.language.set("Choose")
-
-        self.language_switcher = ctk.CTkOptionMenu(self.ui.sidebar_frame, variable=self.language, state="normal", values=(), width=10)
-        self.language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nwe")
-        self.language_switcher.configure(values=(), command=lambda choice: self.update_label())
-
-        self.imported_languages_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text="Imported Languages:")
-        self.imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
-
-        self.server_status_menu_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
-        self.server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
-
-        self.server_status_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{self.url}")
-        self.server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
-
-        self.server_indicator = tk.Canvas(self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
-        self.server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
-
+   
 
     def bind_events(self):
         self.root.bind("<KeyPress>", self.on_key_press)
@@ -143,15 +122,15 @@ class Application:
             server_thread.start()
             self.server_running = True
             if self.local_ip == "127.0.0.1":
-                self.server_status_label.configure(text=f"LOCAL - No network detected")
-                self.server_indicator.configure(bg="red")
+                self.ui.server_status_label.configure(text=f"LOCAL - No network detected")
+                self.ui.server_indicator.configure(bg="red")
             else:
-                self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
-                self.server_indicator.configure(bg="green")
+                self.ui.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
+                self.ui.server_indicator.configure(bg="green")
         else:
             self.server_running = False
-            self.server_status_label.configure(text=f"Idle")
-            self.server_indicator.configure(bg="red")
+            self.ui.server_status_label.configure(text=f"Idle")
+            self.ui.server_indicator.configure(bg="red")
 
     def change_port(self):
         reserved_ports = [80, 443, 8080, 8443]
@@ -159,8 +138,8 @@ class Application:
         if self.server_running:
             self.start_server_thread(start=False)
             self.server_running = False
-            self.server_status_label.configure(text=f"Idle")
-            self.server_indicator.configure(bg="red")
+            self.ui.server_status_label.configure(text=f"Idle")
+            self.ui.server_indicator.configure(bg="red")
 
         while True:
             new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=self.root)
@@ -174,11 +153,11 @@ class Application:
                         server_thread.start()
                         self.server_running = True
                         if self.local_ip == "127.0.0.1":
-                            self.server_status_label.configure(text=f"LOCAL - No network detected")
-                            self.server_indicator.configure(bg="red")
+                            self.ui.server_status_label.configure(text=f"LOCAL - No network detected")
+                            self.ui.server_indicator.configure(bg="red")
                         else:
-                            self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
-                            self.server_indicator.configure(bg="green")
+                            self.ui.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
+                            self.ui.server_indicator.configure(bg="green")
                         break
                     else:
                         tk.messagebox.showerror("Invalid Port", "The selected port is already reserved or invalid.")
@@ -244,10 +223,9 @@ class Application:
             if language_code not in self.language_switcher_values:
                 self.language_switcher_values.append(language_name)
                 self.language_switcher_values.sort()
-                self.language_switcher.configure(values=tuple(self.language_switcher_values))
-            
-            self.language.set(language_name)
-            self.update_label()
+                self.ui.language_switcher.configure(command=lambda choice: self.update_label())            
+                self.language.set(language_name)
+                self.update_label()
 
 
     @staticmethod
@@ -367,6 +345,10 @@ class Application:
                 self.ui.current_line_label.bind("<Button-1>", lambda event, line=self.current_line: self.set_current_line(line))
 
                 self.ui.progress.set(self.current_line / (max(len(self.combined_lines), max(len(lang_lines) for lang_lines in self.additional_languages.values())) - 1))
+                
+                self.ui.server_status_label.configure(text=f"http://{self.local_ip}:{self.port_number}")
+                self.ui.server_indicator.configure(bg="green")
+
 
                 for i in range(5):
                     prev_index = max(self.current_line - (5-i), 0)
