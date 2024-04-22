@@ -20,3 +20,15 @@ pyten.txt
 .DS_Store
 env/.DS_Store
 env/*
+vscode/
+vscode/*
+.coverage
+app_debug.log
+application_log.txt
+.coverage/
+.coverage/*
+coverage
+.vscode
+.vscode/
+.aider*
+.codiumai.toml
