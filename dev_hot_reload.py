@@ -12,19 +12,22 @@ class ChangeHandler(FileSystemEventHandler):
             return
         print(f'File changed: {event.src_path}')
         if self.observer_process:
+            # Make sure to terminate and wait for the old process to avoid zombies
             self.observer_process.terminate()
             self.observer_process.wait()
         print('Hot reload triggered. Restarting application...')
         self.start_application()
 
     def start_application(self):
-        command = ['python', os.path.join(self.path, 'run.py')]
+        # Including the --debug flag in the command to run the application
+        command = ['python', os.path.join(self.path, 'run.py'), '--debug']
+        # Start the new process with cwd set to the script's directory
         self.observer_process = subprocess.Popen(command, cwd=self.path)
 
 def start_observer(path):
     event_handler = ChangeHandler()
     event_handler.path = path
-    event_handler.start_application()
+    event_handler.start_application()  # Initial application start
     observer = Observer()
     observer.schedule(event_handler, path, recursive=True)
     observer.start()
@@ -36,7 +39,8 @@ def start_observer(path):
     observer.join()
 
 def main():
-    signal.signal(signal.SIGINT, signal.SIG_DFL)  # Allow process to be killed with CTRL+C
+    # Proper signal handling for clean exits
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     path = os.path.dirname(os.path.abspath(__file__))
     start_observer(path)
 
