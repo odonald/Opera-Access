@@ -8,6 +8,7 @@ import pickle
 import threading
 import iso639
 import charset_normalizer
+import logging
 import qrcode
 from PIL import ImageTk, Image
 from io import BytesIO
@@ -208,7 +209,7 @@ class Application:
         webbrowser.open(url)
 
     def import_additional_language(self):
-        print("Opening Language Import Dialog...")
+        logging.info("Opening Language Import Dialog...")
         dialog = ImportLanguageDialog(self.root, self.available_languages, self.additional_languages, self.import_additional_translation, title="Select Language")
         self.root.wait_window(dialog.top)
         self.update_ui_after_language_import()
