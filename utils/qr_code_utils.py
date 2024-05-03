@@ -16,7 +16,23 @@ from config.config import AppConfig
 
 url = AppConfig.HOST
 
+
 class QrCode:
+    """
+    This class represents a QR Code generator.
+
+    The QrCode class has two methods:
+    - show_qr_code(url): Generates a QR code image using the qrcode library and displays it in a tkinter window. The URL to be encoded in the QR code is passed as an argument to the method.
+    - save_qr_code(url): Generates a QR code image using the qrcode library and prompts the user to choose a file path to save the image as a PNG file. The URL to be encoded in the QR code is passed as an argument to the method.
+
+    Both methods use the AppConfig class from the config.config module to retrieve the URL to be encoded in the QR code.
+
+    Example usage:
+        qr = QrCode()
+        qr.show_qr_code("https://example.com")
+        qr.save_qr_code("https://example.com")
+    """
+
     def show_qr_code(self, url):
 
         qr = qrcode.QRCode(
@@ -42,6 +58,19 @@ class QrCode:
         qr_window.mainloop()
 
     def save_qr_code(self, url):
+        """
+        Generates a QR code image using the qrcode library and prompts the user to choose a file path to save the image as a PNG file.
+
+        Parameters:
+        - url (str): The URL to be encoded in the QR code.
+
+        Returns:
+        None
+
+        Example:
+            qr = QrCode()
+            qr.save_qr_code("https://example.com")
+        """
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -53,10 +82,11 @@ class QrCode:
 
         img = qr.make_image(fill_color="black", back_color="white")
 
-        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".png", filetypes=[("PNG files", "*.png")])
 
         if file_path:
             img.save(file_path)
 
-    def __init__(self): 
+    def __init__(self):
         pass
