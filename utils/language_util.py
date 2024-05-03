@@ -1,53 +1,96 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import tkinter as tk
-import customtkinter as ctk
-from tkinter import messagebox, filedialog, ttk, StringVar, simpledialog
-from PIL import ImageTk, Image
-from io import BytesIO
-from ui.ui import UserInterface, create_main_window
-from config.config import AppConfig
 
 class ImportLanguageDialog(tk.simpledialog.Dialog):
+    """
+    A dialog window for importing additional languages.
+
+    This class represents a dialog window that allows the user to import additional languages for translation. It inherits from the `tk.simpledialog.Dialog` class.
+
+    Attributes:
+        available_languages (dict): A dictionary containing the available languages and their corresponding language codes.
+        additional_languages (dict): A dictionary containing additional languages and their corresponding language codes.
+        import_additional_translation (function): A function that handles the import of additional translations.
+        search_var (tk.StringVar): A string variable used for searching languages in the dialog window.
+
+    Methods:
+        body(master): Creates the body of the dialog window.
+        update_list(): Updates the list of languages based on the search term.
+        apply(): Applies the selected language for import.
+        on_select(event): Handles the selection of a language from the listbox.
+        buttonbox(): Creates the button box with "Import" and "Cancel" buttons.
+
+    """
     def __init__(self, parent, available_languages, additional_languages, import_additional_translation, **kwargs):
+        """
+        Initializes an instance of the ImportLanguageDialog class.
+
+        Parameters:
+            parent (tkinter.Tk or tkinter.Toplevel): The parent window for the dialog.
+            available_languages (dict): A dictionary containing the available languages and their corresponding language codes.
+            additional_languages (dict): A dictionary containing additional languages and their corresponding language codes.
+            import_additional_translation (function): A function that handles the import of additional translations.
+            **kwargs: Additional keyword arguments to be passed to the parent class constructor.
+
+        Attributes:
+            available_languages (dict): A dictionary containing the available languages and their corresponding language codes.
+            additional_languages (dict): A dictionary containing additional languages and their corresponding language codes.
+            import_additional_translation (function): A function that handles the import of additional translations.
+            search_var (tkinter.StringVar): A string variable used for searching languages in the dialog window.
+        """
         self.available_languages = available_languages
         self.additional_languages = additional_languages
         self.import_additional_translation = import_additional_translation
+        self.search_var = tk.StringVar()
         super().__init__(parent, **kwargs)
 
     def body(self, master):
-        sorted_languages = dict(sorted({**self.available_languages, **self.additional_languages}.items(), key=lambda item: item[0]))
+        """
+        Creates the body of the dialog window.
 
+        This method is responsible for creating the body of the dialog window in the ImportLanguageDialog class. It sets up the necessary widgets such as labels, entry fields, listboxes, and scrollbars. It also binds the necessary event handlers for user interactions.
+
+        Parameters:
+            master (tkinter.Tk or tkinter.Toplevel): The master window in which the dialog is displayed.
+
+        Returns:
+            tkinter.Entry: The entry field widget for searching languages.
+
+        """
+        sorted_languages = dict(sorted({**self.available_languages, **self.additional_languages}.items(), key=lambda item: item[0]))
         label = tk.Label(master, text="Search for a language:")
         label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
-
-        self.search_var = tk.StringVar()
         self.search_var.trace("w", self.update_list)
         self.entry = tk.Entry(master, textvariable=self.search_var, width=25)
         self.entry.grid(row=1, column=0, padx=5, pady=5, sticky="w")
-
         self.language_listbox = tk.Listbox(master, selectmode="single", exportselection=False, height=10)
         for language in sorted_languages.keys():
             self.language_listbox.insert(tk.END, language)
         self.language_listbox.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
         self.language_listbox.bind("<<ListboxSelect>>", self.on_select)
-
         scrollbar = ttk.Scrollbar(master, orient="vertical", command=self.language_listbox.yview)
         scrollbar.grid(row=2, column=1, sticky="ns")
         self.language_listbox.configure(yscrollcommand=scrollbar.set)
-
         self.update_list()
-
         return self.entry
     
 
-    def update_list(self, *args):
+    def update_list(self):
+        """
+        Updates the list of languages based on the search term.
+
+        This method is responsible for updating the list of languages displayed in the dialog window based on the search term entered by the user. It clears the current list of languages in the language_listbox and then populates it with the languages that match the search term. The matching is case-insensitive and partial matches are also considered.
+
+        Returns:
+            None
+
+        """
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
-        COMMON_LANGUAGES = ["English", "Spanish", "French", "German", "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
+        prefilled_languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
         items = []
         if len(search_term) < 3:
-            items = COMMON_LANGUAGES
+            items = prefilled_languages
         else:
             for language in {**self.available_languages, **self.additional_languages}.keys():
                 if search_term in language.lower():
@@ -59,6 +102,18 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
 
     def apply(self):
+        """
+        Applies the selected language for import.
+
+        This method is responsible for applying the selected language for import. It retrieves the language code corresponding to the selected language from the available_languages and additional_languages dictionaries. If a valid language code is found, it calls the import_additional_translation function with the selected language and language code as arguments. If no valid language code is found, it displays an error message using the messagebox.showerror method.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
+        """
         language_code = {**self.available_languages, **self.additional_languages}.get(self.selected_language, None)
         if language_code:
             self.import_additional_translation(self.selected_language, language_code)
@@ -66,6 +121,18 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
             messagebox.showerror("Error", "Selected language is not valid or does not have a code.")
 
     def on_select(self, event):
+        """
+        Handles the selection of a language from the listbox.
+
+        This method is called when a language is selected from the listbox in the ImportLanguageDialog class. It retrieves the selected language from the listbox and stores it in the instance variable 'selected_language'. It also prints the selected language to the console.
+
+        Parameters:
+            event (tkinter.Event): The event object that triggered the method call.
+
+        Returns:
+            None
+
+        """
         widget = event.widget
         selection = widget.curselection()
         if selection:
@@ -75,7 +142,16 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
     def buttonbox(self):
         """
-        Creates a frame with two buttons, "Import" and "Cancel", and binds the Enter and Escape keys to the corresponding actions.
+        Creates the button box with "Import" and "Cancel" buttons.
+
+        This method is responsible for creating the button box in the ImportLanguageDialog class. It creates a frame widget to hold the buttons and then creates the "Import" and "Cancel" buttons using the tk.Button class. The buttons are packed into the frame with appropriate padding and side alignment. The method also binds the "<Return>" and "<Escape>" events to the self.ok and self.cancel methods respectively.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+
         """
         box = tk.Frame(self)
     
