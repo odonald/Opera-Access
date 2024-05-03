@@ -9,3 +9,6 @@ class AppConfig:
     PORT = 7832
     URL = f"http://{HOST}:{PORT}"
     SSE_URL = f"http://{HOST}:{PORT}/stream/push"
+
+    def __init__(self): 
+        pass
