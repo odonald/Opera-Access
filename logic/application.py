@@ -87,7 +87,7 @@ class Application:
             })
     
     def bind_show_qr_button(self):
-        self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(self.url))   
+        self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(url=self.url))  
     
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
@@ -95,7 +95,7 @@ class Application:
     def on_mousewheel(self, event):
         self.ui.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def on_canvas_configure(self, event):
+    def on_canvas_configure(self):
         self.ui.canvas.configure(scrollregion=self.ui.canvas.bbox("all"))
 
     def bind_scroll_to_widget(self, widget):

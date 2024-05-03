@@ -17,7 +17,7 @@ from config.config import AppConfig
 url = AppConfig.HOST
 
 class QrCode:
-    def show_qr_code(url):
+    def show_qr_code(self, url):
 
         qr = qrcode.QRCode(
             version=1,
@@ -41,7 +41,7 @@ class QrCode:
 
         qr_window.mainloop()
 
-    def save_qr_code(url):
+    def save_qr_code(self, url):
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -57,3 +57,6 @@ class QrCode:
 
         if file_path:
             img.save(file_path)
+
+    def __init__(self): 
+        pass
