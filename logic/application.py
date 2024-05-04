@@ -16,6 +16,7 @@ from utils.language_util import ImportLanguageDialog
 from ui.file_menu import FileMenu
 from utils.qr_code_utils import QrCode
 
+
 class Application:
     def __init__(self, root):
 
@@ -49,13 +50,15 @@ class Application:
             self.next_button_clicks = 0
             self.prev_button_clicks = 0
 
-            self.available_languages = {lang.name: lang.alpha2 for lang in iso639.languages}
+            self.available_languages = {
+                lang.name: lang.alpha2 for lang in iso639.languages}
             self.server_running = False
             self.setup_ui()
             self.bind_events()
             self.start_server_thread(start=True)
 
-            self.scrollbar = ttk.Scrollbar(self.ui.navigation_frame, orient="vertical", command=self.ui.canvas.yview)
+            self.scrollbar = ttk.Scrollbar(
+                self.ui.navigation_frame, orient="vertical", command=self.ui.canvas.yview)
             self.scrollbar.grid(row=0, column=3, sticky="ns")
 
             self.ui.canvas.configure(yscrollcommand=self.scrollbar.set)
@@ -82,10 +85,11 @@ class Application:
                 "clear_program": self.clear_program,
                 "close_program": self.close_program
             })
-    
+
     def bind_show_qr_button(self):
-        self.ui.show_qr_button.configure(command=lambda: self.show_qr_code(url=self.url))  
-    
+        self.ui.show_qr_button.configure(
+            command=lambda: self.show_qr_code(url=self.url))
+
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
 
@@ -105,28 +109,39 @@ class Application:
         self.ui.canvas.yview_moveto(0.1)
 
     def setup_ui(self):
-        self.language_label = ctk.CTkLabel(self.ui.sidebar_frame, text="Switch Display Language:")
+        self.language_label = ctk.CTkLabel(
+            self.ui.sidebar_frame, text="Switch Display Language:")
         self.language_label.grid(row=4, column=0, padx=10, pady=0, sticky="nw")
 
         self.language = tk.StringVar(self.root)
         self.language.set("Choose")
 
-        self.language_switcher = ctk.CTkOptionMenu(self.ui.sidebar_frame, variable=self.language, state="normal", values=(), width=10)
-        self.language_switcher.grid(row=5, column=0, padx=10, pady=0, sticky="nwe")
-        self.language_switcher.configure(values=(), command=lambda choice: self.update_label())
+        self.language_switcher = ctk.CTkOptionMenu(
+            self.ui.sidebar_frame, variable=self.language, state="normal", values=(), width=10)
+        self.language_switcher.grid(
+            row=5, column=0, padx=10, pady=0, sticky="nwe")
+        self.language_switcher.configure(
+            values=(), command=lambda choice: self.update_label())
 
-        self.imported_languages_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text="Imported Languages:")
-        self.imported_languages_label.grid(row=6, column=0, padx=10, pady=10, sticky="w")
+        self.imported_languages_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", text_color=(
+            "gray10", "#DCE4EE"), text="Imported Languages:")
+        self.imported_languages_label.grid(
+            row=6, column=0, padx=10, pady=10, sticky="w")
 
-        self.server_status_menu_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", font=("", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
-        self.server_status_menu_label.grid(row=7, column=0, padx=10, pady=0, sticky="nw")
+        self.server_status_menu_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", font=(
+            "", 20), text_color=("gray10", "#DCE4EE"), text=f"Server Status:")
+        self.server_status_menu_label.grid(
+            row=7, column=0, padx=10, pady=0, sticky="nw")
 
-        self.server_status_label = ctk.CTkLabel(self.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{self.url}")
-        self.server_status_label.grid(row=8, column=0, padx=10, pady=0, sticky="nw")
+        self.server_status_label = ctk.CTkLabel(
+            self.ui.sidebar_frame, fg_color="transparent", text_color=("gray10", "#DCE4EE"), text=f"{self.url}")
+        self.server_status_label.grid(
+            row=8, column=0, padx=10, pady=0, sticky="nw")
 
-        self.server_indicator = tk.Canvas(self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
-        self.server_indicator.grid(row=7, column=0, padx=10, pady=10, sticky="e")
-
+        self.server_indicator = tk.Canvas(
+            self.ui.sidebar_frame, width=12, height=12, bg="red", bd=0, highlightthickness=0)
+        self.server_indicator.grid(
+            row=7, column=0, padx=10, pady=10, sticky="e")
 
     def bind_events(self):
         self.root.bind("<KeyPress>", self.on_key_press)
@@ -137,14 +152,17 @@ class Application:
         server_thread.daemon = True
         server_thread.start()
         if start:
-            server_thread = threading.Thread(target=self.run_server, daemon=True)
+            server_thread = threading.Thread(
+                target=self.run_server, daemon=True)
             server_thread.start()
             self.server_running = True
             if self.local_ip == "127.0.0.1":
-                self.server_status_label.configure(text=f"LOCAL - No network detected")
+                self.server_status_label.configure(
+                    text=f"LOCAL - No network detected")
                 self.server_indicator.configure(bg="red")
             else:
-                self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
+                self.server_status_label.configure(
+                    text=f"Live\n http://{self.local_ip}:{self.port_number}")
                 self.server_indicator.configure(bg="green")
         else:
             self.server_running = False
@@ -161,27 +179,33 @@ class Application:
             self.server_indicator.configure(bg="red")
 
         while True:
-            new_port = simpledialog.askstring("Change Port", "Enter new port number between 1024 and 65535:", parent=self.root)
+            new_port = simpledialog.askstring(
+                "Change Port", "Enter new port number between 1024 and 65535:", parent=self.root)
             if new_port:
                 try:
                     port_int = int(new_port)
                     if 1024 <= port_int <= 65535 and port_int not in reserved_ports:
                         self.port_number = port_int
                         self.url = f"http://{self.local_ip}:{self.port_number}/stream/push"
-                        server_thread = threading.Thread(target=self.run_server, daemon=True)
+                        server_thread = threading.Thread(
+                            target=self.run_server, daemon=True)
                         server_thread.start()
                         self.server_running = True
                         if self.local_ip == "127.0.0.1":
-                            self.server_status_label.configure(text=f"LOCAL - No network detected")
+                            self.server_status_label.configure(
+                                text=f"LOCAL - No network detected")
                             self.server_indicator.configure(bg="red")
                         else:
-                            self.server_status_label.configure(text=f"Live\n http://{self.local_ip}:{self.port_number}")
+                            self.server_status_label.configure(
+                                text=f"Live\n http://{self.local_ip}:{self.port_number}")
                             self.server_indicator.configure(bg="green")
                         break
                     else:
-                        tk.messagebox.showerror("Invalid Port", "The selected port is already reserved or invalid.")
+                        tk.messagebox.showerror(
+                            "Invalid Port", "The selected port is already reserved or invalid.")
                 except ValueError:
-                    tk.messagebox.showerror("Invalid Port", "Please enter a valid port number.")
+                    tk.messagebox.showerror(
+                        "Invalid Port", "Please enter a valid port number.")
             else:
                 break
 
@@ -189,7 +213,8 @@ class Application:
         self.ui.website_button.configure(command=self.open_url_in_browser)
 
     def bind_import_translation_button(self):
-        self.ui.import_translation_button.configure(command=self.import_additional_language)
+        self.ui.import_translation_button.configure(
+            command=self.import_additional_language)
 
     def bind_previous_line_button(self):
         self.ui.previous_line_button.configure(command=self.previous_line)
@@ -200,19 +225,20 @@ class Application:
     def bind_go_button(self):
         self.ui.go_button.configure(command=self.jump_to_line)
 
-
     def open_url_in_browser(self):
         url = f"http://{self.local_ip}:{self.port_number}"
         webbrowser.open(url)
 
     def import_additional_language(self):
         logging.info("Opening Language Import Dialog...")
-        dialog = ImportLanguageDialog(self.root, self.available_languages, self.additional_languages, self.import_additional_translation, title="Select Language")
+        dialog = ImportLanguageDialog(self.root, self.available_languages, self.additional_languages,
+                                      self.import_additional_translation, title="Select Language")
         self.root.wait_window(dialog.top)
         self.update_ui_after_language_import()
 
     def import_additional_translation(self, language_name, language_code):
-        additional_translation_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+        additional_translation_file = filedialog.askopenfilename(
+            filetypes=[("Text files", "*.txt")])
 
         if additional_translation_file:
             with open(additional_translation_file, "rb") as file:
@@ -228,7 +254,8 @@ class Application:
             additional_translation_lines.insert(0, "")
 
             if self.additional_languages and any(len(lines) != len(additional_translation_lines) for lines in self.additional_languages.values()):
-                example_language, example_lines = next(iter(self.additional_languages.items()))
+                example_language, example_lines = next(
+                    iter(self.additional_languages.items()))
                 tk.messagebox.showerror("Line Length Mismatch",
                                         f"The imported text does not match the line count of the existing translations.\n"
                                         f"Example mismatch with '{example_language}': {len(example_lines)} lines.\n"
@@ -236,17 +263,19 @@ class Application:
                 return
 
             self.additional_languages[language_code] = additional_translation_lines
-            self.imported_languages_label.configure(text="Imported Languages: \n " + ", ".join(self.additional_languages.keys()))
-            self.language_switcher_values = list(self.language_switcher.cget("values"))
+            self.imported_languages_label.configure(
+                text="Imported Languages: \n " + ", ".join(self.additional_languages.keys()))
+            self.language_switcher_values = list(
+                self.language_switcher.cget("values"))
 
             if language_code not in self.language_switcher_values:
                 self.language_switcher_values.append(language_name)
                 self.language_switcher_values.sort()
-                self.language_switcher.configure(values=tuple(self.language_switcher_values))
-            
+                self.language_switcher.configure(
+                    values=tuple(self.language_switcher_values))
+
             self.language.set(language_name)
             self.update_label()
-
 
     @staticmethod
     def combine_files(original_lines, translation_lines):
@@ -305,7 +334,8 @@ class Application:
             'language_switcher_values': self.language_switcher.cget("values")
         }
 
-        save_file = filedialog.asksaveasfilename(defaultextension=".pkl", filetypes=[("Pickle files", "*.pkl")])
+        save_file = filedialog.asksaveasfilename(
+            defaultextension=".pkl", filetypes=[("Pickle files", "*.pkl")])
         if save_file:
             with open(save_file, 'wb') as f:
                 pickle.dump(session_data, f)
@@ -313,7 +343,8 @@ class Application:
         return False
 
     def load_session(self):
-        load_file = filedialog.askopenfilename(filetypes=[("Pickle files", "*.pkl")])
+        load_file = filedialog.askopenfilename(
+            filetypes=[("Pickle files", "*.pkl")])
         if load_file:
             with open(load_file, 'rb') as f:
                 session_data = pickle.load(f)
@@ -324,9 +355,12 @@ class Application:
             self.additional_languages = session_data['additional_languages']
             self.combined_lines = session_data['combined_lines']
             self.current_line = session_data['current_line']
-            self.imported_languages_label.configure(text=session_data.get('imported_languages_label', ''))
-            self.language_switcher_values = session_data.get('language_switcher_values', [])
-            self.language_switcher.configure(values=tuple(self.language_switcher_values))
+            self.imported_languages_label.configure(
+                text=session_data.get('imported_languages_label', ''))
+            self.language_switcher_values = session_data.get(
+                'language_switcher_values', [])
+            self.language_switcher.configure(
+                values=tuple(self.language_switcher_values))
 
             self.update_label()
 
@@ -334,7 +368,8 @@ class Application:
         from logic.flask_app import app
         host = self.local_ip
         port = self.port_number
-        app.run(debug=AppConfig.DEBUG, port=port, host=host, use_reloader=False)
+        app.run(debug=AppConfig.DEBUG, port=port,
+                host=host, use_reloader=False)
 
     def send_to_server(self, line_number):
         message = {
@@ -348,41 +383,44 @@ class Application:
         requests.post(self.sse_url, json=message)
 
     def update_label(self):
-            if self.additional_languages:
-                percentage = (self.current_line / (max(len(self.combined_lines), max(len(lang_lines) for lang_lines in self.additional_languages.values())) - 1)) * 100
-                prev_line = max(self.current_line - 1, 0)
-                next_line = min(self.current_line + 1, max(len(self.combined_lines), max(len(lang_lines) for lang_lines in self.additional_languages.values())) - 1)
+        if self.additional_languages:
 
-                selected_language = self.language.get()
+            selected_language = self.language.get()
 
-                lang_code = self.available_languages[selected_language]
-                prev_lang_line = self.additional_languages[lang_code][prev_line]
-                current_lang_line = self.additional_languages[lang_code][self.current_line]
-                next_lang_line = self.additional_languages[lang_code][next_line]
+            lang_code = self.available_languages[selected_language]
+            current_lang_line = self.additional_languages[lang_code][self.current_line]
 
-                self.ui.current_line_label.configure(text=f"Current Line:\n{current_lang_line}")
-                self.ui.current_line_label.unbind("<Button-1>")
-                self.ui.current_line_label.bind("<Button-1>", lambda event, line=self.current_line: self.set_current_line(line))
+            self.ui.current_line_label.configure(
+                text=f"Current Line:\n{current_lang_line}")
+            self.ui.current_line_label.unbind("<Button-1>")
+            self.ui.current_line_label.bind(
+                "<Button-1>", lambda event, line=self.current_line: self.set_current_line(line))
 
-                self.ui.progress.set(self.current_line / (max(len(self.combined_lines), max(len(lang_lines) for lang_lines in self.additional_languages.values())) - 1))
+            self.ui.progress.set(self.current_line / (max(len(self.combined_lines), max(
+                len(lang_lines) for lang_lines in self.additional_languages.values())) - 1))
 
-                for i in range(5):
-                    prev_index = max(self.current_line - (5-i), 0)
-                    prev_lang_line = self.additional_languages[lang_code][prev_index]
-                    self.ui.prev_line_labels[i].configure(text=f"Line {prev_index + 1}:\n{prev_lang_line}")
-                    self.ui.prev_line_labels[i].unbind("<Button-1>")
-                    self.ui.prev_line_labels[i].bind("<Button-1>", lambda event, line=prev_index: self.set_current_line(line))
+            for i in range(5):
+                prev_index = max(self.current_line - (5-i), 0)
+                prev_lang_line = self.additional_languages[lang_code][prev_index]
+                self.ui.prev_line_labels[i].configure(
+                    text=f"Line {prev_index + 1}:\n{prev_lang_line}")
+                self.ui.prev_line_labels[i].unbind("<Button-1>")
+                self.ui.prev_line_labels[i].bind(
+                    "<Button-1>", lambda event, line=prev_index: self.set_current_line(line))
 
-                for i in range(20):
-                    next_index = min(self.current_line + (i+1), max(len(self.combined_lines), max(len(lang_lines) for lang_lines in self.additional_languages.values())) - 1)
-                    next_lang_line = self.additional_languages[lang_code][next_index]
-                    self.ui.next_line_labels[i].configure(text=f"Line {next_index + 1}:\n{next_lang_line}")
-                    self.ui.next_line_labels[i].unbind("<Button-1>")
-                    self.ui.next_line_labels[i].bind("<Button-1>", lambda event, line=next_index: self.set_current_line(line))
+            for i in range(20):
+                next_index = min(self.current_line + (i+1), max(len(self.combined_lines), max(
+                    len(lang_lines) for lang_lines in self.additional_languages.values())) - 1)
+                next_lang_line = self.additional_languages[lang_code][next_index]
+                self.ui.next_line_labels[i].configure(
+                    text=f"Line {next_index + 1}:\n{next_lang_line}")
+                self.ui.next_line_labels[i].unbind("<Button-1>")
+                self.ui.next_line_labels[i].bind(
+                    "<Button-1>", lambda event, line=next_index: self.set_current_line(line))
 
-            else:
-                self.ui.current_line_label.configure(text="No lines loaded.")
-                self.ui.progress.configure(value=0)
+        else:
+            self.ui.current_line_label.configure(text="No lines loaded.")
+            self.ui.progress.configure(value=0)
 
     def set_current_line(self, line):
         self.current_line_clicks += 1
@@ -426,8 +464,7 @@ class Application:
             self.next_button_clicks = 0
 
     def previous_line(self):
-        selected_language = self.language.get()
-        lang_code = self.available_languages[selected_language]
+
 
         if self.current_line > 0:
             self.prev_button_clicks += 1
@@ -464,6 +501,7 @@ class Application:
                 self.update_label()
                 self.send_to_server(self.current_line)
             else:
-                messagebox.showerror("Error", f"Line number should be between 1 and {len(self.additional_languages[lang_code])}.")
+                messagebox.showerror(
+                    "Error", f"Line number should be between 1 and {len(self.additional_languages[lang_code])}.")
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid line number.")
