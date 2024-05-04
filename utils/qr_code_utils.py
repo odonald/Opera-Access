@@ -32,8 +32,8 @@ class QrCode:
         qr.show_qr_code("https://example.com")
         qr.save_qr_code("https://example.com")
     """
-
-    def show_qr_code(self, url):
+    @staticmethod
+    def show_qr_code(url):
 
         qr = qrcode.QRCode(
             version=1,
@@ -57,7 +57,8 @@ class QrCode:
 
         qr_window.mainloop()
 
-    def save_qr_code(self, url):
+    @staticmethod
+    def save_qr_code(url):
         """
         Generates a QR code image using the qrcode library and prompts the user to choose a file path to save the image as a PNG file.
 
