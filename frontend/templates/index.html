@@ -1,54 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Opera Access</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, orientation=landscape">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="mobile-web-app-capable" content="yes">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Opera Access</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, orientation=landscape">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="mobile-web-app-capable" content="yes">
 
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
 
 
-    <style>
-      #message {
-        font-size: 36px;
-        color:#FFD90F;
-        margin: 0 auto;
-        width: 95%;
-        text-align: center;
-      }
+  <style>
+    #message {
+      font-size: 36px;
+      color: #FFD90F;
+      margin: 0 auto;
+      width: 95%;
+      text-align: center;
+    }
 
-      #text-size-controls {
-        position: fixed;
-        top: 10;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+    #text-size-controls {
+      position: fixed;
+      top: 10;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-      .text-size-icon {
-        background-color: transparent;
-        border: none;
-        font-size: 32px;
-        color: #555;
-        cursor: pointer;
-      }
+    .text-size-icon {
+      background-color: transparent;
+      border: none;
+      font-size: 32px;
+      color: #555;
+      cursor: pointer;
+    }
 
-      .text-size-icon:hover {
-        color: #333;
-      }
+    .text-size-icon:hover {
+      color: #333;
+    }
 
-      .text-size-icon:active {
-        color: #000;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message"></div>
+    .text-size-icon:active {
+      color: #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="message"></div>
 
   <div id="toggle-controls">
     <button id="toggle-button" class="toggle-icon">▼</button>
@@ -71,7 +74,7 @@
     var toggleButton = document.getElementById("toggle-button");
     var controls = document.getElementById("controls");
 
-    toggleButton.addEventListener("click", function() {
+    toggleButton.addEventListener("click", function () {
       if (controls.style.display === "none") {
         controls.style.display = "block";
         toggleButton.innerHTML = "▼";
@@ -81,61 +84,62 @@
       }
     });
   </script>
-    <script>
-      var source = new EventSource("/stream/sse");
-      var languageSelector = document.getElementById("language");
-      var currentMessageContent = null;
-      var currentTextSize = 36;
-      var currentLanguages = [];
+  <script>
+    var source = new EventSource("/stream/sse");
+    var languageSelector = document.getElementById("language");
+    var currentMessageContent = null;
+    var currentTextSize = 36;
+    var currentLanguages = [];
 
-      source.onmessage = function (event) {
-        var json_data = JSON.parse(event.data);
-        currentMessageContent = json_data.content;
+    source.onmessage = function (event) {
+      var json_data = JSON.parse(event.data);
+      currentMessageContent = json_data.content;
 
-        // Include additional languages
-        if (json_data.additional_languages) {
-          for (var lang in json_data.additional_languages) {
-            currentMessageContent[lang] = json_data.additional_languages[lang];
-          }
+      // Include additional languages
+      if (json_data.additional_languages) {
+        for (var lang in json_data.additional_languages) {
+          currentMessageContent[lang] = json_data.additional_languages[lang];
         }
+      }
 
-        var newLanguages = Object.keys(currentMessageContent);
-        if (JSON.stringify(currentLanguages) !== JSON.stringify(newLanguages)) {
-          // Update language selector options
-          var options = newLanguages.map(function (lang) {
-            return '<option value="' + lang + '">' + lang + '</option>';
-          });
-          languageSelector.innerHTML = options.join('');
-          currentLanguages = newLanguages;
-        }
+      var newLanguages = Object.keys(currentMessageContent);
+      if (JSON.stringify(currentLanguages) !== JSON.stringify(newLanguages)) {
+        // Update language selector options
+        var options = newLanguages.map(function (lang) {
+          return '<option value="' + lang + '">' + lang + '</option>';
+        });
+        languageSelector.innerHTML = options.join('');
+        currentLanguages = newLanguages;
+      }
 
-        displayMessage(languageSelector.value);
-        console.log(json_data);
-      };
+      displayMessage(languageSelector.value);
+      console.log(json_data);
+    };
 
-      function displayMessage(language) {
-        if (currentMessageContent) {
-          var message = currentMessageContent[language];
-          // Replace '\n' with '<br>' for HTML rendering
-          message = message.replace(/\n/g, '<br>');
-          document.getElementById("message").innerHTML = message;
-          document.getElementById("message").style.fontSize = currentTextSize + "px";
-  }
-}
+    function displayMessage(language) {
+      if (currentMessageContent) {
+        var message = currentMessageContent[language];
+        // Replace '\n' with '<br>' for HTML rendering
+        message = message.replace(/\n/g, '<br>');
+        document.getElementById("message").innerHTML = message;
+        document.getElementById("message").style.fontSize = currentTextSize + "px";
+      }
+    }
 
-      languageSelector.addEventListener("change", function() {
-        displayMessage(languageSelector.value);
-      });
+    languageSelector.addEventListener("change", function () {
+      displayMessage(languageSelector.value);
+    });
 
-      document.getElementById("text-size-minus").addEventListener("click", function() {
-        currentTextSize = Math.max(currentTextSize - 4, 24);
-        displayMessage(languageSelector.value);
-      });
+    document.getElementById("text-size-minus").addEventListener("click", function () {
+      currentTextSize = Math.max(currentTextSize - 4, 24);
+      displayMessage(languageSelector.value);
+    });
 
-      document.getElementById("text-size-plus").addEventListener("click", function() {
-        currentTextSize = Math.min(currentTextSize + 4, 60);
-        displayMessage(languageSelector.value);
-      });
-    </script>
-  </body>
+    document.getElementById("text-size-plus").addEventListener("click", function () {
+      currentTextSize = Math.min(currentTextSize + 4, 60);
+      displayMessage(languageSelector.value);
+    });
+  </script>
+</body>
+
 </html>
