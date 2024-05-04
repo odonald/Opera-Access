@@ -12,17 +12,21 @@ from selenium.webdriver.chrome.options import Options
 SCALING_FACTOR = 0.5  # Modify this as needed to find the right factor for your screen
 pyautogui.FAILSAFE = True
 
+
 def apply_scaling(x, y):
     """Applies scaling factor to coordinates."""
     return int(x * SCALING_FACTOR), int(y * SCALING_FACTOR)
+
 
 @pytest.fixture(scope="session")
 def driver():
     """Provides a Selenium WebDriver instance with Chrome Options configured for headless use."""
     chrome_options = Options()
-    chrome_options.add_argument("--headless=new")  # Use headless mode for automation
+    # Use headless mode for automation
+    chrome_options.add_argument("--headless=new")
     with webdriver.Chrome(options=chrome_options) as driver:
         yield driver
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_and_teardown():
@@ -33,6 +37,7 @@ def setup_and_teardown():
     pyautogui.moveTo(initial_mouse_position)
     print("Mouse moved back to the initial position after all tests.")
 
+
 def locate_center_on_screen_with_scaling(image_path, confidence=0.8):
     """Locates the center of an image on screen with scaling adjustment."""
     center = pyautogui.locateCenterOnScreen(image_path, confidence=confidence)
@@ -41,41 +46,55 @@ def locate_center_on_screen_with_scaling(image_path, confidence=0.8):
     scaled_x, scaled_y = apply_scaling(center.x, center.y)
     return scaled_x, scaled_y
 
+
 def test_import_text_button():
     """Tests clicking on the import text button."""
-    button_x, button_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/button_image.png")
+    button_x, button_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/button_image.png")
     pyautogui.click(button_x, button_y)
+
 
 def test_languages_list():
     """Tests clicking on the languages list."""
-    languages_list_x, languages_list_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/test_languages_list.png")
+    languages_list_x, languages_list_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/test_languages_list.png")
     pyautogui.click(languages_list_x, languages_list_y)
+
 
 def test_import_button():
     """Tests clicking the import button."""
-    import_button_x, import_button_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/test_import_button.png")
+    import_button_x, import_button_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/test_import_button.png")
     pyautogui.click(import_button_x, import_button_y)
+
 
 def test_pick_language_file():
     """Tests selecting a language file."""
     time.sleep(0.4)  # Waiting time to simulate delay
-    pick_language_file_x, pick_language_file_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/test_pick_language_file.png")
+    pick_language_file_x, pick_language_file_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/test_pick_language_file.png")
     pyautogui.click(pick_language_file_x, pick_language_file_y)
+
 
 def test_open_button():
     """Tests clicking the open button."""
-    open_button_x, open_button_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/test_open_button.png")
+    open_button_x, open_button_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/test_open_button.png")
     pyautogui.doubleClick(open_button_x, open_button_y)
+
 
 def test_next_button():
     """Tests clicking the next button."""
-    next_button_x, next_button_y = locate_center_on_screen_with_scaling("tests/pyautogui_img/test_next_button.png")
+    next_button_x, next_button_y = locate_center_on_screen_with_scaling(
+        "tests/pyautogui_img/test_next_button.png")
     pyautogui.doubleClick(next_button_x, next_button_y)
     time.sleep(0.1)  # Short delay to allow UI response
+
 
 @pytest.mark.usefixtures("driver")
 def test_text_on_website(driver):
     """Tests the presence of a specific line of text on a website."""
     driver.get(AppConfig.URL)
     expected_text = "Line 1"
-    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{expected_text}')]")))
+    WebDriverWait(driver, 1).until(EC.presence_of_element_located(
+        (By.XPATH, f"//*[contains(text(), '{expected_text}')]")))

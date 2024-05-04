@@ -48,9 +48,7 @@ def push():
     Pushes a message to the server's event stream.
 
     This function is used to handle POST requests to the "/stream/push" endpoint. It expects a JSON payload containing a message. The function updates the global variable 'latest_message' with the JSON representation of the message.
-
-    Parameters:
-        None
+    
 
     Returns:
         A tuple containing the string "OK" and the HTTP status code 200.
