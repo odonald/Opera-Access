@@ -22,7 +22,7 @@ def main():
 
 """
     root = create_main_window()
-    app = Application(root)
+    Application(root)
     root.mainloop()
 
 
