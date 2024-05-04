@@ -49,7 +49,7 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.selected_language = None
         self.entry = None
         self.language_listbox = None
-        
+
         super().__init__(parent, **kwargs)
 
     def body(self, master):
@@ -90,13 +90,8 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         """
         Updates the list of languages based on the search term.
 
-        This method is responsible for updating the list of languages displayed in the dialog window based on the search term entered by the user. It clears the current list of languages in the language_listbox and then populates it with the languages that match the search term. The matching is case-insensitive and partial matches are also considered.
+        This method is responsible for updating the list of languages displayed in the dialog window based on the search term entered by the user. It clears the current list of languages in the language_listbox and then populates it with the languages that match the search term. If the search term is less than 3 characters, it displays a predefined list of languages. The languages are sorted based on their length, whether they start with the search term, and their alphabetical order.
 
-        Args:
-            *args: Additional arguments passed by the trace_add method (not used).
-
-        Returns:
-            None
         """
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
