@@ -8,6 +8,7 @@ debug_mode = parse_arguments()
 
 setup_logging(debug_mode)
 
+
 def main():
     """
     Main function to start the application.
@@ -21,8 +22,9 @@ def main():
 
 """
     root = create_main_window()
-    app = Application(root) 
+    app = Application(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
