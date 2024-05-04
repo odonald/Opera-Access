@@ -34,6 +34,12 @@ class Application:
             self.port_number = AppConfig.PORT
             self.save_qr_code = QrCode.save_qr_code
             self.show_qr_code = QrCode.show_qr_code
+            self.language_label = None
+            self.language = None
+            self.language_switcher = None
+            self.server_status_menu_label = None
+            self.server_status_label = None
+            self.server_indicator = None
             self.language_switcher_values = []
             self.original_file = None
             self.translation_file = None
@@ -80,12 +86,7 @@ class Application:
                 "clear_program": self.clear_program,
                 "close_program": self.close_program
             })
-            self.language_label = None
-            self.language = None
-            self.language_switcher = None
-            self.server_status_menu_label = None
-            self.server_status_label = None
-            self.server_indicator = None
+
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(
