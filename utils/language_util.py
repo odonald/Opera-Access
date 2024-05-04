@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+
 class ImportLanguageDialog(tk.simpledialog.Dialog):
     """
     A dialog window for importing additional languages.
@@ -21,6 +22,7 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         buttonbox(): Creates the button box with "Import" and "Cancel" buttons.
 
     """
+
     def __init__(self, parent, available_languages, additional_languages, import_additional_translation, **kwargs):
         """
         Initializes an instance of the ImportLanguageDialog class.
@@ -57,23 +59,26 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
             tkinter.Entry: The entry field widget for searching languages.
 
         """
-        sorted_languages = dict(sorted({**self.available_languages, **self.additional_languages}.items(), key=lambda item: item[0]))
+        sorted_languages = dict(sorted(
+            {**self.available_languages, **self.additional_languages}.items(), key=lambda item: item[0]))
         label = tk.Label(master, text="Search for a language:")
         label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
-        self.search_var.trace("w", self.update_list)
+        self.search_var.trace_add("w", self.update_list)
         self.entry = tk.Entry(master, textvariable=self.search_var, width=25)
         self.entry.grid(row=1, column=0, padx=5, pady=5, sticky="w")
-        self.language_listbox = tk.Listbox(master, selectmode="single", exportselection=False, height=10)
+        self.language_listbox = tk.Listbox(
+            master, selectmode="single", exportselection=False, height=10)
         for language in sorted_languages.keys():
             self.language_listbox.insert(tk.END, language)
-        self.language_listbox.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
+        self.language_listbox.grid(
+            row=2, column=0, padx=5, pady=5, sticky="nsew")
         self.language_listbox.bind("<<ListboxSelect>>", self.on_select)
-        scrollbar = ttk.Scrollbar(master, orient="vertical", command=self.language_listbox.yview)
+        scrollbar = ttk.Scrollbar(
+            master, orient="vertical", command=self.language_listbox.yview)
         scrollbar.grid(row=2, column=1, sticky="ns")
         self.language_listbox.configure(yscrollcommand=scrollbar.set)
         self.update_list()
         return self.entry
-    
 
     def update_list(self):
         """
@@ -87,7 +92,8 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         """
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
-        prefilled_languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
+        prefilled_languages = ["English", "Spanish", "French", "German",
+                               "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
         items = []
         if len(search_term) < 3:
             items = prefilled_languages
@@ -95,11 +101,11 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
             for language in {**self.available_languages, **self.additional_languages}.keys():
                 if search_term in language.lower():
                     items.append(language)
-            items = sorted(items, key=lambda x: (len(x), x.startswith(search_term), x))
+            items = sorted(items, key=lambda x: (
+                len(x), x.startswith(search_term), x))
 
         for item in items:
             self.language_listbox.insert(tk.END, item)
-
 
     def apply(self):
         """
@@ -107,18 +113,15 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
         This method is responsible for applying the selected language for import. It retrieves the language code corresponding to the selected language from the available_languages and additional_languages dictionaries. If a valid language code is found, it calls the import_additional_translation function with the selected language and language code as arguments. If no valid language code is found, it displays an error message using the messagebox.showerror method.
 
-        Parameters:
-            None
-
-        Returns:
-            None
-
         """
-        language_code = {**self.available_languages, **self.additional_languages}.get(self.selected_language, None)
+        language_code = {**self.available_languages, **
+                         self.additional_languages}.get(self.selected_language, None)
         if language_code:
-            self.import_additional_translation(self.selected_language, language_code)
+            self.import_additional_translation(
+                self.selected_language, language_code)
         else:
-            messagebox.showerror("Error", "Selected language is not valid or does not have a code.")
+            messagebox.showerror(
+                "Error", "Selected language is not valid or does not have a code.")
 
     def on_select(self, event):
         """
@@ -128,9 +131,6 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
         Parameters:
             event (tkinter.Event): The event object that triggered the method call.
-
-        Returns:
-            None
 
         """
         widget = event.widget
@@ -146,22 +146,18 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
 
         This method is responsible for creating the button box in the ImportLanguageDialog class. It creates a frame widget to hold the buttons and then creates the "Import" and "Cancel" buttons using the tk.Button class. The buttons are packed into the frame with appropriate padding and side alignment. The method also binds the "<Return>" and "<Escape>" events to the self.ok and self.cancel methods respectively.
 
-        Parameters:
-            None
-
-        Returns:
-            None
-
         """
         box = tk.Frame(self)
-    
-        import_button = tk.Button(box, text="Import", width=10, command=self.ok, default=tk.ACTIVE)
+
+        import_button = tk.Button(
+            box, text="Import", width=10, command=self.ok, default=tk.ACTIVE)
         import_button.pack(side=tk.LEFT, padx=5, pady=5)
-    
-        cancel_button = tk.Button(box, text="Cancel", width=10, command=self.cancel)
+
+        cancel_button = tk.Button(
+            box, text="Cancel", width=10, command=self.cancel)
         cancel_button.pack(side=tk.LEFT, padx=5, pady=5)
-    
+
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
-            
+
         box.pack()
