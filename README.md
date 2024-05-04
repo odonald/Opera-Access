@@ -73,7 +73,7 @@ ptw -- -m "not e2e"
 ```python
 python dev_hot_reload.py
 ```
-*(Note: You have to keep this running in a separate terminal window within your environment. It automatically close and reopen the application after every saved code change.)*
+*(Note: You have to keep this running in a separate terminal window within your environment. It automatically closes and reopens the application after every saved code change.)*
 
 2. Then, again in a separate terminal window within your environment, start Pytestwatch by running:
 ```python
