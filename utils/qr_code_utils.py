@@ -34,6 +34,19 @@ class QrCode:
     """
     @staticmethod
     def show_qr_code(url):
+        """
+        Generates a QR code image using the qrcode library and displays it in a tkinter window.
+
+        Parameters:
+        - url (str): The URL to be encoded in the QR code.
+
+        Returns:
+        None
+
+        Example:
+            qr = QrCode()
+            qr.show_qr_code("https://example.com")
+        """
 
         qr = qrcode.QRCode(
             version=1,
