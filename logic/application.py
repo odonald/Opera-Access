@@ -43,24 +43,20 @@ class Application:
             self.combined_lines = []
             self.current_line = 0
             self.imported_languages_label = []
-
             self.current_line_clicks = 0
             self.last_confirmed_line = 0
             self.empty_line = 0
             self.next_button_clicks = 0
             self.prev_button_clicks = 0
-
             self.available_languages = {
                 lang.name: lang.alpha2 for lang in iso639.languages}
             self.server_running = False
             self.setup_ui()
             self.bind_events()
             self.start_server_thread(start=True)
-
             self.scrollbar = ttk.Scrollbar(
                 self.ui.navigation_frame, orient="vertical", command=self.ui.canvas.yview)
             self.scrollbar.grid(row=0, column=3, sticky="ns")
-
             self.ui.canvas.configure(yscrollcommand=self.scrollbar.set)
             self.ui.canvas.bind("<Configure>", self.resize_inner_frame)
             self.ui.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
@@ -72,7 +68,6 @@ class Application:
             self.bind_next_line_button()
             self.bind_go_button()
             self.bind_show_qr_button()
-
             self.root.after(100, self.set_scroll_to_center)
             self.file_menu = FileMenu(root, {
                 "save_qr_code": lambda: self.save_qr_code(),
@@ -85,6 +80,12 @@ class Application:
                 "clear_program": self.clear_program,
                 "close_program": self.close_program
             })
+            self.language_label = None
+            self.language = None
+            self.language_switcher = None
+            self.server_status_menu_label = None
+            self.server_status_label = None
+            self.server_indicator = None
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(
