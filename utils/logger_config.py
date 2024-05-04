@@ -3,11 +3,14 @@ import os
 import sys
 import argparse
 
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description='My Application')
-    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser.add_argument('--debug', action='store_true',
+                        help='Enable debug mode')
     args = parser.parse_args()
     return args.debug
+
 
 def setup_logging(debug_mode):
     if debug_mode:
@@ -23,7 +26,8 @@ def setup_logging(debug_mode):
         else:
             logs_folder = '.logs'
 
-        application_path = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else __file__)
+        application_path = os.path.dirname(
+            sys.executable if getattr(sys, 'frozen', False) else __file__)
         log_dir = os.path.join(application_path, logs_folder)
 
         if not os.path.exists(log_dir):
