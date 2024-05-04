@@ -2,18 +2,15 @@ import os
 import sys
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import messagebox, filedialog, ttk, StringVar, simpledialog
+from tkinter import messagebox, filedialog, ttk, simpledialog
 import requests
 import pickle
 import threading
 import iso639
 import charset_normalizer
 import logging
-import qrcode
-from PIL import ImageTk, Image
-from io import BytesIO
 import webbrowser
-from ui.ui import UserInterface, create_main_window
+from ui.ui import UserInterface
 from config.config import AppConfig
 from utils.language_util import ImportLanguageDialog
 from ui.file_menu import FileMenu
@@ -29,7 +26,7 @@ class Application:
         self.current_line = None
         self.root = root
         if root is not None:
-            self.ui = UserInterface(root)  # Pass the show_qr_code method as the command
+            self.ui = UserInterface(root)
             self.url = AppConfig.URL
             self.sse_url = AppConfig.SSE_URL
             self.local_ip = AppConfig.HOST
