@@ -75,8 +75,8 @@ class Application:
 
             self.root.after(100, self.set_scroll_to_center)
             self.file_menu = FileMenu(root, {
-                "save_qr_code": lambda: self.save_qr_code(self.url),
-                "show_qr_code": lambda: self.show_qr_code(self.url),
+                "save_qr_code": lambda: self.save_qr_code(),
+                "show_qr_code": lambda: self.show_qr_code(),
                 "import_additional_language": self.import_additional_language,
                 "save_session": self.save_session,
                 "load_session": self.load_session,
@@ -88,7 +88,7 @@ class Application:
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(
-            command=lambda: self.show_qr_code(url=self.url))
+            command=lambda: self.show_qr_code())
 
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)

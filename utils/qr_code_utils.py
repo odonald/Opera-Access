@@ -14,7 +14,7 @@ from PIL import ImageTk
 from tkinter import filedialog
 from config.config import AppConfig
 
-url = AppConfig.HOST
+url = AppConfig.URL
 
 
 class QrCode:
@@ -33,7 +33,7 @@ class QrCode:
         qr.save_qr_code("https://example.com")
     """
     @staticmethod
-    def show_qr_code(url):
+    def show_qr_code():
         """
         Generates a QR code image using the qrcode library and displays it in a tkinter window.
 
@@ -71,7 +71,7 @@ class QrCode:
         qr_window.mainloop()
 
     @staticmethod
-    def save_qr_code(url):
+    def save_qr_code():
         """
         Generates a QR code image using the qrcode library and prompts the user to choose a file path to save the image as a PNG file.
 
