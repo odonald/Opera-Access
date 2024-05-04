@@ -75,7 +75,7 @@ python dev_hot_reload.py
 ```
 *(Note: This will automatically close and reopen the application after every saved code change.)*
 
-2. Then run the suite without the end-to-end test:
+2. Then to run the suite without the end-to-end test, execute:
 ```python
 ptw
 ```
