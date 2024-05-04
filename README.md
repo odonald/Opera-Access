@@ -58,7 +58,7 @@ To run all tests, make sure you are within the virtual environment by repeating 
 
 You currently have two options:
 
-## 1. Run without end-to-end test:
+## 1. Run without end-to-end test (recommended):
 The testing suite currently includes a very "flaky" [pyautogui](https://pyautogui.readthedocs.io/en/latest/)
  end-to-end test, chances are high it will not work, unless you are running it on macOS using dark mode system settings.
 #### !At this point it is highly recommended to run tests excluding the end-to-end test!
