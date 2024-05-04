@@ -44,6 +44,10 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.additional_languages = additional_languages
         self.import_additional_translation = import_additional_translation
         self.search_var = tk.StringVar()
+        self.selected_language = None 
+        self.entry = None
+        self.language_listbox = None
+
         super().__init__(parent, **kwargs)
 
     def body(self, master):
@@ -63,7 +67,7 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
             {**self.available_languages, **self.additional_languages}.items(), key=lambda item: item[0]))
         label = tk.Label(master, text="Search for a language:")
         label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
-        self.search_var.trace_add("w", self.update_list)
+        self.search_var.trace_add("write", self.update_list)
         self.entry = tk.Entry(master, textvariable=self.search_var, width=25)
         self.entry.grid(row=1, column=0, padx=5, pady=5, sticky="w")
         self.language_listbox = tk.Listbox(
@@ -80,20 +84,21 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.update_list()
         return self.entry
 
-    def update_list(self):
+    def update_list(self, *args):
         """
         Updates the list of languages based on the search term.
 
         This method is responsible for updating the list of languages displayed in the dialog window based on the search term entered by the user. It clears the current list of languages in the language_listbox and then populates it with the languages that match the search term. The matching is case-insensitive and partial matches are also considered.
 
+        Args:
+            *args: Additional arguments passed by the trace_add method (not used).
+
         Returns:
             None
-
         """
         search_term = self.search_var.get().lower()
         self.language_listbox.delete(0, tk.END)
-        prefilled_languages = ["English", "Spanish", "French", "German",
-                               "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
+        prefilled_languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese", "Russian", "Portuguese", "Italian"]
         items = []
         if len(search_term) < 3:
             items = prefilled_languages
@@ -101,8 +106,7 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
             for language in {**self.available_languages, **self.additional_languages}.keys():
                 if search_term in language.lower():
                     items.append(language)
-            items = sorted(items, key=lambda x: (
-                len(x), x.startswith(search_term), x))
+            items = sorted(items, key=lambda x: (len(x), x.startswith(search_term), x))
 
         for item in items:
             self.language_listbox.insert(tk.END, item)
@@ -161,3 +165,4 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.bind("<Escape>", self.cancel)
 
         box.pack()
+ 
