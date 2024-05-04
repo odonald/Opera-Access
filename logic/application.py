@@ -64,7 +64,7 @@ class Application:
             self.ui.canvas.configure(yscrollcommand=self.scrollbar.set)
             self.ui.canvas.bind("<Configure>", self.resize_inner_frame)
             self.ui.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-            self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure)
+            self.ui.inner_frame.bind("<Configure>", self.on_canvas_configure())
             self.bind_scroll_to_widget(self.ui.inner_frame)
             self.bind_website_button()
             self.bind_import_translation_button()
@@ -464,7 +464,6 @@ class Application:
             self.next_button_clicks = 0
 
     def previous_line(self):
-
 
         if self.current_line > 0:
             self.prev_button_clicks += 1
