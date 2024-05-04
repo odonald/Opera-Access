@@ -69,7 +69,6 @@ Methods:
         self.previous_line_button = self.create_previous_line_button()
         self.next_line_button = self.create_next_line_button()
         self.line_number_entry = self.create_line_number_entry()
-        # The actual command will be set in Application class
         self.go_button = self.create_go_button(None)
 
     def create_website_button(self):
