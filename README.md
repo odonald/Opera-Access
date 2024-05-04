@@ -62,7 +62,7 @@ You currently have two options:
 The testing suite currently includes a very "flaky" [pyautogui](https://pyautogui.readthedocs.io/en/latest/)
  end-to-end test, chances are high it will not work, unless you are running it on macOS using dark mode system settings.
 #### !At this point it is highly recommended to run tests excluding the end-to-end test!
-To run the suite without the end-to-end test:
+To start the suite without the end-to-end test, run:
 ```python
 ptw -- -m "not e2e"
 ```
@@ -75,7 +75,7 @@ python dev_hot_reload.py
 ```
 *(Note: This will automatically close and reopen the application after every saved code change.)*
 
-2. Then to run the suite without the end-to-end test, execute:
+2. Then to start the suite without the end-to-end test, run:
 ```python
 ptw
 ```
