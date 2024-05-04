@@ -32,3 +32,6 @@ coverage
 .vscode/
 .aider*
 .codiumai.toml
+.idea/
+qodana.yaml
+venv/
