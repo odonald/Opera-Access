@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
-
-
+from utils.qr_code_utils import QrCode
+from config.config import AppConfig
 class UserInterface:
     """
 The UserInterface class represents the graphical user interface of the application. It contains methods for creating various UI elements such as buttons, labels, frames, and progress bars.
@@ -53,6 +53,7 @@ Methods:
 
     def __init__(self, root):
         self.root = root
+        self.url = AppConfig.URL
         self.navigation_frame, self.navigation_frame2, self.navigation_frame3 = self.main_frame()
         self.sidebar_frame = self.create_sidebar_frame()
         self.canvas = self.create_canvas()
@@ -70,6 +71,7 @@ Methods:
         self.next_line_button = self.create_next_line_button()
         self.line_number_entry = self.create_line_number_entry()
         self.go_button = self.create_go_button(None)
+        self.bind_show_qr_button(lambda: QrCode.show_qr_code(self.url))
 
     def create_website_button(self):
         """
@@ -107,6 +109,9 @@ Methods:
             "gray10", "#DCE4EE"), border_width=2, text="Show QR")
         show_qr_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsw")
         return show_qr_button
+
+    def bind_show_qr_button(self, command):
+        self.show_qr_button.configure(command=command)
 
     def create_appearance_mode_optionmenu(self):
         """
