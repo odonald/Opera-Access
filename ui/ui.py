@@ -66,12 +66,12 @@ Methods:
         self.progress = self.create_progress_bar()
         self.website_button = self.create_website_button()
         self.show_qr_button = self.create_show_qr_button()
+        self.bind_show_qr_button(lambda: QrCode.show_qr_code(self.url))
         self.import_translation_button = self.create_import_translation_button()
         self.previous_line_button = self.create_previous_line_button()
         self.next_line_button = self.create_next_line_button()
         self.line_number_entry = self.create_line_number_entry()
         self.go_button = self.create_go_button(None)
-        self.bind_show_qr_button(lambda: QrCode.show_qr_code(self.url))
 
     def create_website_button(self):
         """
