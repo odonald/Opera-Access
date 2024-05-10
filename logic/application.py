@@ -90,7 +90,7 @@ class Application:
 
     def bind_show_qr_button(self):
         self.ui.show_qr_button.configure(
-            command=lambda: self.show_qr_code())
+            command=lambda: self.show_qr_code(self.url))
 
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)

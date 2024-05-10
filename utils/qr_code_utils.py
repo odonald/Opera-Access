@@ -33,7 +33,7 @@ class QrCode:
         qr.save_qr_code("https://example.com")
     """
     @staticmethod
-    def show_qr_code():
+    def show_qr_code(url):
         """
         Generates a QR code image using the qrcode library and displays it in a tkinter window.
 
