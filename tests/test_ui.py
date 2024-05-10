@@ -1,15 +1,17 @@
 import unittest
+from unittest.mock import patch, MagicMock
 import tkinter as tk
-import customtkinter as ctk 
-from ui.ui import UserInterface  
+import customtkinter as ctk
+from ui.ui import UserInterface
+
 
 class TestUIComponents(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         "Set up a hidden Tkinter root window for all tests, ensuring tests run headlessly."
         cls.root = tk.Tk()
-        cls.root.withdraw() 
-        cls.ui = UserInterface(cls.root) 
+        cls.root.withdraw()
+        cls.ui = UserInterface(cls.root)
 
     @classmethod
     def tearDownClass(cls):
@@ -44,7 +46,8 @@ class TestUIComponents(unittest.TestCase):
     def test_create_appearance_mode_optionmenu(self):
         appearance_mode_optionmenu = self.ui.create_appearance_mode_optionmenu()
         self.assertIsInstance(appearance_mode_optionmenu, ctk.CTkOptionMenu)
-        self.assertEqual(appearance_mode_optionmenu.cget("values"), ["Light", "Dark", "System"])
+        self.assertEqual(appearance_mode_optionmenu.cget(
+            "values"), ["Light", "Dark", "System"])
 
     def test_create_appearance_mode_optionmenu_default_value(self):
         appearance_mode_optionmenu = self.ui.create_appearance_mode_optionmenu()
@@ -65,16 +68,11 @@ class TestUIComponents(unittest.TestCase):
         self.assertIsInstance(next_line_button, ctk.CTkButton)
         self.assertEqual(next_line_button.cget("text"), "Next")
 
-    # def test_create_next_line_button_command(self):
-    #     def mock_command():
-    #         pass
-    #     next_line_button = self.ui.create_next_line_button(command=mock_command)
-    #     self.assertEqual(next_line_button.cget("command"), mock_command)
-
     def test_create_line_number_entry(self):
         line_number_entry = self.ui.create_line_number_entry()
         self.assertIsInstance(line_number_entry, ctk.CTkEntry)
-        self.assertEqual(line_number_entry.cget("placeholder_text"), "Jump to line")
+        self.assertEqual(line_number_entry.cget(
+            "placeholder_text"), "Jump to line")
 
     def test_create_line_number_entry_initial_value(self):
         line_number_entry = self.ui.create_line_number_entry()
@@ -125,7 +123,6 @@ class TestUIComponents(unittest.TestCase):
         sidebar_frame = self.ui.create_sidebar_frame()
         self.assertIsInstance(sidebar_frame, ctk.CTkFrame)
 
-
     def test_create_sidebar_label(self):
         sidebar_label = self.ui.create_sidebar_label()
         self.assertIsInstance(sidebar_label, ctk.CTkLabel)
@@ -153,6 +150,35 @@ class TestUIComponents(unittest.TestCase):
     def test_labels_inner_frame_current_line_label_font(self):
         current_line_label, _, _ = self.ui.labels_inner_frame()
         self.assertEqual(current_line_label.cget("font"), ("", 25))
+
+    @patch('tkinter.Toplevel', autospec=True)
+    @patch('qrcode.QRCode.make_image', autospec=True)
+    @patch('PIL.ImageTk.PhotoImage', autospec=True)
+    @patch('tkinter.Label', autospec=True)
+    def test_show_qr_button_opens_window_with_qr_code(self, mock_label, mock_photoimage, mock_make_image, mock_toplevel):
+        # Arrange
+        mock_window = MagicMock()
+        mock_toplevel.return_value = mock_window
+
+        # Act
+        self.ui.show_qr_button.invoke()
+
+        # Assert
+        mock_toplevel.assert_called_once()
+        mock_window.title.assert_called_once_with("QR Code")
+        mock_window.geometry.assert_called_once_with("600x600")
+        mock_window.mainloop.assert_called_once()
+
+        # Verify the QR code generation and display
+        mock_make_image.assert_called_once()
+        mock_photoimage.assert_called_once_with(mock_make_image.return_value)
+
+        # Verify the Label was created with the correct image and added to the window
+        mock_label.assert_called_once_with(
+            mock_window, image=mock_photoimage.return_value)
+        mock_label_instance = mock_label.return_value
+        mock_label_instance.pack.assert_called_once_with()
+
 
 if __name__ == '__main__':
     unittest.main()
