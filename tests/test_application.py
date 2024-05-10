@@ -134,3 +134,6 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(self.app.prev_button_clicks, 0)
         mock_send_to_server.assert_called_once_with(line)
         mock_update_label.assert_called_once()
+
+if __name__ == '__main__':
+    unittest.main()
