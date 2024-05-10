@@ -2,6 +2,8 @@ import tkinter as tk
 import customtkinter as ctk
 from utils.qr_code_utils import QrCode
 from config.config import AppConfig
+
+
 class UserInterface:
     """
 The UserInterface class represents the graphical user interface of the application. It contains methods for creating various UI elements such as buttons, labels, frames, and progress bars.
