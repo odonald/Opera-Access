@@ -85,7 +85,6 @@ class Application:
                 "close_program": self.close_program
             })
 
-
     def resize_inner_frame(self, event):
         self.ui.canvas.itemconfig(self.ui.canvas_frame, width=event.width)
 
@@ -229,8 +228,11 @@ class Application:
         logging.info("Opening Language Import Dialog...")
         dialog = ImportLanguageDialog(self.root, self.available_languages, self.additional_languages,
                                       self.import_additional_translation, title="Select Language")
-        self.root.wait_window(dialog.top)
-        self.update_ui_after_language_import()
+        selected_language = dialog.selected_language
+        if selected_language:
+            print(f"Selected language: {selected_language}")
+        else:
+            print("No language selected.")
 
     def import_additional_translation(self, language_name, language_code):
         additional_translation_file = filedialog.askopenfilename(
