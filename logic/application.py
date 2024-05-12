@@ -16,7 +16,6 @@ from utils.language_util import ImportLanguageDialog
 from ui.file_menu import FileMenu
 from utils.qr_code_utils import QrCode
 
-
 class Application:
     def __init__(self, root):
 
@@ -502,3 +501,8 @@ class Application:
                     "Error", f"Line number should be between 1 and {len(self.additional_languages[lang_code])}.")
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid line number.")
+
+if __name__ == '__main__':
+    root = ctk.CTk()
+    app = Application(root)
+    root.mainloop()
