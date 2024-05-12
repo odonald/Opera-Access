@@ -1,8 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, simpledialog
 
-
-class ImportLanguageDialog(tk.simpledialog.Dialog):
+class ImportLanguageDialog(simpledialog.Dialog):  # Use simpledialog.Dialog
     """
     A dialog window for importing additional languages.
 
@@ -49,7 +48,6 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.selected_language = None
         self.entry = None
         self.language_listbox = None
-
         super().__init__(parent, **kwargs)
 
     def body(self, master):
@@ -164,3 +162,14 @@ class ImportLanguageDialog(tk.simpledialog.Dialog):
         self.bind("<Escape>", self.cancel)
 
         box.pack()
+
+
+def import_additional_translation(language, code):
+    print(f"Importing translation for {language} ({code})")
+    
+if __name__ == '__main__':
+    root = tk.Tk()
+    available_languages = {"English": "en", "Spanish": "es"}
+    additional_languages = {}
+    dialog = ImportLanguageDialog(root, available_languages, additional_languages, import_additional_translation)
+    root.mainloop()
