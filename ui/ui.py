@@ -47,7 +47,6 @@ Methods:
     create_inner_frame: Creates the inner frame inside the canvas.
     create_canvas_frame: Creates the canvas frame.
     create_sidebar_frame: Creates the sidebar frame.
-    button_go_to_website: Creates the website button.
     create_sidebar_label: Creates the sidebar label.
     create_navigation_label: Creates the navigation label.
     labels_inner_frame: Creates the labels inside the inner frame.
