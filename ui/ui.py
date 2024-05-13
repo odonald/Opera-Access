@@ -268,18 +268,6 @@ Methods:
         sidebar_frame.grid_columnconfigure(0, weight=0)
         return sidebar_frame
 
-    def button_go_to_website(self):
-        """
-        Creates the website button.
-
-        Returns:
-            ctk.CTkButton: The created website button.
-        """
-        website_button = ctk.CTkButton(self.sidebar_frame, fg_color="transparent", text_color=(
-            "gray10", "#DCE4EE"), border_width=2, text="Open Website")
-        website_button.grid(row=3, column=0, padx=10, pady=10, sticky="nsw")
-        return website_button
-
     def create_sidebar_label(self):
         """
         Creates the sidebar label.
