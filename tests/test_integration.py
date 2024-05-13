@@ -6,7 +6,7 @@ from logic.application import Application
 
 class TestApplicationIntegration(unittest.TestCase):
     @patch.object(Application, 'run_server')
-    def setUp(self):
+    def setUp(self, mock_run_server):
         self.root = ctk.CTk()
         self.root.withdraw()
         self.app = Application(self.root)
