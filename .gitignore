@@ -35,3 +35,4 @@ coverage
 .idea/
 qodana.yaml
 venv/
+CLAUDE.md
